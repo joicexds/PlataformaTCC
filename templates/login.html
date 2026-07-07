@@ -11,15 +11,17 @@
     
     <style>
         :root {
-            --bg-main: #06090F;
-            --bg-institucional: #0A0F1D;
-            --bg-card: #0E131F;
-            --color-primary: #00FFAE;
-            --color-primary-hover: #00D18F;
-            --text-primary: #00FFAE;
+            --bg-main: #0E1020;
+            --bg-institucional: #0E1020;
+            --bg-card: #15182D;
+            --color-primary-start: #A855F7;
+            --color-primary-end: #FF5FA2;
+            --color-lavender: #6E5BC7;
+            --color-cyan: #3DD6D0;
             --text-white: #FFFFFF;
-            --text-secondary: #8A99AD;
-            --border-color: #1E293B;
+            --text-secondary: #8E94B2;
+            --border-color: #2A2D3E;
+            
             --color-danger: #F87171;
             --color-danger-bg: #2D191E;
             --color-danger-border: #EF4444;
@@ -71,12 +73,19 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            color: var(--color-primary);
             font-family: 'Poppins', sans-serif;
             font-size: 28px;
             font-weight: 700;
             text-decoration: none;
+            background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 30px;
+        }
+
+        .presentation-logo i {
+            color: var(--color-cyan);
+            -webkit-text-fill-color: initial;
         }
 
         .presentation-title {
@@ -84,7 +93,9 @@
             font-size: 32px;
             font-weight: 700;
             line-height: 1.25;
-            color: var(--text-white);
+            background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 20px;
         }
 
@@ -131,7 +142,9 @@
             font-family: 'Poppins', sans-serif;
             font-size: 32px;
             font-weight: 700;
-            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 8px;
         }
 
@@ -150,7 +163,7 @@
             display: block;
             font-size: 14px;
             font-weight: 600;
-            color: var(--text-primary);
+            color: var(--text-white);
             margin-bottom: 8px;
         }
 
@@ -163,7 +176,7 @@
         .input-wrapper i {
             position: absolute;
             left: 16px;
-            color: var(--text-secondary);
+            color: var(--color-lavender);
             width: 20px;
             height: 20px;
         }
@@ -182,12 +195,13 @@
         }
 
         .form-control::placeholder {
-            color: #5A6E85;
+            color: var(--text-secondary);
+            opacity: 0.6;
         }
 
         .form-control:focus {
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(0, 255, 174, 0.15);
+            border-color: var(--color-cyan);
+            box-shadow: 0 0 0 3px rgba(61, 214, 208, 0.15);
         }
 
         .btn-submit {
@@ -195,8 +209,8 @@
             height: 50px;
             border: none;
             border-radius: 12px;
-            background-color: var(--color-primary);
-            color: var(--bg-main);
+            background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
+            color: var(--text-white);
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
@@ -209,8 +223,7 @@
         }
 
         .btn-submit:hover {
-            background-color: var(--color-primary-hover);
-            box-shadow: 0 0 15px rgba(0, 255, 174, 0.4);
+            box-shadow: 0 0 15px rgba(255, 95, 162, 0.4);
             transform: translateY(-1px);
         }
 
@@ -235,7 +248,7 @@
         }
 
         .auth-switch-link a {
-            color: var(--color-primary);
+            color: var(--color-cyan);
             text-decoration: none;
             font-weight: 600;
             transition: text-decoration 0.2s;
@@ -275,49 +288,49 @@
                 <div class="illustration-box">
                     <!-- FutureWay SVG Illustration representing the future -->
                     <svg class="illustration-svg" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Background stars -->
-                        <circle cx="100" cy="80" r="2" fill="#00FFAE" opacity="0.5"/>
-                        <circle cx="420" cy="120" r="3" fill="#00FFAE" opacity="0.6"/>
-                        <circle cx="150" cy="220" r="2.5" fill="#00FFAE" opacity="0.4"/>
-                        <circle cx="380" cy="260" r="1.5" fill="#00FFAE" opacity="0.5"/>
+                        <!-- Background stars in Ciano Neon -->
+                        <circle cx="100" cy="80" r="2" fill="#3DD6D0" opacity="0.5"/>
+                        <circle cx="420" cy="120" r="3" fill="#A855F7" opacity="0.6"/>
+                        <circle cx="150" cy="220" r="2.5" fill="#FF5FA2" opacity="0.4"/>
+                        <circle cx="380" cy="260" r="1.5" fill="#3DD6D0" opacity="0.5"/>
 
                         <!-- Perspective Horizon Grid Lines (representing the pathway of the future) -->
-                        <path d="M 50 350 L 250 180 M 450 350 L 250 180 M 150 350 L 250 180 M 350 350 L 250 180 M 250 350 L 250 180" stroke="#1E293B" stroke-width="2" opacity="0.6"/>
-                        <path d="M 80 320 H 420 M 120 280 H 380 M 160 240 H 340 M 200 200 H 300" stroke="#1E293B" stroke-width="1.5" opacity="0.4"/>
+                        <path d="M 50 350 L 250 180 M 450 350 L 250 180 M 150 350 L 250 180 M 350 350 L 250 180 M 250 350 L 250 180" stroke="#2A2D3E" stroke-width="2" opacity="0.8"/>
+                        <path d="M 80 320 H 420 M 120 280 H 380 M 160 240 H 340 M 200 200 H 300" stroke="#2A2D3E" stroke-width="1.5" opacity="0.6"/>
 
-                        <!-- Pathway (The Way) -->
+                        <!-- Pathway (The Way) using Pink/Purple neon gradient -->
                         <polygon points="250,180 180,350 320,350" fill="url(#way-gradient)" opacity="0.85"/>
 
                         <!-- Glowing Star/Future Portal at the end of the way -->
                         <circle cx="250" cy="180" r="50" fill="url(#future-glow)"/>
                         <!-- Central Bright Light -->
                         <circle cx="250" cy="180" r="15" fill="#FFFFFF"/>
-                        <!-- Decorative Orbit Rings -->
-                        <circle cx="250" cy="180" r="60" stroke="#00FFAE" stroke-width="2" stroke-dasharray="12 6" opacity="0.5"/>
-                        <circle cx="250" cy="180" r="75" stroke="#00FFAE" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.4"/>
+                        <!-- Decorative Orbit Rings in Ciano Neon and Lavanda -->
+                        <circle cx="250" cy="180" r="60" stroke="#FF5FA2" stroke-width="2" stroke-dasharray="12 6" opacity="0.6"/>
+                        <circle cx="250" cy="180" r="75" stroke="#3DD6D0" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.5"/>
 
                         <!-- Rocket rising up towards the future/star -->
                         <g transform="translate(242, 120) scale(0.8)">
-                            <path d="M 10 0 C 15 10, 15 30, 15 40 L 5 40 C 5 30, 5 10, 10 0 Z" fill="#00D18F"/>
-                            <path d="M 10 0 C 7 10, 5 30, 5 40 L 15 40 C 15 30, 13 10, 10 0 Z" fill="#00FFAE"/>
+                            <path d="M 10 0 C 15 10, 15 30, 15 40 L 5 40 C 5 30, 5 10, 10 0 Z" fill="#6E5BC7"/>
+                            <path d="M 10 0 C 7 10, 5 30, 5 40 L 15 40 C 15 30, 13 10, 10 0 Z" fill="#3DD6D0"/>
                             <!-- Wings -->
-                            <path d="M 5 30 L 0 42 L 5 40 Z" fill="#005A3C"/>
-                            <path d="M 15 30 L 20 42 L 15 40 Z" fill="#005A3C"/>
+                            <path d="M 5 30 L 0 42 L 5 40 Z" fill="#A855F7"/>
+                            <path d="M 15 30 L 20 42 L 15 40 Z" fill="#FF5FA2"/>
                             <!-- Fire -->
-                            <path d="M 7 42 L 10 52 L 13 42 Z" fill="#FF5F56"/>
+                            <path d="M 7 42 L 10 52 L 13 42 Z" fill="#FF5FA2"/>
                         </g>
 
                         <!-- Gradients definitions -->
                         <defs>
                             <linearGradient id="way-gradient" x1="250" y1="180" x2="250" y2="350" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="#00FFAE" stop-opacity="0.1"/>
-                                <stop offset="1" stop-color="#00FFAE" stop-opacity="0.6"/>
+                                <stop stop-color="#A855F7" stop-opacity="0.1"/>
+                                <stop offset="1" stop-color="#FF5FA2" stop-opacity="0.6"/>
                             </linearGradient>
                             <radialGradient id="future-glow" cx="250" cy="180" r="50" fx="250" fy="180" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="#00FFAE" stop-opacity="1"/>
-                                <stop offset="0.4" stop-color="#00FFAE" stop-opacity="0.8"/>
-                                <stop offset="0.8" stop-color="#00FFAE" stop-opacity="0.2"/>
-                                <stop offset="1" stop-color="#00FFAE" stop-opacity="0"/>
+                                <stop stop-color="#3DD6D0" stop-opacity="1"/>
+                                <stop offset="0.4" stop-color="#A855F7" stop-opacity="0.8"/>
+                                <stop offset="0.8" stop-color="#FF5FA2" stop-opacity="0.2"/>
+                                <stop offset="1" stop-color="#0E1020" stop-opacity="0"/>
                             </radialGradient>
                         </defs>
                     </svg>
@@ -349,7 +362,7 @@
                         <label for="id_username">Usuário</label>
                         <div class="input-wrapper">
                             <i data-lucide="user"></i>
-                            <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username" class="form-control" placeholder="Digite seu usuário">
+                            <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username" class="form-control" placeholder="Digite seu e-mail">
                         </div>
                     </div>
 

@@ -11,13 +11,16 @@
     
     <style>
         :root {
-            --bg-main: #06090F;
-            --bg-card: #0E131F;
-            --color-primary: #00FFAE;
-            --color-primary-hover: #00D18F;
+            --bg-main: #0E1020;
+            --bg-card: #15182D;
+            --color-primary-start: #A855F7;
+            --color-primary-end: #FF5FA2;
+            --color-lavender: #6E5BC7;
+            --color-cyan: #3DD6D0;
             --text-white: #FFFFFF;
-            --text-muted: #8A99AD;
-            --border-color: #1E293B;
+            --text-secondary: #8E94B2;
+            --border-color: #2A2D3E;
+            
             --color-danger: #F87171;
             --color-danger-bg: #2D191E;
             --color-danger-border: #EF4444;
@@ -55,8 +58,15 @@
             font-family: 'Poppins', sans-serif;
             font-size: 22px;
             font-weight: 700;
-            color: var(--color-primary);
+            background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--color-cyan);
+            -webkit-text-fill-color: initial;
         }
 
         .user-nav {
@@ -111,12 +121,14 @@
             font-family: 'Poppins', sans-serif;
             font-size: 32px;
             margin-bottom: 16px;
-            color: var(--color-primary);
+            background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .welcome-card p {
             font-size: 16px;
-            color: var(--text-muted);
+            color: var(--text-secondary);
             line-height: 1.6;
         }
     </style>
@@ -130,7 +142,7 @@
         </a>
         <div class="user-nav">
             <span class="user-info">
-                <i data-lucide="user" style="width: 18px; height: 18px; color: var(--color-primary);"></i>
+                <i data-lucide="user" style="width: 18px; height: 18px; color: var(--color-cyan);"></i>
                 Olá, {{ user.username }}
             </span>
             <a href="{% url 'logout' %}" class="btn-logout">Sair</a>
