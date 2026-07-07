@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -285,55 +286,8 @@
                 <p class="presentation-subtitle">
                     Descubra suas habilidades naturais, alinhe seus objetivos e tome decisões de carreira mais assertivas.
                 </p>
-                <div class="illustration-box">
-                    <!-- FutureWay SVG Illustration representing the future -->
-                    <svg class="illustration-svg" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Background stars in Ciano Neon -->
-                        <circle cx="100" cy="80" r="2" fill="#3DD6D0" opacity="0.5"/>
-                        <circle cx="420" cy="120" r="3" fill="#A855F7" opacity="0.6"/>
-                        <circle cx="150" cy="220" r="2.5" fill="#FF5FA2" opacity="0.4"/>
-                        <circle cx="380" cy="260" r="1.5" fill="#3DD6D0" opacity="0.5"/>
-
-                        <!-- Perspective Horizon Grid Lines (representing the pathway of the future) -->
-                        <path d="M 50 350 L 250 180 M 450 350 L 250 180 M 150 350 L 250 180 M 350 350 L 250 180 M 250 350 L 250 180" stroke="#2A2D3E" stroke-width="2" opacity="0.8"/>
-                        <path d="M 80 320 H 420 M 120 280 H 380 M 160 240 H 340 M 200 200 H 300" stroke="#2A2D3E" stroke-width="1.5" opacity="0.6"/>
-
-                        <!-- Pathway (The Way) using Pink/Purple neon gradient -->
-                        <polygon points="250,180 180,350 320,350" fill="url(#way-gradient)" opacity="0.85"/>
-
-                        <!-- Glowing Star/Future Portal at the end of the way -->
-                        <circle cx="250" cy="180" r="50" fill="url(#future-glow)"/>
-                        <!-- Central Bright Light -->
-                        <circle cx="250" cy="180" r="15" fill="#FFFFFF"/>
-                        <!-- Decorative Orbit Rings in Ciano Neon and Lavanda -->
-                        <circle cx="250" cy="180" r="60" stroke="#FF5FA2" stroke-width="2" stroke-dasharray="12 6" opacity="0.6"/>
-                        <circle cx="250" cy="180" r="75" stroke="#3DD6D0" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.5"/>
-
-                        <!-- Rocket rising up towards the future/star -->
-                        <g transform="translate(242, 120) scale(0.8)">
-                            <path d="M 10 0 C 15 10, 15 30, 15 40 L 5 40 C 5 30, 5 10, 10 0 Z" fill="#6E5BC7"/>
-                            <path d="M 10 0 C 7 10, 5 30, 5 40 L 15 40 C 15 30, 13 10, 10 0 Z" fill="#3DD6D0"/>
-                            <!-- Wings -->
-                            <path d="M 5 30 L 0 42 L 5 40 Z" fill="#A855F7"/>
-                            <path d="M 15 30 L 20 42 L 15 40 Z" fill="#FF5FA2"/>
-                            <!-- Fire -->
-                            <path d="M 7 42 L 10 52 L 13 42 Z" fill="#FF5FA2"/>
-                        </g>
-
-                        <!-- Gradients definitions -->
-                        <defs>
-                            <linearGradient id="way-gradient" x1="250" y1="180" x2="250" y2="350" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="#A855F7" stop-opacity="0.1"/>
-                                <stop offset="1" stop-color="#FF5FA2" stop-opacity="0.6"/>
-                            </linearGradient>
-                            <radialGradient id="future-glow" cx="250" cy="180" r="50" fx="250" fy="180" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="#3DD6D0" stop-opacity="1"/>
-                                <stop offset="0.4" stop-color="#A855F7" stop-opacity="0.8"/>
-                                <stop offset="0.8" stop-color="#FF5FA2" stop-opacity="0.2"/>
-                                <stop offset="1" stop-color="#0E1020" stop-opacity="0"/>
-                            </radialGradient>
-                        </defs>
-                    </svg>
+                <div class="illustration-box" style="max-width: 480px;">
+                    <img src="{% static 'banner.jpg' %}" alt="FutureWay Journey" class="illustration-img" style="width: 100%; border-radius: 16px; border: 2px solid var(--border-color); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6); transition: transform 0.3s ease;">
                 </div>
             </div>
         </div>
