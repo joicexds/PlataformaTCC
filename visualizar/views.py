@@ -71,6 +71,7 @@ BACKUP_TEST = {
         {
             "id": 1,
             "enunciado": "Se você pudesse resolver um grande problema do mundo, qual seria?",
+            "image_prompt": "global world healing and diverse people",
             "alternativas": [
                 {"letra": "A", "texto": "Combater a desigualdade social e defender direitos humanos.", "categoria": "Humanas"},
                 {"letra": "B", "texto": "Desenvolver uma nova tecnologia limpa ou inteligência artificial.", "categoria": "Exatas"},
@@ -81,6 +82,7 @@ BACKUP_TEST = {
         {
             "id": 2,
             "enunciado": "Qual tipo de projeto acadêmico ou escolar você prefere integrar?",
+            "image_prompt": "students working together on science project",
             "alternativas": [
                 {"letra": "A", "texto": "Produção de redações, debates sociais ou apresentações de teatro.", "categoria": "Humanas"},
                 {"letra": "B", "texto": "Criação de robôs, planilhas financeiras ou desenvolvimento de sistemas.", "categoria": "Exatas"},
@@ -91,6 +93,7 @@ BACKUP_TEST = {
         {
             "id": 3,
             "enunciado": "Como você se descreve ao tomar decisões importantes?",
+            "image_prompt": "brain and heart glowing neon futuristic",
             "alternativas": [
                 {"letra": "A", "texto": "Empático, considerando o impacto emocional nas outras pessoas.", "categoria": "Humanas"},
                 {"letra": "B", "texto": "Racional, analisando estatísticas, gráficos e dados numéricos.", "categoria": "Exatas"},
@@ -101,6 +104,7 @@ BACKUP_TEST = {
         {
             "id": 4,
             "enunciado": "Se você estivesse em uma empresa, qual cargo chamaria mais sua atenção?",
+            "image_prompt": "modern corporate office teamwork futuristic",
             "alternativas": [
                 {"letra": "A", "texto": "Gerente de Recursos Humanos ou Diretor de Comunicação.", "categoria": "Humanas"},
                 {"letra": "B", "texto": "Engenheiro de Software, Analista de Dados ou Diretor Financeiro.", "categoria": "Exatas"},
@@ -111,6 +115,7 @@ BACKUP_TEST = {
         {
             "id": 5,
             "enunciado": "No seu tempo livre, qual destas atividades mais te relaxa?",
+            "image_prompt": "person relaxing with books and plants",
             "alternativas": [
                 {"letra": "A", "texto": "Escrever, desenhar, tocar música ou conversar sobre diversos temas.", "categoria": "Humanas"},
                 {"letra": "B", "texto": "Jogar videogame de estratégia, xadrez ou programar.", "categoria": "Exatas"},
@@ -163,6 +168,7 @@ def iniciar_teste(request):
                     {{
                       "id": 1,
                       "enunciado": "Qual...",
+                      "image_prompt": "A short english prompt to generate a picture related to the question (max 6 words, ex: futuristic tech laboratory)",
                       "alternativas": [
                         {{"letra": "A", "texto": "...", "categoria": "Humanas"}},
                         {{"letra": "B", "texto": "...", "categoria": "Exatas"}},

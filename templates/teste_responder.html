@@ -671,7 +671,15 @@
             <!-- Mascot Panel -->
             <aside class="mascot-panel">
                 <div class="mascot-bubble" id="mascotBubble">
-                    Olá! Eu sou o FutureBot. Vou te guiar pelo teste vocacional criado pela IA. Vamos lá!
+                    <p id="mascotMessage" style="margin-bottom: 12px;">Olá! Eu sou o FutureBot. Vou te guiar pelo teste vocacional criado pela IA. Vamos lá!</p>
+                    <div class="mascot-images-container">
+                        {% for q in questions %}
+                        <img id="img-step-{{ forloop.counter }}" 
+                             src="https://image.pollinations.ai/prompt/{{ q.image_prompt|urlencode }}?width=300&height=200&nologo=true" 
+                             alt="Ilustração da pergunta" 
+                             style="width: 100%; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); display: {% if forloop.first %}block{% else %}none{% endif %};">
+                        {% endfor %}
+                    </div>
                 </div>
                 
                 <!-- Beautiful SVG Mascot Robot -->
@@ -768,7 +776,15 @@
             document.getElementById('progressText').innerText = `Etapa ${currentStep} de ${totalSteps}`;
             
             // Update Robot bubble dialogue
-            document.getElementById('mascotBubble').innerText = robotMessages[currentStep - 1];
+            document.getElementById('mascotMessage').innerText = robotMessages[currentStep - 1];
+            
+            // Show corresponding image
+            for (let i = 1; i <= totalSteps; i++) {
+                const img = document.getElementById(`img-step-${i}`);
+                if (img) {
+                    img.style.display = (i === currentStep) ? 'block' : 'none';
+                }
+            }
             
             // Enable/disable navigation buttons
             document.getElementById('btnBack').disabled = currentStep === 1;
