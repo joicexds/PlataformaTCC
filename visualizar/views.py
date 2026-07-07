@@ -30,3 +30,30 @@ def register(request):
 def explorar_profissoes(request):
     return render(request, 'explorar_profissoes.html')
 
+
+from .models import UserProfile
+from .forms import UserProfileForm
+
+@login_required
+def profile(request):
+    profile_instance, created = UserProfile.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=profile_instance, user=request.user)
+        if form.is_valid():
+            # Update User fields
+            user = request.user
+            user.first_name = form.cleaned_data['first_name']
+            user.last_name = form.cleaned_data['last_name']
+            user.email = form.cleaned_data['email']
+            user.username = form.cleaned_data['email']
+            user.save()
+            
+            # Save Profile
+            form.save()
+            return redirect('profile')
+    else:
+        form = UserProfileForm(instance=profile_instance, user=request.user)
+        
+    return render(request, 'profile.html', {'form': form, 'profile': profile_instance})
+

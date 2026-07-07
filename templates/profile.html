@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário - FutureWay</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #060814;
+            --bg-sidebar: #090B19;
+            --bg-card: #0C0E22;
+            --bg-card-hover: #121532;
+            --border-color: #1A1D3A;
+            
+            --color-purple: #A855F7;
+            --color-pink: #FF5FA2;
+            --color-cyan: #3DD6D0;
+            --color-blue: #3B82F6;
+            
+            --text-white: #FFFFFF;
+            --text-muted: #8E94B2;
+            --text-secondary: #B4B9D4;
+            
+            --gradient-primary: linear-gradient(135deg, var(--color-purple), var(--color-pink));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar styling (identical) */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 10;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            margin-bottom: 40px;
+            padding-left: 10px;
+        }
+
+        .brand-logo i {
+            color: var(--color-pink);
+            font-size: 24px;
+        }
+
+        .brand-logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--text-white), var(--color-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-subtitle {
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .menu-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item a:hover {
+            background-color: var(--bg-card-hover);
+            color: var(--text-white);
+        }
+
+        .menu-item.active a {
+            background-color: rgba(168, 85, 247, 0.15);
+            color: var(--color-purple);
+            font-weight: 600;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .user-profile-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--bg-card-hover);
+            border: 1px solid var(--color-purple);
+            border-radius: 16px;
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-white);
+            font-size: 16px;
+        }
+
+        .user-meta {
+            flex: 1;
+            margin-left: 12px;
+            text-align: left;
+        }
+
+        .user-meta h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        .user-meta p {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 1200px;
+        }
+
+        /* Top bar buttons */
+        .topbar-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            color: var(--text-white);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-back-home:hover {
+            border-color: var(--color-cyan);
+            background-color: var(--bg-card-hover);
+            transform: translateX(-2px);
+        }
+
+        .topbar-stats {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .stat-badge.gems i {
+            color: var(--color-cyan);
+        }
+
+        .stat-badge.streak i {
+            color: var(--color-cyan);
+        }
+
+        /* Profile Editor container */
+        .profile-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            text-align: left;
+            max-width: 800px;
+        }
+
+        .profile-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--color-cyan), var(--color-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 24px;
+        }
+
+        .profile-editor-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 40px;
+        }
+
+        /* Avatar Editor */
+        .avatar-uploader-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .large-avatar-preview {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 54px;
+            font-weight: 700;
+            color: var(--text-white);
+            border: 4px solid var(--border-color);
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .large-avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .custom-file-input {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .custom-file-input input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-button {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background-color: rgba(61, 214, 208, 0.1);
+            border: 1px solid var(--color-cyan);
+            color: var(--color-cyan);
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .custom-file-input:hover .file-input-button {
+            background-color: var(--color-cyan);
+            color: var(--bg-main);
+        }
+
+        /* Info Form */
+        .profile-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        .form-control {
+            height: 48px;
+            padding: 12px 16px;
+            background-color: rgba(26, 29, 58, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            outline: none;
+            color: var(--text-white);
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--color-cyan);
+            box-shadow: 0 0 0 3px rgba(61, 214, 208, 0.15);
+        }
+
+        .btn-save-profile {
+            align-self: flex-start;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            background: var(--gradient-primary);
+            color: var(--text-white);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 95, 162, 0.3);
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-save-profile:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 95, 162, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Menu -->
+    <aside class="sidebar">
+        <a href="{% url 'home' %}" class="brand-logo">
+            <i data-lucide="compass"></i>
+            <div>
+                <div class="brand-logo-text">FutureWay</div>
+                <div class="brand-subtitle">Descubra seu caminho</div>
+            </div>
+        </a>
+
+        <ul class="menu-list">
+            <li class="menu-item">
+                <a href="{% url 'home' %}">
+                    <i data-lucide="home" style="width: 20px; height: 20px;"></i>
+                    <span>Início</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="award" style="width: 20px; height: 20px;"></i>
+                    <span>Teste Vocacional</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="trending-up" style="width: 20px; height: 20px;"></i>
+                    <span>Meu Progresso</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="trophy" style="width: 20px; height: 20px;"></i>
+                    <span>Conquistas</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="bar-chart-2" style="width: 20px; height: 20px;"></i>
+                    <span>Ranking</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'explorar_profissoes' %}">
+                    <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+                    <span>Explorar Profissões</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="book-open" style="width: 20px; height: 20px;"></i>
+                    <span>Guia de Carreiras</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="settings" style="width: 20px; height: 20px;"></i>
+                    <span>Configurações</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="user-profile-card">
+                <div class="user-avatar">
+                    {% if profile.profile_picture %}
+                        <img src="{{ profile.profile_picture.url }}" alt="Avatar">
+                    {% else %}
+                        {% if user.first_name %}{{ user.first_name|slice:":1"|upper }}{% else %}{{ user.username|slice:":1"|upper }}{% endif %}
+                    {% endif %}
+                </div>
+                <div class="user-meta">
+                    <h4>Olá, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!</h4>
+                    <p>Ver perfil</p>
+                </div>
+                <i data-lucide="chevron-right" style="width: 16px; height: 16px; color: var(--color-purple);"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        
+        <!-- Top bar actions & stats -->
+        <div class="topbar-actions">
+            <a href="{% url 'home' %}" class="btn-back-home">
+                <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+                <span>Voltar ao Início</span>
+            </a>
+            
+            <div class="topbar-stats">
+                <div class="stat-badge gems">
+                    <i data-lucide="gem" style="width: 18px; height: 18px;"></i>
+                    <span>1250</span>
+                </div>
+                <div class="stat-badge streak">
+                    <i data-lucide="flag" style="width: 18px; height: 18px; color: var(--color-cyan);"></i>
+                    <span>2/5 etapas</span>
+                </div>
+                <a href="{% url 'logout' %}" class="btn-logout" style="text-decoration: none; color: var(--color-pink); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 12px; font-weight: 600; font-size: 14px; background-color: rgba(255, 95, 162, 0.05); transition: 0.2s;">Sair</a>
+            </div>
+        </div>
+
+        <!-- Profile Editor Card -->
+        <section class="profile-container">
+            <h1 class="profile-title">Editar Perfil</h1>
+            
+            <form method="post" enctype="multipart/form-data" class="profile-form">
+                {% csrf_token %}
+                
+                <div class="profile-editor-grid">
+                    
+                    <!-- Avatar Column -->
+                    <div class="avatar-uploader-section">
+                        <div class="large-avatar-preview">
+                            {% if profile.profile_picture %}
+                                <img src="{{ profile.profile_picture.url }}" alt="Foto de Perfil" id="avatar-image-element">
+                            {% else %}
+                                <span id="avatar-initial-element">{% if user.first_name %}{{ user.first_name|slice:":1"|upper }}{% else %}{{ user.username|slice:":1"|upper }}{% endif %}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="custom-file-input">
+                            {{ form.profile_picture }}
+                            <div class="file-input-button">
+                                <i data-lucide="camera" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;"></i>
+                                Alterar Foto
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Details Fields Column -->
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.first_name.id_for_label }}">Nome</label>
+                                {{ form.first_name }}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="{{ form.last_name.id_for_label }}">Sobrenome</label>
+                                {{ form.last_name }}
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.email.id_for_label }}">E-mail</label>
+                            {{ form.email }}
+                        </div>
+                        
+                        <button type="submit" class="btn-save-profile">
+                            <i data-lucide="save" style="width: 20px; height: 20px;"></i>
+                            <span>Salvar Alterações</span>
+                        </button>
+                        
+                    </div>
+                    
+                </div>
+            </form>
+        </section>
+
+    </main>
+
+    <!-- Script to preview image before uploading -->
+    <script>
+        const fileInput = document.querySelector('input[type="file"]');
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    let img = document.getElementById('avatar-image-element');
+                    if (!img) {
+                        const preview = document.querySelector('.large-avatar-preview');
+                        preview.innerHTML = '';
+                        img = document.createElement('img');
+                        img.id = 'avatar-image-element';
+                        preview.appendChild(img);
+                    }
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

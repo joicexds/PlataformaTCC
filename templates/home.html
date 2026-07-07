@@ -756,16 +756,22 @@
         </ul>
 
         <div class="sidebar-footer">
-            <div class="user-profile-card">
-                <div class="user-avatar">
-                    {% if user.first_name %}{{ user.first_name|slice:":1"|upper }}{% else %}{{ user.username|slice:":1"|upper }}{% endif %}
+            <a href="{% url 'profile' %}" style="text-decoration: none;">
+                <div class="user-profile-card">
+                    <div class="user-avatar">
+                        {% if user.profile.profile_picture %}
+                            <img src="{{ user.profile.profile_picture.url }}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        {% else %}
+                            {% if user.first_name %}{{ user.first_name|slice:":1"|upper }}{% else %}{{ user.username|slice:":1"|upper }}{% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="user-meta">
+                        <h4>Olá, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!</h4>
+                        <p>Ver perfil</p>
+                    </div>
+                    <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
                 </div>
-                <div class="user-meta">
-                    <h4>Olá, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!</h4>
-                    <p>Ver perfil</p>
-                </div>
-                <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
-            </div>
+            </a>
         </div>
     </aside>
 

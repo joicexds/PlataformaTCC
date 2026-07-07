@@ -86,3 +86,40 @@ class RegisterForm(forms.Form):
             last_name=last_name
         )
         return user
+
+
+from .models import UserProfile
+
+class UserProfileForm(forms.ModelForm):
+    first_name = forms.CharField(
+        label="Nome",
+        max_length=150,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'required': True})
+    )
+    last_name = forms.CharField(
+        label="Sobrenome",
+        max_length=150,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    email = forms.EmailField(
+        label="E-mail",
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'required': True})
+    )
+    profile_picture = forms.ImageField(
+        label="Foto de Perfil",
+        required=False,
+        widget=forms.FileInput(attrs={'class': 'form-control-file', 'accept': 'image/*'})
+    )
+
+    class Meta:
+        model = UserProfile
+        fields = ['profile_picture']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['first_name'].initial = user.first_name
+            self.fields['last_name'].initial = user.last_name
+            self.fields['email'].initial = user.email
