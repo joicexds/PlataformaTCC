@@ -7,18 +7,21 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-primary: #F8FAFC;
-            --bg-secondary: #EEF6FF;
-            --color-primary: #3B82F6;
-            --color-primary-hover: #2563EB;
-            --text-primary: #1F2937;
-            --text-secondary: #6B7280;
-            --border-light: #E2E8F0;
-            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --bg-main: #06090F;
+            --bg-card: #0E131F;
+            --color-primary: #00FFAE;
+            --color-primary-hover: #00D18F;
+            --text-white: #FFFFFF;
+            --text-muted: #8A99AD;
+            --border-color: #1E293B;
+            --color-danger: #F87171;
+            --color-danger-bg: #2D191E;
+            --color-danger-border: #EF4444;
+            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
         }
 
         * {
@@ -29,16 +32,16 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
+            background-color: var(--bg-main);
+            color: var(--text-white);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
         .header {
-            background-color: #FFFFFF;
-            border-bottom: 1px solid var(--border-light);
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
             padding: 20px 40px;
             display: flex;
             justify-content: space-between;
@@ -67,23 +70,25 @@
             align-items: center;
             gap: 8px;
             font-weight: 500;
+            color: var(--text-white);
         }
 
         .btn-logout {
-            background-color: #EF4444;
-            color: #FFFFFF;
-            border: none;
+            background-color: var(--color-danger-bg);
+            color: var(--color-danger);
+            border: 1px solid var(--color-danger-border);
             padding: 8px 16px;
             font-size: 14px;
             font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
             text-decoration: none;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
         }
 
         .btn-logout:hover {
-            background-color: #DC2626;
+            background-color: var(--color-danger-border);
+            color: #FFFFFF;
         }
 
         .container {
@@ -95,11 +100,11 @@
         }
 
         .welcome-card {
-            background-color: #FFFFFF;
+            background-color: var(--bg-card);
             border-radius: 16px;
             padding: 40px;
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
         }
 
         .welcome-card h1 {
@@ -111,7 +116,7 @@
 
         .welcome-card p {
             font-size: 16px;
-            color: var(--text-secondary);
+            color: var(--text-muted);
             line-height: 1.6;
         }
     </style>
@@ -125,13 +130,12 @@
         </a>
         <div class="user-nav">
             <span class="user-info">
-                <i data-lucide="user" style="width: 18px; height: 18px;"></i>
+                <i data-lucide="user" style="width: 18px; height: 18px; color: var(--color-primary);"></i>
                 Olá, {{ user.username }}
             </span>
             <a href="{% url 'logout' %}" class="btn-logout">Sair</a>
         </div>
     </header>
-
 
     <div class="container">
         <div class="welcome-card">
