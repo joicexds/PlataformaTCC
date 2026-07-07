@@ -143,7 +143,7 @@
         <div class="user-nav">
             <span class="user-info">
                 <i data-lucide="user" style="width: 18px; height: 18px; color: var(--color-cyan);"></i>
-                Olá, {{ user.username }}
+                Olá, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}
             </span>
             <a href="{% url 'logout' %}" class="btn-logout">Sair</a>
         </div>
