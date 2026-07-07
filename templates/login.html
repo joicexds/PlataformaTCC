@@ -3,25 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entrar - PlataformaTCC</title>
+    <title>Acessar Plataforma - PlataformaTCC</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-primary: #F8FAFC;
-            --bg-secondary: #EEF6FF;
-            --color-primary: #3B82F6;
-            --color-primary-hover: #2563EB;
-            --text-primary: #1F2937;
+            --bg-main: #F8FAFC;
+            --bg-institucional: #EEF6FF;
+            --color-primary: #2563EB;
+            --color-primary-hover: #1D4ED8;
+            --text-primary: #111827;
             --text-secondary: #6B7280;
-            --color-danger: #EF4444;
+            --border-color: #D1D5DB;
+            --color-danger: #B91C1C;
             --color-danger-bg: #FEE2E2;
-            --border-light: #E2E8F0;
-            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
-            --shadow-medium: 0 10px 15px -3px rgba(59, 130, 246, 0.1), 0 4px 6px -2px rgba(59, 130, 246, 0.05);
+            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
         * {
@@ -32,62 +31,124 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
+            background-color: var(--bg-main);
             color: var(--text-primary);
+            min-height: 100vh;
             display: flex;
+            overflow-x: hidden;
+        }
+
+        /* Two-Column Grid Layout */
+        .login-wrapper {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* 55% Institutional / Left Column */
+        .column-presentation {
+            width: 55%;
+            background-color: var(--bg-institucional);
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .login-card {
-            background-color: #FFFFFF;
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: var(--shadow-medium);
-            border: 1px solid var(--border-light);
-            width: 100%;
-            max-width: 400px;
+            padding: 60px;
             text-align: center;
+            position: relative;
         }
 
-        .logo {
+        .presentation-content {
+            max-width: 500px;
+            z-index: 2;
+        }
+
+        .presentation-logo {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
+            gap: 10px;
             color: var(--color-primary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
             text-decoration: none;
-            margin-bottom: 24px;
+            margin-bottom: 30px;
+        }
+
+        .presentation-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.25;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+
+        .presentation-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .illustration-box {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .illustration-svg {
+            width: 100%;
+            height: auto;
+        }
+
+        /* 45% Login / Right Column */
+        .column-login {
+            width: 45%;
+            background-color: var(--bg-main);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            border-left: 1px solid #E5E7EB;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .login-header {
+            margin-bottom: 32px;
+            text-align: left;
         }
 
         .login-header h2 {
             font-family: 'Poppins', sans-serif;
-            font-size: 22px;
-            font-weight: 600;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
             margin-bottom: 8px;
         }
 
         .login-header p {
-            font-size: 14px;
+            font-size: 16px;
             color: var(--text-secondary);
-            margin-bottom: 24px;
         }
 
+        /* Form Controls */
         .form-group {
+            margin-bottom: 24px;
             text-align: left;
-            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
             font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 6px;
+            font-weight: 600;
             color: var(--text-primary);
+            margin-bottom: 8px;
         }
 
         .input-wrapper {
@@ -98,108 +159,171 @@
 
         .input-wrapper i {
             position: absolute;
-            left: 14px;
+            left: 16px;
             color: var(--text-secondary);
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
         }
 
         .form-control {
             width: 100%;
-            padding: 12px 14px 12px 42px;
-            font-size: 15px;
-            border: 1px solid var(--border-light);
+            height: 50px;
+            padding: 12px 16px 12px 48px;
+            font-size: 16px;
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             outline: none;
             transition: all 0.3s ease;
-            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: var(--text-primary);
         }
 
         .form-control:focus {
             border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
 
         .btn-submit {
             width: 100%;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 12px;
+            height: 50px;
             border: none;
+            border-radius: 12px;
             background-color: var(--color-primary);
             color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: var(--shadow-soft);
             transition: all 0.3s ease;
-            margin-top: 8px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .btn-submit:hover {
             background-color: var(--color-primary-hover);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-medium);
         }
 
         .alert-error {
             background-color: var(--color-danger-bg);
             border: 1px solid #FCA5A5;
-            color: #B91C1C;
-            padding: 12px;
+            color: var(--color-danger);
+            padding: 14px;
             border-radius: 12px;
             font-size: 14px;
-            margin-bottom: 20px;
-            text-align: left;
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 1024px) {
+            .column-presentation {
+                display: none;
+            }
+            .column-login {
+                width: 100%;
+                border-left: none;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="login-card">
-        <!-- Logo -->
-        <a href="/" class="logo">
-            <i data-lucide="compass" style="width: 28px; height: 28px;"></i>
-            <span>PlataformaTCC</span>
-        </a>
+    <div class="login-wrapper">
+        
+        <!-- Left Column: Presentation (55%) -->
+        <div class="column-presentation">
+            <div class="presentation-content">
+                <a href="/" class="presentation-logo">
+                    <i data-lucide="compass" style="width: 32px; height: 32px;"></i>
+                    <span>PlataformaTCC</span>
+                </a>
+                <h1 class="presentation-title">Sua jornada de autoconhecimento começa aqui</h1>
+                <p class="presentation-subtitle">
+                    Descubra suas habilidades naturais, alinhe seus objetivos e tome decisões de carreira mais assertivas.
+                </p>
+                <div class="illustration-box">
+                    <!-- Clean SVG Illustration -->
+                    <svg class="illustration-svg" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Floating dashboard items -->
+                        <rect x="50" y="50" width="400" height="280" rx="20" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="4" />
+                        <!-- Top Bar of Dashboard -->
+                        <line x1="50" y1="100" x2="450" y2="100" stroke="#E2E8F0" stroke-width="3" />
+                        <circle cx="80" cy="75" r="8" fill="#FF5F56" />
+                        <circle cx="104" cy="75" r="8" fill="#FFBD2E" />
+                        <circle cx="128" cy="75" r="8" fill="#27C93F" />
+                        
+                        <!-- Illustration content: Compass & Charts -->
+                        <circle cx="250" cy="210" r="60" fill="#EEF6FF" stroke="#2563EB" stroke-width="4" stroke-dasharray="8 4" />
+                        <path d="M250 170 L262 205 L285 210 L262 215 L250 250 L238 215 L215 210 L238 205 Z" fill="#2563EB" />
+                        <circle cx="250" cy="210" r="6" fill="#FFFFFF" />
 
-        <div class="login-header">
-            <h2>Bem-vindo(a)</h2>
-            <p>Faça login para continuar</p>
+                        <!-- Decorative graphs -->
+                        <rect x="80" y="140" width="100" height="12" rx="6" fill="#93C5FD" />
+                        <rect x="80" y="165" width="70" height="12" rx="6" fill="#E2E8F0" />
+                        <rect x="80" y="190" width="85" height="12" rx="6" fill="#E2E8F0" />
+                        
+                        <rect x="320" y="140" width="100" height="12" rx="6" fill="#86EFAC" />
+                        <rect x="320" y="165" width="85" height="12" rx="6" fill="#E2E8F0" />
+                        <rect x="320" y="190" width="70" height="12" rx="6" fill="#E2E8F0" />
+
+                        <!-- Connection lines -->
+                        <path d="M200 300 C 220 320, 280 320, 300 300" stroke="#93C5FD" stroke-width="4" stroke-linecap="round" />
+                    </svg>
+                </div>
+            </div>
         </div>
 
-        <form method="post">
-            {% csrf_token %}
-
-            {% if form.errors %}
-            <div class="alert-error">
-                <i data-lucide="alert-circle" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
-                <span>Usuário ou senha incorretos.</span>
-            </div>
-            {% endif %}
-
-            <div class="form-group">
-                <label for="id_username">Usuário</label>
-                <div class="input-wrapper">
-                    <i data-lucide="user"></i>
-                    <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username" class="form-control" placeholder="Digite seu usuário">
+        <!-- Right Column: Login (45%) -->
+        <div class="column-login">
+            <div class="login-container">
+                
+                <div class="login-header">
+                    <h2>Acessar</h2>
+                    <p class="presentation-subtitle" style="margin-bottom: 0;">Faça login com suas credenciais</p>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="id_password">Senha</label>
-                <div class="input-wrapper">
-                    <i data-lucide="lock"></i>
-                    <input type="password" name="password" autocomplete="current-password" required id="id_password" class="form-control" placeholder="Digite sua senha">
-                </div>
-            </div>
+                <form method="post">
+                    {% csrf_token %}
 
-            <button type="submit" class="btn-submit">
-                Entrar
-            </button>
-        </form>
+                    {% if form.errors %}
+                    <div class="alert-error">
+                        <i data-lucide="alert-circle" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
+                        <span>Usuário ou senha incorretos.</span>
+                    </div>
+                    {% endif %}
+
+                    <!-- Username -->
+                    <div class="form-group">
+                        <label for="id_username">Usuário</label>
+                        <div class="input-wrapper">
+                            <i data-lucide="user"></i>
+                            <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username" class="form-control" placeholder="Digite seu usuário">
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="id_password">Senha</label>
+                        <div class="input-wrapper">
+                            <i data-lucide="lock"></i>
+                            <input type="password" name="password" autocomplete="current-password" required id="id_password" class="form-control" placeholder="Digite sua senha">
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn-submit">
+                        <span>Entrar</span>
+                        <i data-lucide="arrow-right" style="width: 20px; height: 20px;"></i>
+                    </button>
+                </form>
+
+            </div>
+        </div>
+
     </div>
 
     <!-- Icons -->
