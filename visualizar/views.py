@@ -129,6 +129,14 @@ def iniciar_teste(request):
         habilidade = request.POST.get('habilidade', '')
         objetivo = request.POST.get('objetivo', '')
         
+        # Save to session for personalized result later
+        request.session['user_preferences'] = {
+            'materia': materia,
+            'hobby': hobby,
+            'habilidade': habilidade,
+            'objetivo': objetivo
+        }
+        
         # Call Gemini if API Key is configured
         api_key = getattr(settings, 'GEMINI_API_KEY', '')
         questions_data = None
@@ -136,8 +144,9 @@ def iniciar_teste(request):
         if HAS_GEMINI and api_key:
             try:
                 genai.configure(api_key=api_key)
-                model = genai.GenerativeModel("gemini-2.5-flash")
+                model = genai.GenerativeModel("gemini-2.5-flash", generation_config={"temperature": 0.9})
                 prompt = f"""
+                ATENÇÃO: Gere perguntas INÉDITAS, CRIATIVAS e diferentes a cada execução. Não repita formatos padrões.
                 Gere um teste vocacional rápido com exatamente 5 perguntas personalizadas de múltipla escolha.
                 O perfil de preferências do usuário é:
                 - Matéria que mais gosta: {materia}
@@ -188,63 +197,115 @@ def responder_teste(request):
 @login_required
 def resultado_teste(request):
     if request.method == 'POST':
-        # Collect categories of answers
+        # Collect chosen options and categories
+        user_answers = []
         category_counts = {}
+        questions = request.session.get('vocational_test_questions', [])
+        
         for key, value in request.POST.items():
             if key.startswith('pergunta_'):
+                try:
+                    q_id = int(key.split('_')[1])
+                except ValueError:
+                    continue
                 category_counts[value] = category_counts.get(value, 0) + 1
+                
+                # Find the question text and chosen alternative text
+                q_text = ""
+                alt_text = ""
+                for q in questions:
+                    if q.get('id') == q_id:
+                        q_text = q.get('enunciado', '')
+                        for alt in q.get('alternativas', []):
+                            if alt.get('categoria') == value:
+                                alt_text = alt.get('texto', '')
+                                break
+                        break
+                if q_text and alt_text:
+                    user_answers.append({'pergunta': q_text, 'resposta': alt_text, 'categoria': value})
+
+        # Base parameters
+        prefs = request.session.get('user_preferences', {})
+        winner = max(category_counts, key=category_counts.get) if category_counts else 'Exatas'
         
-        # Find winning category
-        if not category_counts:
-            winner = 'Exatas' # Default fallback
-        else:
-            winner = max(category_counts, key=category_counts.get)
-            
-        # Profiles mapping
-        profiles = {
-            'Exatas': {
-                'titulo': 'Explorador da Lógica e Exatas',
-                'descricao': 'Você é movido por dados, lógica, equações e tecnologia. Gosta de estruturar ideias e foca na resolução objetiva de problemas complexos.',
-                'carreiras': [
-                    {'nome': 'Engenharia de Software', 'salario': 'R$ 8.500', 'icone': 'code'},
-                    {'nome': 'Ciência de Dados', 'salario': 'R$ 9.000', 'icone': 'database'},
-                    {'nome': 'Engenharia de Produção', 'salario': 'R$ 7.200', 'icone': 'settings'},
-                    {'nome': 'Economia e Finanças', 'salario': 'R$ 6.800', 'icone': 'trending-up'}
-                ]
-            },
-            'Humanas': {
-                'titulo': 'Pensador e Comunicador de Humanas',
-                'descricao': 'Você valoriza a história, dinâmicas sociais, linguagem e conexões humanas. Empatia e comunicação são as suas maiores forças profissionais.',
-                'carreiras': [
-                    {'nome': 'Direito', 'salario': 'R$ 7.800', 'icone': 'briefcase'},
-                    {'nome': 'Psicologia', 'salario': 'R$ 4.500', 'icone': 'users'},
-                    {'nome': 'Marketing e Publicidade', 'salario': 'R$ 5.200', 'icone': 'megaphone'},
-                    {'nome': 'Relações Internacionais', 'salario': 'R$ 6.000', 'icone': 'globe'}
-                ]
-            },
-            'Saude': {
-                'titulo': 'Protetor do Cuidado e Saúde',
-                'descricao': 'Seu foco principal está na promoção do bem-estar físico e mental das pessoas. Você demonstra profundo zelo e sensibilidade para com o próximo.',
-                'carreiras': [
-                    {'nome': 'Medicina', 'salario': 'R$ 15.000', 'icone': 'heart'},
-                    {'nome': 'Enfermagem', 'salario': 'R$ 5.500', 'icone': 'activity'},
-                    {'nome': 'Fisioterapia', 'salario': 'R$ 4.200', 'icone': 'shield-alert'},
-                    {'nome': 'Nutrição', 'salario': 'R$ 4.000', 'icone': 'apple'}
-                ]
-            },
-            'Natureza': {
-                'titulo': 'Cientista e Protetor da Natureza',
-                'descricao': 'Você possui uma conexão natural com o meio ambiente, com a fauna, a flora e com o estudo das leis da biologia e ciências da terra.',
-                'carreiras': [
-                    {'nome': 'Biotecnologia / Biologia', 'salario': 'R$ 5.200', 'icone': 'flask'},
-                    {'nome': 'Engenharia Ambiental', 'salario': 'R$ 7.000', 'icone': 'leaf'},
-                    {'nome': 'Medicina Veterinária', 'salario': 'R$ 5.000', 'icone': 'dog'},
-                    {'nome': 'Agronomia', 'salario': 'R$ 6.800', 'icone': 'sprout'}
-                ]
+        api_key = getattr(settings, 'GEMINI_API_KEY', '')
+        resultado = None
+        
+        if HAS_GEMINI and api_key and user_answers:
+            try:
+                genai.configure(api_key=api_key)
+                model = genai.GenerativeModel("gemini-2.5-flash", generation_config={"temperature": 0.8})
+                prompt = f"""
+                Gere um resultado de teste vocacional altamente personalizado para um usuário que tem maior afinidade com a área de: {winner}.
+                As respostas dele no teste foram:
+                {json.dumps(user_answers, ensure_ascii=False, indent=2)}
+                E suas preferências iniciais:
+                Matéria: {prefs.get('materia', '')}, Hobby: {prefs.get('hobby', '')}, Habilidade: {prefs.get('habilidade', '')}, Objetivo: {prefs.get('objetivo', '')}
+                
+                Crie um perfil vocacional engajador e preciso. Retorne ESTRITAMENTE em formato JSON, sem marcações markdown:
+                {{
+                    "titulo": "Título criativo do perfil (ex: Explorador da Lógica e Exatas)",
+                    "descricao": "Uma descrição envolvente de até 3 linhas sobre as características vocacionais do usuário.",
+                    "carreiras": [
+                        {{"nome": "Nome da Profissão", "salario": "R$ X.XXX", "icone": "um icone da biblioteca lucide-icons (ex: code, heart, leaf, briefcase, globe, etc)"}},
+                        {{"nome": "...", "salario": "...", "icone": "..."}},
+                        {{"nome": "...", "salario": "...", "icone": "..."}},
+                        {{"nome": "...", "salario": "...", "icone": "..."}}
+                    ]
+                }}
+                """
+                response = model.generate_content(prompt)
+                text = response.text.replace("```json", "").replace("```", "").strip()
+                resultado = json.loads(text)
+            except Exception as e:
+                resultado = None
+
+        if not resultado:
+            # Fallback Profiles mapping
+            profiles = {
+                'Exatas': {
+                    'titulo': 'Explorador da Lógica e Exatas',
+                    'descricao': 'Você é movido por dados, lógica, equações e tecnologia. Gosta de estruturar ideias e foca na resolução objetiva de problemas complexos.',
+                    'carreiras': [
+                        {'nome': 'Engenharia de Software', 'salario': 'R$ 8.500', 'icone': 'code'},
+                        {'nome': 'Ciência de Dados', 'salario': 'R$ 9.000', 'icone': 'database'},
+                        {'nome': 'Engenharia de Produção', 'salario': 'R$ 7.200', 'icone': 'settings'},
+                        {'nome': 'Economia e Finanças', 'salario': 'R$ 6.800', 'icone': 'trending-up'}
+                    ]
+                },
+                'Humanas': {
+                    'titulo': 'Pensador e Comunicador de Humanas',
+                    'descricao': 'Você valoriza a história, dinâmicas sociais, linguagem e conexões humanas. Empatia e comunicação são as suas maiores forças profissionais.',
+                    'carreiras': [
+                        {'nome': 'Direito', 'salario': 'R$ 7.800', 'icone': 'briefcase'},
+                        {'nome': 'Psicologia', 'salario': 'R$ 4.500', 'icone': 'users'},
+                        {'nome': 'Marketing e Publicidade', 'salario': 'R$ 5.200', 'icone': 'megaphone'},
+                        {'nome': 'Relações Internacionais', 'salario': 'R$ 6.000', 'icone': 'globe'}
+                    ]
+                },
+                'Saude': {
+                    'titulo': 'Protetor do Cuidado e Saúde',
+                    'descricao': 'Seu foco principal está na promoção do bem-estar físico e mental das pessoas. Você demonstra profundo zelo e sensibilidade para com o próximo.',
+                    'carreiras': [
+                        {'nome': 'Medicina', 'salario': 'R$ 15.000', 'icone': 'heart'},
+                        {'nome': 'Enfermagem', 'salario': 'R$ 5.500', 'icone': 'activity'},
+                        {'nome': 'Fisioterapia', 'salario': 'R$ 4.200', 'icone': 'shield-alert'},
+                        {'nome': 'Nutrição', 'salario': 'R$ 4.000', 'icone': 'apple'}
+                    ]
+                },
+                'Natureza': {
+                    'titulo': 'Cientista e Protetor da Natureza',
+                    'descricao': 'Você possui uma conexão natural com o meio ambiente, com a fauna, a flora e com o estudo das leis da biologia e ciências da terra.',
+                    'carreiras': [
+                        {'nome': 'Biotecnologia / Biologia', 'salario': 'R$ 5.200', 'icone': 'flask'},
+                        {'nome': 'Engenharia Ambiental', 'salario': 'R$ 7.000', 'icone': 'leaf'},
+                        {'nome': 'Medicina Veterinária', 'salario': 'R$ 5.000', 'icone': 'dog'},
+                        {'nome': 'Agronomia', 'salario': 'R$ 6.800', 'icone': 'sprout'}
+                    ]
+                }
             }
-        }
-        
-        resultado = profiles.get(winner, profiles['Exatas'])
+            resultado = profiles.get(winner, profiles['Exatas'])
+            
         return render(request, 'teste_resultado.html', {'resultado': resultado, 'winner': winner})
         
     return redirect('iniciar_teste')
