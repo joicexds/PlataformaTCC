@@ -3,28 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Início - FutureWay</title>
+    <title>Painel - FutureWay</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-main: #0E1020;
-            --bg-card: #15182D;
-            --color-primary-start: #A855F7;
-            --color-primary-end: #FF5FA2;
-            --color-lavender: #6E5BC7;
-            --color-cyan: #3DD6D0;
-            --text-white: #FFFFFF;
-            --text-secondary: #8E94B2;
-            --border-color: #2A2D3E;
+            --bg-main: #060814;
+            --bg-sidebar: #090B19;
+            --bg-card: #0C0E22;
+            --bg-card-hover: #121532;
+            --border-color: #1A1D3A;
             
-            --color-danger: #F87171;
-            --color-danger-bg: #2D191E;
-            --color-danger-border: #EF4444;
-            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+            --color-purple: #A855F7;
+            --color-pink: #FF5FA2;
+            --color-cyan: #3DD6D0;
+            --color-blue: #3B82F6;
+            
+            --text-white: #FFFFFF;
+            --text-muted: #8E94B2;
+            --text-secondary: #B4B9D4;
+            
+            --gradient-primary: linear-gradient(135deg, var(--color-purple), var(--color-pink));
+            --gradient-blue-purple: linear-gradient(135deg, var(--color-cyan), var(--color-purple));
         }
 
         * {
@@ -39,124 +42,942 @@
             color: var(--text-white);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            overflow-x: hidden;
         }
 
-        .header {
-            background-color: var(--bg-card);
-            border-bottom: 1px solid var(--border-color);
-            padding: 20px 40px;
+        /* Sidebar styling */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            padding: 30px 20px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 10;
         }
 
-        .logo {
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            margin-bottom: 40px;
+            padding-left: 10px;
+        }
+
+        .brand-logo i {
+            color: var(--color-pink);
+            font-size: 24px;
+        }
+
+        .brand-logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--text-white), var(--color-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-subtitle {
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .menu-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item a:hover {
+            background-color: var(--bg-card-hover);
+            color: var(--text-white);
+        }
+
+        .menu-item.active a {
+            background-color: rgba(168, 85, 247, 0.15);
+            color: var(--color-purple);
+            font-weight: 600;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .user-profile-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .user-profile-card:hover {
+            background-color: var(--bg-card-hover);
+            border-color: var(--color-purple);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-white);
+            font-size: 16px;
+        }
+
+        .user-meta {
+            flex: 1;
+            margin-left: 12px;
+            text-align: left;
+        }
+
+        .user-meta h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        .user-meta p {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .user-profile-card i {
+            color: var(--text-muted);
+        }
+
+        /* Main Content area */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 1200px;
+        }
+
+        /* Top Bar stats */
+        .topbar-stats {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .stat-badge.gems i {
+            color: var(--color-cyan);
+        }
+
+        .stat-badge.streak i {
+            color: #EF4444; /* orange-red */
+        }
+
+        .btn-notification {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 20px;
+            transition: color 0.2s;
+        }
+
+        .btn-notification:hover {
+            color: var(--text-white);
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background-color: var(--bg-card);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .welcome-info {
+            max-width: 50%;
+            text-align: left;
+            z-index: 2;
+        }
+
+        .welcome-user {
+            font-size: 16px;
+            color: var(--text-white);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .welcome-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.25;
+            background: linear-gradient(135deg, var(--color-cyan), var(--color-purple), var(--color-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .welcome-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .btn-start-test {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 22px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            padding: 14px 28px;
+            border-radius: 14px;
+            background: var(--gradient-primary);
+            color: var(--text-white);
             text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 95, 162, 0.3);
         }
 
-        .logo i {
+        .btn-start-test:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 95, 162, 0.5);
+        }
+
+        /* Journey Map (Duolingo Path) styling */
+        .journey-map {
+            width: 45%;
+            height: 220px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .journey-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .journey-node {
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-white);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+        }
+
+        .journey-node:hover {
+            transform: scale(1.15) translateY(-2px);
+        }
+
+        .journey-node.completed {
+            background: var(--gradient-blue-purple);
+        }
+
+        .journey-node.active {
+            background: var(--gradient-primary);
+            border-color: var(--text-white);
+            box-shadow: 0 0 25px rgba(255, 95, 162, 0.8);
+            animation: pulse-glow 2s infinite alternate;
+        }
+
+        .journey-node.locked {
+            background: #1C1E36;
+            color: var(--text-muted);
+            border-color: var(--border-color);
+            box-shadow: none;
+        }
+
+        @keyframes pulse-glow {
+            from {
+                box-shadow: 0 0 15px rgba(255, 95, 162, 0.6);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(255, 95, 162, 1);
+            }
+        }
+
+        /* Grid Row Layouts */
+        .dashboard-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .dashboard-row.uneven {
+            grid-template-columns: 1.4fr 0.8fr;
+        }
+
+        /* Card stylings */
+        .dash-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            text-align: left;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .card-header i {
+            font-size: 20px;
+            color: var(--color-purple);
+        }
+
+        .card-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        /* Progress Card internals */
+        .progress-content-box {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .circular-progress {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: conic-gradient(var(--color-purple) 60%, var(--border-color) 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .circular-progress::before {
+            content: "";
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background-color: var(--bg-card);
+        }
+
+        .progress-value {
+            position: relative;
+            z-index: 2;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--text-white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .progress-value span {
+            font-size: 9px;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .progress-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .progress-details h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        .progress-details p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .progress-track {
+            height: 6px;
+            width: 100%;
+            background-color: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 60%;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+        }
+
+        .btn-continue-test {
+            align-self: flex-start;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid var(--color-purple);
+            background: transparent;
+            color: var(--text-white);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-continue-test:hover {
+            background-color: rgba(168, 85, 247, 0.1);
+            border-color: var(--color-pink);
+        }
+
+        /* Streak Card internals */
+        .streak-info {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .streak-count {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--color-purple);
+        }
+
+        .streak-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .streak-days {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .day-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .day-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .day-status {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .day-status.completed {
+            background-color: rgba(61, 214, 208, 0.1);
+            border: 2px solid var(--color-cyan);
             color: var(--color-cyan);
-            -webkit-text-fill-color: initial;
         }
 
-        .user-nav {
+        .day-status.active {
+            background: var(--gradient-primary);
+            color: var(--text-white);
+            box-shadow: 0 0 10px rgba(255, 95, 162, 0.4);
+        }
+
+        /* Daily Quests styling */
+        .quests-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .quest-subcard {
+            background-color: rgba(26, 29, 58, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: all 0.2s;
+        }
+
+        .quest-subcard:hover {
+            border-color: var(--color-purple);
+            transform: translateY(-2px);
+        }
+
+        .quest-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-white);
+            line-height: 1.5;
+            min-height: 40px;
+        }
+
+        .quest-progress-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .quest-bar-container {
+            flex: 1;
+            height: 6px;
+            background-color: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .quest-fill {
+            height: 100%;
+            background-color: var(--color-purple);
+            border-radius: 3px;
+        }
+
+        .quest-xp {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .quest-xp i {
+            color: #EAB308; /* Gold/yellow star */
+            font-size: 14px;
+        }
+
+        /* Achievement Card styling */
+        .achievement-box {
             display: flex;
             align-items: center;
             gap: 20px;
         }
 
-        .user-info {
+        .badge-hexagon {
+            position: relative;
+            width: 60px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--color-purple), var(--color-pink));
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-weight: 500;
-            color: var(--text-white);
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
         }
 
-        .btn-logout {
-            background-color: var(--color-danger-bg);
-            color: var(--color-danger);
-            border: 1px solid var(--color-danger-border);
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .btn-logout:hover {
-            background-color: var(--color-danger-border);
-            color: #FFFFFF;
-        }
-
-        .container {
-            flex: 1;
-            max-width: 800px;
-            margin: 60px auto;
-            padding: 0 20px;
-            text-align: center;
-        }
-
-        .welcome-card {
+        .badge-hexagon-inner {
+            position: absolute;
+            width: 52px;
+            height: 62px;
             background-color: var(--bg-card);
-            border-radius: 16px;
-            padding: 40px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .welcome-card h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 32px;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
+        .badge-hexagon-inner i {
+            font-size: 24px;
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .welcome-card p {
-            font-size: 16px;
-            color: var(--text-secondary);
-            line-height: 1.6;
+        .achievement-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .achievement-details h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        .achievement-details p {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .achievement-xp {
+            font-size: 12px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--color-purple), var(--color-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 4px;
         }
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <a href="/" class="logo">
-            <i data-lucide="rocket"></i>
-            <span>FutureWay</span>
+    <!-- Sidebar Menu (Duolingo Style Layout) -->
+    <aside class="sidebar">
+        <a href="{% url 'home' %}" class="brand-logo">
+            <i data-lucide="compass"></i>
+            <div>
+                <div class="brand-logo-text">FUTURO</div>
+                <div class="brand-subtitle">Descubra seu caminho</div>
+            </div>
         </a>
-        <div class="user-nav">
-            <span class="user-info">
-                <i data-lucide="user" style="width: 18px; height: 18px; color: var(--color-cyan);"></i>
-                Olá, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}
-            </span>
-            <a href="{% url 'logout' %}" class="btn-logout">Sair</a>
-        </div>
-    </header>
 
-    <div class="container">
-        <div class="welcome-card">
-            <h1>Você está conectado!</h1>
-            <p>
-                Sua autenticação foi realizada com sucesso através do sistema nativo do Django. A partir daqui, você pode iniciar o desenvolvimento da sua plataforma de orientação vocacional de forma limpa e organizada.
-            </p>
+        <ul class="menu-list">
+            <li class="menu-item active">
+                <a href="{% url 'home' %}">
+                    <i data-lucide="home" style="width: 20px; height: 20px;"></i>
+                    <span>Início</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="award" style="width: 20px; height: 20px;"></i>
+                    <span>Teste Vocacional</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="trending-up" style="width: 20px; height: 20px;"></i>
+                    <span>Meu Progresso</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="trophy" style="width: 20px; height: 20px;"></i>
+                    <span>Conquistas</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="bar-chart-2" style="width: 20px; height: 20px;"></i>
+                    <span>Ranking</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+                    <span>Explorar Profissões</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="book-open" style="width: 20px; height: 20px;"></i>
+                    <span>Guia de Carreiras</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="settings" style="width: 20px; height: 20px;"></i>
+                    <span>Configurações</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="user-profile-card">
+                <div class="user-avatar">
+                    {% if user.first_name %}{{ user.first_name|slice:":1"|upper }}{% else %}{{ user.username|slice:":1"|upper }}{% endif %}
+                </div>
+                <div class="user-meta">
+                    <h4>Olá, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!</h4>
+                    <p>Ver perfil</p>
+                </div>
+                <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+            </div>
         </div>
-    </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        
+        <!-- Top bar metrics -->
+        <div class="topbar-stats">
+            <div class="stat-badge gems">
+                <i data-lucide="gem" style="width: 18px; height: 18px;"></i>
+                <span>1250</span>
+            </div>
+            <div class="stat-badge streak">
+                <i data-lucide="flame" style="width: 18px; height: 18px;"></i>
+                <span>7 dias</span>
+            </div>
+            <button class="btn-notification">
+                <i data-lucide="bell"></i>
+            </button>
+            <a href="{% url 'logout' %}" class="btn-logout" style="text-decoration: none; color: var(--color-pink); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 12px; font-weight: 600; font-size: 14px; background-color: rgba(255, 95, 162, 0.05); transition: 0.2s;">Sair</a>
+        </div>
+
+        <!-- Welcome Hero Banner -->
+        <section class="welcome-banner">
+            <div class="welcome-info">
+                <div class="welcome-user">Olá, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}! 👋</div>
+                <h1 class="welcome-title">Pronto para descobrir seu futuro?</h1>
+                <p class="welcome-desc">
+                    Responda ao teste vocacional e descubra carreiras que combinam com você. Cada passo te aproxima do seu futuro!
+                </p>
+                <a href="#" class="btn-start-test">
+                    <span>Começar Teste</span>
+                    <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+                </a>
+            </div>
+
+            <!-- Interactive Duolingo Winding Road Path -->
+            <div class="journey-map">
+                <!-- SVG path line drawing the neon path -->
+                <svg class="journey-svg" viewBox="0 0 400 200" fill="none">
+                    <path d="M 40 150 Q 120 150 150 100 T 260 50 T 360 80" stroke="url(#road-gradient)" stroke-width="8" stroke-linecap="round" opacity="0.8"/>
+                    <defs>
+                        <linearGradient id="road-gradient" x1="0" y1="150" x2="400" y2="80">
+                            <stop stop-color="#3DD6D0"/>
+                            <stop offset="0.5" stop-color="#A855F7"/>
+                            <stop offset="1" stop-color="#FF5FA2"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+
+                <!-- Interactive level nodes -->
+                <div class="journey-node completed" style="bottom: 18px; left: 24px;" title="Introdução">
+                    <i data-lucide="star" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div class="journey-node completed" style="bottom: 40px; left: 120px;" title="Competências">
+                    <i data-lucide="briefcase" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div class="journey-node active" style="top: 60px; left: 190px;" title="Áreas de Interesse">
+                    <i data-lucide="brain" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div class="journey-node locked" style="top: 15px; left: 270px;" title="Valores Pessoais">
+                    <i data-lucide="heart" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div class="journey-node locked" style="top: 45px; left: 340px;" title="Resultado Final">
+                    <i data-lucide="rocket" style="width: 20px; height: 20px;"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cards Row 1 -->
+        <div class="dashboard-row">
+            <!-- Progress Card -->
+            <div class="dash-card">
+                <div class="card-header">
+                    <i data-lucide="trending-up"></i>
+                    <h3>Seu Progresso</h3>
+                </div>
+                <div class="progress-content-box">
+                    <div class="circular-progress">
+                        <div class="progress-value">
+                            60%
+                            <span>concluído</span>
+                        </div>
+                    </div>
+                    <div class="progress-details">
+                        <h4>Continue assim!</h4>
+                        <p>Você está no caminho certo para descobrir sua vocação.</p>
+                        <div class="progress-track">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <a href="#" class="btn-continue-test">Continuar Teste</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Streak Card -->
+            <div class="dash-card">
+                <div class="card-header">
+                    <i data-lucide="flame" style="color: #EF4444;"></i>
+                    <h3>Sequência Atual</h3>
+                </div>
+                <div class="streak-info">
+                    <div>
+                        <div class="streak-count">7 dias</div>
+                        <div class="streak-desc">Continue ativo e mantenha sua sequência!</div>
+                    </div>
+                    <div class="streak-days">
+                        <div class="day-box">
+                            <span class="day-label">S</span>
+                            <div class="day-status completed">✓</div>
+                        </div>
+                        <div class="day-box">
+                            <span class="day-label">T</span>
+                            <div class="day-status completed">✓</div>
+                        </div>
+                        <div class="day-box">
+                            <span class="day-label">Q</span>
+                            <div class="day-status completed">✓</div>
+                        </div>
+                        <div class="day-box">
+                            <span class="day-label">Q</span>
+                            <div class="day-status completed">✓</div>
+                        </div>
+                        <div class="day-box">
+                            <span class="day-label">S</span>
+                            <div class="day-status completed">✓</div>
+                        </div>
+                        <div class="day-box">
+                            <span class="day-label">S</span>
+                            <div class="day-status completed">✓</div>
+                        </div>
+                        <div class="day-box">
+                            <span class="day-label">D</span>
+                            <div class="day-status active">D</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards Row 2 -->
+        <div class="dashboard-row uneven">
+            <!-- Daily Quests Card -->
+            <div class="dash-card">
+                <div class="card-header">
+                    <i data-lucide="target" style="color: var(--color-cyan);"></i>
+                    <h3>Desafios Diários</h3>
+                </div>
+                <div class="quests-container">
+                    <div class="quest-subcard">
+                        <div class="quest-title">Responda 5 perguntas do teste</div>
+                        <div class="quest-progress-box">
+                            <div class="quest-bar-container">
+                                <div class="quest-fill" style="width: 80%;"></div>
+                            </div>
+                            <div class="quest-xp">
+                                <i data-lucide="sparkles"></i>
+                                <span>50</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quest-subcard">
+                        <div class="quest-title">Explore 3 profissões</div>
+                        <div class="quest-progress-box">
+                            <div class="quest-bar-container">
+                                <div class="quest-fill" style="width: 33%;"></div>
+                            </div>
+                            <div class="quest-xp">
+                                <i data-lucide="star"></i>
+                                <span>40</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quest-subcard">
+                        <div class="quest-title">Complete uma área de interesse</div>
+                        <div class="quest-progress-box">
+                            <div class="quest-bar-container">
+                                <div class="quest-fill" style="width: 0%;"></div>
+                            </div>
+                            <div class="quest-xp">
+                                <i data-lucide="star"></i>
+                                <span>60</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Achievement Card -->
+            <div class="dash-card">
+                <div class="card-header">
+                    <i data-lucide="trophy" style="color: #EAB308;"></i>
+                    <h3>Conquista Recente</h3>
+                </div>
+                <div class="achievement-box">
+                    <div class="badge-hexagon">
+                        <div class="badge-hexagon-inner">
+                            <i data-lucide="zap"></i>
+                        </div>
+                    </div>
+                    <div class="achievement-details">
+                        <h4>Primeiros Passos</h4>
+                        <p>Completou suas primeiras perguntas do teste!</p>
+                        <div class="achievement-xp">+100 XP</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
 
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
