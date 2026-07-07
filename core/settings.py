@@ -136,3 +136,7 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'
 
+# Session configuration to always ask for login on new browser sessions
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+

@@ -238,44 +238,66 @@
         <div class="column-presentation">
             <div class="presentation-content">
                 <a href="/" class="presentation-logo">
-                    <i data-lucide="compass" style="width: 32px; height: 32px;"></i>
-                    <span>PlataformaTCC</span>
+                    <i data-lucide="rocket" style="width: 32px; height: 32px;"></i>
+                    <span>FutureWay</span>
                 </a>
                 <h1 class="presentation-title">Sua jornada de autoconhecimento começa aqui</h1>
                 <p class="presentation-subtitle">
                     Descubra suas habilidades naturais, alinhe seus objetivos e tome decisões de carreira mais assertivas.
                 </p>
                 <div class="illustration-box">
-                    <!-- Clean SVG Illustration -->
+                    <!-- FutureWay SVG Illustration representing the future -->
                     <svg class="illustration-svg" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Floating dashboard items -->
-                        <rect x="50" y="50" width="400" height="280" rx="20" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="4" />
-                        <!-- Top Bar of Dashboard -->
-                        <line x1="50" y1="100" x2="450" y2="100" stroke="#E2E8F0" stroke-width="3" />
-                        <circle cx="80" cy="75" r="8" fill="#FF5F56" />
-                        <circle cx="104" cy="75" r="8" fill="#FFBD2E" />
-                        <circle cx="128" cy="75" r="8" fill="#27C93F" />
-                        
-                        <!-- Illustration content: Compass & Charts -->
-                        <circle cx="250" cy="210" r="60" fill="#EEF6FF" stroke="#2563EB" stroke-width="4" stroke-dasharray="8 4" />
-                        <path d="M250 170 L262 205 L285 210 L262 215 L250 250 L238 215 L215 210 L238 205 Z" fill="#2563EB" />
-                        <circle cx="250" cy="210" r="6" fill="#FFFFFF" />
+                        <!-- Background stars -->
+                        <circle cx="100" cy="80" r="2" fill="#3B82F6" opacity="0.5"/>
+                        <circle cx="420" cy="120" r="3" fill="#4FD1C5" opacity="0.6"/>
+                        <circle cx="150" cy="220" r="2.5" fill="#3B82F6" opacity="0.4"/>
+                        <circle cx="380" cy="260" r="1.5" fill="#4FD1C5" opacity="0.5"/>
 
-                        <!-- Decorative graphs -->
-                        <rect x="80" y="140" width="100" height="12" rx="6" fill="#93C5FD" />
-                        <rect x="80" y="165" width="70" height="12" rx="6" fill="#E2E8F0" />
-                        <rect x="80" y="190" width="85" height="12" rx="6" fill="#E2E8F0" />
-                        
-                        <rect x="320" y="140" width="100" height="12" rx="6" fill="#86EFAC" />
-                        <rect x="320" y="165" width="85" height="12" rx="6" fill="#E2E8F0" />
-                        <rect x="320" y="190" width="70" height="12" rx="6" fill="#E2E8F0" />
+                        <!-- Perspective Horizon Grid Lines (representing the pathway of the future) -->
+                        <path d="M 50 350 L 250 180 M 450 350 L 250 180 M 150 350 L 250 180 M 350 350 L 250 180 M 250 350 L 250 180" stroke="#93C5FD" stroke-width="2" opacity="0.4"/>
+                        <path d="M 80 320 H 420 M 120 280 H 380 M 160 240 H 340 M 200 200 H 300" stroke="#93C5FD" stroke-width="1.5" opacity="0.3"/>
 
-                        <!-- Connection lines -->
-                        <path d="M200 300 C 220 320, 280 320, 300 300" stroke="#93C5FD" stroke-width="4" stroke-linecap="round" />
+                        <!-- Pathway (The Way) -->
+                        <polygon points="250,180 180,350 320,350" fill="url(#way-gradient)" opacity="0.85"/>
+
+                        <!-- Glowing Star/Future Portal at the end of the way -->
+                        <circle cx="250" cy="180" r="50" fill="url(#future-glow)"/>
+                        <!-- Central Bright Light -->
+                        <circle cx="250" cy="180" r="15" fill="#FFFFFF"/>
+                        <!-- Decorative Orbit Rings -->
+                        <circle cx="250" cy="180" r="60" stroke="#2563EB" stroke-width="2" stroke-dasharray="12 6" opacity="0.5"/>
+                        <circle cx="250" cy="180" r="75" stroke="#4FD1C5" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.4"/>
+
+                        <!-- Rocket rising up towards the future/star -->
+                        <g transform="translate(242, 120) scale(0.8)">
+                            <path d="M 10 0 C 15 10, 15 30, 15 40 L 5 40 C 5 30, 5 10, 10 0 Z" fill="#2563EB"/>
+                            <path d="M 10 0 C 7 10, 5 30, 5 40 L 15 40 C 15 30, 13 10, 10 0 Z" fill="#3B82F6"/>
+                            <!-- Wings -->
+                            <path d="M 5 30 L 0 42 L 5 40 Z" fill="#1D4ED8"/>
+                            <path d="M 15 30 L 20 42 L 15 40 Z" fill="#1D4ED8"/>
+                            <!-- Fire -->
+                            <path d="M 7 42 L 10 52 L 13 42 Z" fill="#FACC15"/>
+                        </g>
+
+                        <!-- Gradients definitions -->
+                        <defs>
+                            <linearGradient id="way-gradient" x1="250" y1="180" x2="250" y2="350" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#2563EB" stop-opacity="0.1"/>
+                                <stop offset="1" stop-color="#2563EB" stop-opacity="0.6"/>
+                            </linearGradient>
+                            <radialGradient id="future-glow" cx="250" cy="180" r="50" fx="250" fy="180" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#FACC15" stop-opacity="1"/>
+                                <stop offset="0.4" stop-color="#4FD1C5" stop-opacity="0.8"/>
+                                <stop offset="0.8" stop-color="#2563EB" stop-opacity="0.2"/>
+                                <stop offset="1" stop-color="#2563EB" stop-opacity="0"/>
+                            </radialGradient>
+                        </defs>
                     </svg>
                 </div>
             </div>
         </div>
+
 
         <!-- Right Column: Login (45%) -->
         <div class="column-login">
