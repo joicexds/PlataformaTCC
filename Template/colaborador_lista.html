@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}Colaboradores - Sistema Integrador{% endblock %}
+
+{% block body_class %}dashboard-body{% endblock %}
+
+{% block content %}
+<div class="glass-container" style="max-width: 1400px; margin: 2rem auto; padding: 2rem; position: relative;">
+    
+    <!-- 1. CABEÇALHO -->
+    {% include 'header.html' %}
+
+    <div style="display: flex; margin-top: 1.5rem; min-height: 500px;">
+        <!-- SIDEBAR ESQUERDA -->
+        {% include 'sidebar.html' with active_menu='colaboradores' %}
+
+        <!-- CONTEÚDO CENTRAL -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 2rem; align-items: center;">
+            <div style="width: 100%; max-width: 1100px;">
+                
+                <header class="header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                        <a href="{% url 'home' %}" style="background: var(--glass-border-light); color: var(--text-primary); padding: 0.5rem; border-radius: 8px; display: flex; align-items: center; text-decoration: none; border: 1px solid var(--glass-border);">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </a>
+                        <div class="header-title">
+                            <h1 style="margin: 0; font-size: 1.8rem; font-weight: 700;">Gestão de Colaboradores</h1>
+                            <p style="margin: 0.5rem 0 0 0; color: #94a3b8;">{{ colaboradores|length }} colaboradores registrados</p>
+                        </div>
+                    </div>
+                    <a href="{% url 'colaborador_novo' %}" class="btn-action-two" style="padding: 0.8rem 1.5rem; background: #3b82f6; color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Novo Colaborador
+                    </a>
+                </header>
+
+                {% if messages %}
+                <div>
+                    {% for message in messages %}
+                    <div style="padding: 1rem; border-radius: 8px; background: rgba(34, 197, 94, 0.2); border: 1px solid #22c55e; color: #22c55e; margin-bottom: 1rem;">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="glass-card" style="background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1.5rem;">
+                    <table class="data-table" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left; padding: 1rem; font-size: 0.85rem; color: #94a3b8; border-bottom: 1px solid var(--glass-border);">Nome / CPF</th>
+                                <th style="text-align: left; padding: 1rem; font-size: 0.85rem; color: #94a3b8; border-bottom: 1px solid var(--glass-border);">Empresa</th>
+                                <th style="text-align: left; padding: 1rem; font-size: 0.85rem; color: #94a3b8; border-bottom: 1px solid var(--glass-border);">Status</th>
+                                <th style="text-align: left; padding: 1rem; font-size: 0.85rem; color: #94a3b8; border-bottom: 1px solid var(--glass-border);">Tempo</th>
+                                <th style="text-align: right; padding: 1rem; font-size: 0.85rem; color: #94a3b8; border-bottom: 1px solid var(--glass-border);">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for colab in colaboradores %}
+                            <tr>
+                                <td style="padding: 1.25rem 1rem; border-bottom: 1px solid var(--glass-border);">
+                                    <div style="font-size: 0.9rem; font-weight: 700;">{{ colab.nome }}</div>
+                                    <div style="font-size: 0.75rem; color: #94a3b8;" class="mask-cpf">{{ colab.cpf }}</div>
+                                </td>
+                                <td style="padding: 1.25rem 1rem; font-size: 0.9rem; border-bottom: 1px solid var(--glass-border);">{{ colab.fk_empresa.nome }}</td>
+                                <td style="padding: 1.25rem 1rem; font-size: 0.9rem; border-bottom: 1px solid var(--glass-border);">
+                                    {% if colab.ativo %}
+                                    <span style="background: rgba(34, 197, 94, 0.1); color: #22c55e; padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.8rem;">Ativo</span>
+                                    {% else %}
+                                    <span style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.8rem;">Inativo</span>
+                                    {% endif %}
+                                </td>
+                                <td style="padding: 1.25rem 1rem; font-size: 0.9rem; border-bottom: 1px solid var(--glass-border);">
+                                    <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                                        <span>{% if colab.tempo_empresa_anos > 0 %}{{ colab.tempo_empresa_anos }}a{% endif %} {{ colab.tempo_empresa_meses }}m</span>
+                                        {% if colab.status_vencimento == 'vencido' %}
+                                        <span style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; width: fit-content;">Expirado (>1 ano)</span>
+                                        {% elif colab.status_vencimento == 'alerta' %}
+                                        <span style="background: rgba(234, 179, 8, 0.1); color: #facc15; padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; width: fit-content;">Próximo do vencimento</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td style="padding: 1.25rem 1rem; font-size: 0.9rem; border-bottom: 1px solid var(--glass-border); text-align: right;">
+                                    <a href="{% url 'colaborador_editar' colab.id_colaborador %}" style="color: #3b82f6; text-decoration: none; margin-right: 1rem; font-weight: 600;">Editar</a>
+                                    <a href="{% url 'colaborador_excluir' colab.id_colaborador %}" style="color: #ef4444; text-decoration: none; font-weight: 600;" onclick="return confirm('Excluir este colaborador?')">Excluir</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" style="padding: 3rem; text-align: center; color: #94a3b8;">Nenhum colaborador registrado.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('menuToggle').addEventListener('click', function() {
+        const menu = document.getElementById('sideMenu');
+        if (menu.style.width === '0px' || menu.style.width === '') {
+            menu.style.width = '250px';
+            menu.style.marginRight = '2rem';
+            menu.style.border = '1px solid var(--glass-border)';
+        } else {
+            menu.style.width = '0';
+            menu.style.marginRight = '0';
+            menu.style.border = '0px solid var(--glass-border)';
+        }
+    });
+
+    function formatCPF(value) {
+        let val = value.replace(/\D/g, '');
+        if (val.length === 11) {
+            return val.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+        }
+        return value;
+    }
+
+    document.querySelectorAll('.mask-cpf').forEach(el => {
+        el.textContent = formatCPF(el.textContent);
+    });
+</script>
+{% endblock %}

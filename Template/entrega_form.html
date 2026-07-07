@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrar Entrega - Sistema Integrador{% endblock %}
+
+{% block body_class %}dashboard-body{% endblock %}
+
+{% block content %}
+<div class="glass-container" style="max-width: 1400px; margin: 2rem auto; padding: 2rem; position: relative;">
+
+    <!-- 1. CABEÇALHO -->
+    {% include 'header.html' %}
+
+    <div style="display: flex; margin-top: 1.5rem; min-height: 500px;">
+        <!-- SIDEBAR ESQUERDA -->
+        {% include 'sidebar.html' with active_menu='documentos' %}
+
+        <!-- CONTEÚDO CENTRAL -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 2rem; align-items: center;">
+            <div style="width: 100%; max-width: 800px;">
+                <header class="header" style="display: flex; gap: 1.5rem; align-items: center; margin-bottom: 2.5rem;">
+                    <a href="{% url 'entrega_lista' %}" style="background: var(--glass-border-light); color: var(--text-primary); padding: 0.5rem; border-radius: 8px; display: flex; align-items: center; text-decoration: none; border: 1px solid var(--glass-border);">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                    </a>
+                    <h1 style="margin: 0; font-size: 1.8rem; font-weight: 700;">{% if entrega %}Editar Entrega{% else %}Registrar Nova Entrega{% endif %}</h1>
+                </header>
+
+                <p style="text-align: center; color: #94a3b8; margin-bottom: 2.5rem;">
+                    Registre o recebimento de documentos para controle de vencimentos automático.
+                </p>
+
+                {% if messages %}
+                <div style="margin-bottom: 1.5rem;">
+                    {% for message in messages %}
+                    <div style="padding: 1rem; border-radius: 8px; background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444;">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="glass-card" style="background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2.5rem;">
+                    <form method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label style="display: block; margin-bottom: 0.6rem; color: #94a3b8; font-size: 0.9rem; font-weight: 600;">Empresa</label>
+                            <select name="empresa" required style="width: 100%; padding: 0.8rem; background: var(--glass-bg-darker); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); outline: none;">
+                                <option value="">Selecione uma empresa</option>
+                                {% for emp in empresas %}
+                                <option value="{{ emp.id_empresa }}" {% if entrega and entrega.fk_empresa_id == emp.id_empresa %}selected{% endif %}>{{ emp.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display: block; margin-bottom: 0.6rem; color: #94a3b8; font-size: 0.9rem; font-weight: 600;">Documento Entregue</label>
+                            <select name="tipo_doc" required style="width: 100%; padding: 0.8rem; background: var(--glass-bg-darker); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); outline: none;">
+                                <option value="">Selecione o documento</option>
+                                {% for tdoc in tipos_doc %}
+                                <option value="{{ tdoc.id_tipo_doc }}" {% if entrega and entrega.fk_tipo_doc_id == tdoc.id_tipo_doc %}selected{% endif %}>{{ tdoc.nome }} ({{ tdoc.prazo_validade_meses }} meses)</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display: block; margin-bottom: 0.6rem; color: #94a3b8; font-size: 0.9rem; font-weight: 600;">Data da Entrega</label>
+                            <input type="date" name="data_entrega" value="{{ entrega.data_entrega|date:'Y-m-d' }}" required style="width: 100%; padding: 0.8rem; background: var(--glass-bg-darker); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); outline: none; color-scheme: dark;">
+                        </div>
+
+                        <div class="form-group" style="padding: 1rem; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px; margin-bottom: 1.5rem;">
+                            <label style="display: block; margin-bottom: 0.6rem; color: #93c5fd; font-size: 0.9rem; font-weight: 600;">Responsável Técnico da Entrega</label>
+                            <p style="color: #f8fafc; font-size: 0.9rem; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                Será preenchido automaticamente com o Responsável Técnico atual da empresa selecionada.
+                            </p>
+                            <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.8rem; margin-bottom: 0;">Nota: A data de vencimento também será calculada automaticamente a partir da data de entrega e da validade do tipo de documento.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display: block; margin-bottom: 0.6rem; color: #94a3b8; font-size: 0.9rem; font-weight: 600;">Documento Digital (Anexo)</label>
+                            {% if entrega.arquivo %}
+                            <div style="margin-bottom: 0.8rem; padding: 0.8rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px;">
+                                <span style="font-size: 0.85rem; color: #10b981; font-weight: 600; display: block; margin-bottom: 0.5rem;">Documento já anexado:</span>
+                                <a href="{{ entrega.arquivo.url }}" target="_blank" style="color: #3b82f6; text-decoration: none; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                                    Baixar / Visualizar Arquivo Atual
+                                </a>
+                            </div>
+                            <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.5rem;">Para substituir o documento atual, envie um novo arquivo abaixo:</p>
+                            {% endif %}
+                            <input type="file" name="arquivo" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="width: 100%; padding: 0.8rem; background: var(--glass-bg-darker); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); outline: none;">
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                            <button type="submit" style="flex: 1; padding: 1rem; background: #3b82f6; color: var(--text-primary); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase;">
+                                SALVAR ENTREGA
+                            </button>
+                            <a href="{% url 'entrega_lista' %}" style="flex: 1; padding: 1rem; text-align: center; background: var(--glass-border-light); color: var(--text-primary); text-decoration: none; border-radius: 12px; font-weight: 600; border: 1px solid var(--glass-border); text-transform: uppercase;">
+                                CANCELAR
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('menuToggle').addEventListener('click', function () {
+        const menu = document.getElementById('sideMenu');
+        if (menu.style.width === '0px' || menu.style.width === '') {
+            menu.style.width = '250px';
+            menu.style.marginRight = '2rem';
+            menu.style.border = '1px solid var(--glass-border)';
+        } else {
+            menu.style.width = '0';
+            menu.style.marginRight = '0';
+            menu.style.border = '0px solid var(--glass-border)';
+        }
+    });
+</script>
+{% endblock %}

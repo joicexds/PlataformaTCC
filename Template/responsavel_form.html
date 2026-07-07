@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastro de Responsável Técnico - Sistema Integrador{% endblock %}
+
+{% block body_class %}dashboard-body{% endblock %}
+
+{% block content %}
+<div class="glass-container" style="max-width: 1400px; margin: 2rem auto; padding: 2rem; position: relative;">
+    
+    <!-- CABEÇALHO -->
+    {% include 'header.html' %}
+
+    <div style="display: flex; margin-top: 1.5rem; min-height: 500px;">
+        
+        <!-- SIDEBAR ESQUERDA -->
+        {% include 'sidebar.html' with active_menu='responsaveis' %}
+
+        <!-- CONTEÚDO CENTRAL -->
+        <div style="flex: 1; display: flex; justify-content: center;">
+            
+            <div style="width: 100%; max-width: 800px;">
+                <div class="glass-card" style="background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem;">
+                    <header class="header" style="display: flex; gap: 1.5rem; align-items: center; margin-bottom: 1.5rem;">
+                        <a href="{% url 'responsavel_lista' %}" style="background: var(--glass-border-light); color: var(--text-primary); padding: 0.5rem; border-radius: 8px; display: flex; align-items: center; text-decoration: none; border: 1px solid var(--glass-border);" title="Voltar para Consulta de Responsáveis">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                        </a>
+                        <h3 style="font-size: 1.4rem; font-weight: 700; color: #3b82f6; margin: 0;">
+                            {% if responsavel.id_resp_tecnico %}Editar Responsável{% else %}Novo Responsável{% endif %}
+                        </h3>
+                    </header>
+
+                    {% if messages %}
+                    <div style="margin-bottom: 1.5rem;">
+                        {% for message in messages %}
+                        <div style="padding: 1rem; border-radius: 8px; background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; margin-bottom: 1rem;">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label style="display: block; margin-bottom: 0.6rem; color: #94a3b8; font-size: 0.9rem; font-weight: 600;">Nome Completo</label>
+                            <input type="text" name="nome" value="{{ responsavel.nome|default:'' }}" required style="width: 100%; padding: 0.8rem; background: var(--glass-bg-darker); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); outline: none;" placeholder="Digite o nome completo">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 2rem;">
+                            <label style="display: block; margin-bottom: 0.6rem; color: #94a3b8; font-size: 0.9rem; font-weight: 600;">CPF</label>
+                            <input type="text" id="cpfInput" name="cpf" value="{{ responsavel.cpf|default:'' }}" required style="width: 100%; padding: 0.8rem; background: var(--glass-bg-darker); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); outline: none;" placeholder="000.000.000-00">
+                        </div>
+
+                        <h3 style="font-size: 1.1rem; font-weight: 700; margin: 2rem 0 1.2rem 0; color: #10b981;">Vincular Empresas</h3>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1rem;">Selecione as empresas que estarão sob a responsabilidade deste profissional:</p>
+                        
+                        <input type="text" id="pesquisaEmpresa" placeholder="Buscar empresa..." style="width: 100%; padding: 0.8rem; background: var(--glass-bg-darker); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); outline: none; margin-bottom: 1rem;">
+                        
+                        <div id="listaEmpresas" style="max-height: 200px; overflow-y: auto; background: var(--glass-bg-darker); border-radius: 8px; padding: 1rem; border: 1px solid var(--glass-border-light);">
+                            {% for empresa in todas_empresas %}
+                            <label class="empresa-item" style="display: flex; align-items: center; gap: 0.8rem; padding: 0.5rem; cursor: pointer; border-radius: 6px; transition: 0.2s;">
+                                <input type="checkbox" name="empresas" value="{{ empresa.id_empresa }}" {% if empresa in empresas_vinculadas %}checked{% endif %} style="width: 18px; height: 18px; accent-color: #3b82f6;">
+                                <span style="font-size: 0.9rem;">{{ empresa.nome }}</span>
+                            </label>
+                            {% empty %}
+                            <p style="font-size: 0.85rem; color: #64748b; text-align: center;">Nenhuma empresa cadastrada no sistema.</p>
+                            {% endfor %}
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; margin-top: 2.5rem;">
+                            <a href="{% url 'responsavel_lista' %}" style="padding: 1rem; background: var(--glass-border); color: var(--text-primary); border: none; border-radius: 10px; font-weight: 700; text-decoration: none; text-align: center; width: 150px;">
+                                CANCELAR
+                            </a>
+                            <button type="submit" style="flex: 1; padding: 1rem; background: #3b82f6; color: var(--text-primary); border: none; border-radius: 10px; font-weight: 700; cursor: pointer;">
+                                {% if responsavel.id_resp_tecnico %}ATUALIZAR{% else %}SALVAR{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function formatCPF(value) {
+        return value.replace(/\D/g, '')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+            .substring(0, 14);
+    }
+
+    const cpfInput = document.getElementById('cpfInput');
+    if(cpfInput) {
+        cpfInput.addEventListener('input', function(e) {
+            e.target.value = formatCPF(e.target.value);
+        });
+        cpfInput.value = formatCPF(cpfInput.value);
+
+        cpfInput.addEventListener('keypress', function(e) {
+            if (!/[\d]/.test(e.key) && e.key !== 'Enter') {
+                e.preventDefault();
+            }
+        });
+    }
+
+    const pesquisaEmpresa = document.getElementById('pesquisaEmpresa');
+    if (pesquisaEmpresa) {
+        pesquisaEmpresa.addEventListener('input', function() {
+            const filtro = this.value.toLowerCase();
+            const itens = document.querySelectorAll('.empresa-item');
+            itens.forEach(function(item) {
+                const texto = item.textContent.toLowerCase();
+                if (texto.includes(filtro)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    }
+
+    document.getElementById('menuToggle').addEventListener('click', function() {
+        const menu = document.getElementById('sideMenu');
+        if (menu.style.width === '0px' || menu.style.width === '') {
+            menu.style.width = '250px';
+            menu.style.marginRight = '2rem';
+            menu.style.border = '1px solid var(--glass-border)';
+        } else {
+            menu.style.width = '0';
+            menu.style.marginRight = '0';
+            menu.style.border = '0px solid var(--glass-border)';
+        }
+    });
+</script>
+{% endblock %}

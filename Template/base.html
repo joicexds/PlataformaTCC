@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema Integrador{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+            }
+        })();
+    </script>
+    {% block sidebar %}{% endblock %}
+    {% block content %}
+    {% endblock %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                const sunIcon = document.getElementById('sunIcon');
+                const moonIcon = document.getElementById('moonIcon');
+                
+                const isLight = document.body.classList.contains('light-theme');
+                if (isLight) {
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'block';
+                }
+                
+                themeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('light-theme');
+                    const lightNow = document.body.classList.contains('light-theme');
+                    
+                    if (lightNow) {
+                        localStorage.setItem('theme', 'light');
+                        sunIcon.style.display = 'none';
+                        moonIcon.style.display = 'block';
+                    } else {
+                        localStorage.setItem('theme', 'dark');
+                        sunIcon.style.display = 'block';
+                        moonIcon.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,23 @@
+# Ambientes Virtuais
+venv/
+.venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django
+db.sqlite3
+# media/ (Permitido para versionar anexos conforme solicitado)
+staticfiles/
+.env
+
+# IDEs
+.vscode/
+.idea/
+
+# Documentação
+docs/

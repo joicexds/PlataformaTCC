@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestão de Tipos de Inspeção - Sistema Integrador{% endblock %}
+
+{% block body_class %}dashboard-body{% endblock %}
+
+{% block content %}
+<div class="glass-container" style="max-width: 1400px; margin: 2rem auto; padding: 2rem; position: relative;">
+    
+    <!-- CABEÇALHO -->
+    {% include 'header.html' %}
+
+    {% if messages %}
+    <div style="margin-top: 1.5rem;">
+        {% for message in messages %}
+        <div style="padding: 1rem; border-radius: 8px; background: rgba(34, 197, 94, 0.2); border: 1px solid #22c55e; color: #22c55e; margin-bottom: 1rem;">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div style="display: flex; margin-top: 1.5rem; min-height: 500px;">
+        
+        <!-- SIDEBAR ESQUERDA -->
+        {% include 'sidebar.html' with active_menu='inspecao' %}
+
+        <!-- CONTEÚDO CENTRAL -->
+        <div style="flex: 1; display: grid; grid-template-columns: 1fr 1.5fr; gap: 2rem;">
+            
+            <!-- COLUNA 1: FORMULÁRIO -->
+            <div>
+                <div class="glass-card" style="background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2.5rem; position: sticky; top: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1.2rem; font-weight: 700; color: #3b82f6; margin: 0;">
+                            {% if tipo_edit %}Editar Tipo de Inspeção{% else %}Novo Tipo de Inspeção{% endif %}
+                        </h3>
+                        {% if tipo_edit %}
+                        <a href="{% url 'tipo_inspecao_index' %}" style="font-size: 0.85rem; color: #94a3b8; text-decoration: none; border: 1px solid var(--glass-border); padding: 0.4rem 0.8rem; border-radius: 6px;">Novo +</a>
+                        {% endif %}
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label style="display: block; margin-bottom: 0.6rem; color: #94a3b8; font-size: 0.9rem; font-weight: 600;">Nome do Tipo</label>
+                            <input type="text" name="nome" value="{{ tipo_edit.nome|default:'' }}" required style="width: 100%; padding: 0.8rem; background: var(--glass-bg-darker); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); outline: none;" placeholder="Ex: Vistoria Anual">
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; margin-top: 2.5rem;">
+                            <button type="submit" style="flex: 1; padding: 1rem; background: #3b82f6; color: var(--text-primary); border: none; border-radius: 10px; font-weight: 700; cursor: pointer;">
+                                {% if tipo_edit %}ATUALIZAR{% else %}SALVAR{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- COLUNA 2: LISTAGEM -->
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1.5rem;">
+                    <div>
+                        <h2 style="margin: 0; font-size: 1.2rem; font-weight: 700;">Tipos Cadastrados</h2>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.85rem; color: #94a3b8;">Total: {{ tipos|length }}</p>
+                    </div>
+                    <div style="background: var(--glass-bg-darker); border: 1px solid var(--glass-border); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; width: 300px;">
+                        <svg class="search-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        <input type="text" id="searchInput" placeholder="Buscar tipos..." style="background: transparent; border: none; color: var(--text-primary); outline: none; width: 100%;">
+                    </div>
+                </div>
+
+                <div class="glass-card" style="background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1.5rem; flex: 1;">
+                    <table class="data-table" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left; padding: 1rem; font-size: 0.85rem; color: #94a3b8; border-bottom: 1px solid var(--glass-border);">Nome do Tipo</th>
+                                <th style="text-align: right; padding: 1rem; font-size: 0.85rem; color: #94a3b8; border-bottom: 1px solid var(--glass-border);">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in tipos %}
+                            <tr class="tipo-row">
+                                <td style="padding: 1.25rem 1rem; font-size: 0.9rem; border-bottom: 1px solid var(--glass-border); font-weight: 700;">{{ item.nome }}</td>
+                                <td style="padding: 1.25rem 1rem; font-size: 0.9rem; border-bottom: 1px solid var(--glass-border); text-align: right;">
+                                    <a href="{% url 'tipo_inspecao_editar' item.id_tipo_inspecao %}" style="color: #3b82f6; text-decoration: none; margin-right: 1rem; font-weight: 600;">Editar</a>
+                                    <a href="{% url 'tipo_inspecao_excluir' item.id_tipo_inspecao %}" style="color: #ef4444; text-decoration: none; font-weight: 600;" onclick="return confirm('Excluir este tipo de inspeção?')">Excluir</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="2" style="padding: 3rem; text-align: center; color: #94a3b8;">Nenhum tipo de inspeção cadastrado.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Toggle menu
+    document.getElementById('menuToggle').addEventListener('click', function() {
+        const menu = document.getElementById('sideMenu');
+        if (menu.style.width === '0px' || menu.style.width === '') {
+            menu.style.width = '250px';
+            menu.style.marginRight = '2rem';
+            menu.style.border = '1px solid var(--glass-border)';
+        } else {
+            menu.style.width = '0';
+            menu.style.marginRight = '0';
+            menu.style.border = '0px solid var(--glass-border)';
+        }
+    });
+
+    // Search functionality aprimorada
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('.tipo-row');
+        
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            if(text.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

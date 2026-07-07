@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if inspecao %}Editar Inspeção{% else %}Registrar Nova Inspeção{% endif %} - Sistema Integrador{% endblock %}
+
+{% block body_class %}dashboard-body{% endblock %}
+
+{% block content %}
+<div class="glass-container" style="max-width: 1400px; margin: 2rem auto; padding: 2rem; position: relative;">
+    
+    <!-- 1. CABEÇALHO (Igual a Home) -->
+    {% include 'header.html' %}
+
+    <div style="display: flex; margin-top: 1.5rem; min-height: 500px;">
+        <!-- SIDEBAR ESQUERDA -->
+        {% include 'sidebar.html' with active_menu='inspecao' %}
+
+        <!-- CONTEÚDO CENTRAL (O FORMULÁRIO) -->
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 2rem; align-items: center;">
+            <div style="width: 100%; max-width: 1100px;">
+                <header class="header" style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
+                    <a href="{% url 'inspecao_lista' %}" style="background: var(--glass-border-light); color: var(--text-primary); padding: 0.5rem; border-radius: 8px; display: flex; align-items: center; text-decoration: none; border: 1px solid var(--glass-border);">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </a>
+                    <h1 style="margin: 0; font-size: 1.8rem; font-weight: 700;">{% if inspecao %}Editar Inspeção{% else %}Registrar Inspeção{% endif %}</h1>
+                </header>
+
+                <div class="glass-card" style="background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2.5rem;">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                            <div class="form-group">
+                                <label style="display: block; margin-bottom: 0.6rem; color: #94a3b8; font-size: 0.9rem; font-weight: 600;">Empresa</label>
+                                <select name="empresa" required style="width: 100%; padding: 0.8rem; background: var(--glass-bg-darker); border: 1px solid var(--text-secondary); border-radius: 8px; color: var(--text-primary); outline: none; appearance: none;">
+                                    <option value="">Selecione uma empresa</option>
+                                    {% for emp in empresas %}
+                                    <option value="{{ emp.id_empresa }}" {% if inspecao.fk_empresa_id == emp.id_empresa %}selected{% endif %}>{{ emp.nome }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label style="display: block; margin-bottom: 0.6rem; color: #94a3b8; font-size: 0.9rem; font-weight: 600;">Responsável Técnico</label>
+                                <select name="responsavel" required style="width: 100%; padding: 0.8rem; background: var(--glass-bg-darker); border: 1px solid var(--text-secondary); border-radius: 8px; color: var(--text-primary); outline: none;">
+                                    <option value="">Selecione o responsável</option>
+                                    {% for resp in responsaveis %}
+                                    <option value="{{ resp.id_resp_tecnico }}" {% if inspecao.fk_resp_tecnico_historico_id == resp.id_resp_tecnico %}selected{% endif %}>{{ resp.nome }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                            <div class="form-group">
+                                <label style="display: block; margin-bottom: 0.6rem; color: #94a3b8; font-size: 0.9rem; font-weight: 600;">Tipo de Inspeção</label>
+                                <select name="categoria" required style="width: 100%; padding: 0.8rem; background: var(--glass-bg-darker); border: 1px solid var(--text-secondary); border-radius: 8px; color: var(--text-primary); outline: none;">
+                                    <option value="">Selecione a categoria</option>
+                                    {% for cat in categorias %}
+                                    <option value="{{ cat.id_tipo_inspecao }}" {% if inspecao.fk_tipo_inspecao_id == cat.id_tipo_inspecao %}selected{% endif %}>{{ cat.nome }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label style="display: block; margin-bottom: 0.6rem; color: #94a3b8; font-size: 0.9rem; font-weight: 600;">Data de Emissão</label>
+                                <input type="date" id="dataEmissao" name="data" value="{{ inspecao.data_evento|date:'Y-m-d'|default:'' }}" required style="width: 100%; padding: 0.8rem; background: var(--glass-bg-darker); border: 1px solid var(--text-secondary); border-radius: 8px; color: var(--text-primary); outline: none; color-scheme: dark;">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                            <div class="form-group">
+                                <label style="display: block; margin-bottom: 0.6rem; color: #94a3b8; font-size: 0.9rem; font-weight: 600;">Data de Vencimento (Automático - 1 Ano)</label>
+                                <input type="date" id="dataVencimento" name="data_vencimento" readonly style="width: 100%; padding: 0.8rem; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--text-secondary); border-radius: 8px; color: #94a3b8; outline: none; color-scheme: dark; cursor: not-allowed;">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label style="display: block; margin-bottom: 0.6rem; color: #94a3b8; font-size: 0.9rem; font-weight: 600;">Anexar Documento/Foto</label>
+                            <div style="border: 2px dashed var(--glass-border); border-radius: 12px; padding: 2rem; text-align: center; background: var(--glass-bg-darker); cursor: pointer; position: relative;">
+                                <input type="file" name="anexo" style="opacity: 0; position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer;">
+                                <svg width="32" height="32" fill="none" stroke="#3b82f6" viewBox="0 0 24 24" style="margin-bottom: 1rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                <p style="margin: 0; font-size: 0.9rem; color: #94a3b8;">Clique ou arraste o arquivo para anexar</p>
+                                {% if inspecao.anexo %}
+                                <p style="margin-top: 1rem; color: #3b82f6; font-size: 0.9rem; font-weight: 600;">
+                                    Arquivo salvo: <a href="{{ inspecao.anexo.url }}" target="_blank" style="color: #60a5fa; text-decoration: underline;">Visualizar Anexo</a>
+                                </p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 2rem;">
+                            <label style="display: block; margin-bottom: 0.6rem; color: #94a3b8; font-size: 0.9rem; font-weight: 600;">Observações e Comentários</label>
+                            <textarea name="observacao" rows="6" style="width: 100%; padding: 1rem; background: var(--glass-bg-darker); border: 1px solid var(--text-secondary); border-radius: 12px; color: var(--text-primary); outline: none; resize: none;" placeholder="Descreva os detalhes da inspeção, irregularidades encontradas ou recomendações...">{{ inspecao.observacao|default:'' }}</textarea>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="submit" style="flex: 1; padding: 1rem; background: #3b82f6; color: var(--text-primary); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase;">{% if inspecao %}Salvar Alterações{% else %}Cadastrar Nova Inspeção{% endif %}</button>
+                            <a href="{% url 'inspecao_lista' %}" style="flex: 1; padding: 1rem; background: var(--glass-border-light); color: var(--text-primary); text-decoration: none; border-radius: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border); text-transform: uppercase;">Voltar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('menuToggle').addEventListener('click', function() {
+        const menu = document.getElementById('sideMenu');
+        if (menu.style.width === '0px' || menu.style.width === '') {
+            menu.style.width = '250px';
+            menu.style.marginRight = '2rem';
+            menu.style.border = '1px solid var(--glass-border)';
+        } else {
+            menu.style.width = '0';
+            menu.style.marginRight = '0';
+            menu.style.border = '0px solid var(--glass-border)';
+        }
+    });
+
+    // Pré-selecionar o responsável técnico atual da empresa
+    const empresaRespMap = {{ empresa_resp_map|safe }};
+    const selectEmpresa = document.querySelector('select[name="empresa"]');
+    const selectResponsavel = document.querySelector('select[name="responsavel"]');
+    
+    selectEmpresa.addEventListener('change', function() {
+        const empresaId = this.value;
+        if (empresaId && empresaRespMap[empresaId]) {
+            selectResponsavel.value = empresaRespMap[empresaId];
+        } else if (!empresaId) {
+            selectResponsavel.value = '';
+        }
+    });
+
+    // Calcular data de vencimento para 1 ano
+    const dataEmissao = document.getElementById('dataEmissao');
+    const dataVencimento = document.getElementById('dataVencimento');
+
+    function calcularVencimento() {
+        if (dataEmissao.value) {
+            const date = new Date(dataEmissao.value);
+            // Adiciona 1 ano
+            date.setFullYear(date.getFullYear() + 1);
+            
+            // Formata YYYY-MM-DD
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            
+            dataVencimento.value = `${year}-${month}-${day}`;
+        } else {
+            dataVencimento.value = '';
+        }
+    }
+
+    dataEmissao.addEventListener('change', calcularVencimento);
+    // Calcular ao carregar a página caso haja data (modo edição)
+    window.addEventListener('load', calcularVencimento);
+</script>
+{% endblock %}
