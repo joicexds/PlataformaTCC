@@ -139,4 +139,7 @@ LOGOUT_REDIRECT_URL = 'login'
 # Session configuration to always ask for login on new browser sessions
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
+import os
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
+
 

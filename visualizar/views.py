@@ -57,3 +57,195 @@ def profile(request):
         
     return render(request, 'profile.html', {'form': form, 'profile': profile_instance})
 
+
+try:
+    import google.generativeai as genai
+    HAS_GEMINI = True
+except ImportError:
+    HAS_GEMINI = False
+import json
+from django.conf import settings
+
+BACKUP_TEST = {
+    "perguntas": [
+        {
+            "id": 1,
+            "enunciado": "Se você pudesse resolver um grande problema do mundo, qual seria?",
+            "alternativas": [
+                {"letra": "A", "texto": "Combater a desigualdade social e defender direitos humanos.", "categoria": "Humanas"},
+                {"letra": "B", "texto": "Desenvolver uma nova tecnologia limpa ou inteligência artificial.", "categoria": "Exatas"},
+                {"letra": "C", "texto": "Encontrar a cura para doenças graves ou melhorar hospitais.", "categoria": "Saude"},
+                {"letra": "D", "texto": "Preservar a fauna, flora e reverter o aquecimento global.", "categoria": "Natureza"}
+            ]
+        },
+        {
+            "id": 2,
+            "enunciado": "Qual tipo de projeto acadêmico ou escolar você prefere integrar?",
+            "alternativas": [
+                {"letra": "A", "texto": "Produção de redações, debates sociais ou apresentações de teatro.", "categoria": "Humanas"},
+                {"letra": "B", "texto": "Criação de robôs, planilhas financeiras ou desenvolvimento de sistemas.", "categoria": "Exatas"},
+                {"letra": "C", "texto": "Pesquisa sobre corpo humano, primeiros socorros ou nutrição.", "categoria": "Saude"},
+                {"letra": "D", "texto": "Experimentos químicos, coleta de solo ou observação biológica.", "categoria": "Natureza"}
+            ]
+        },
+        {
+            "id": 3,
+            "enunciado": "Como você se descreve ao tomar decisões importantes?",
+            "alternativas": [
+                {"letra": "A", "texto": "Empático, considerando o impacto emocional nas outras pessoas.", "categoria": "Humanas"},
+                {"letra": "B", "texto": "Racional, analisando estatísticas, gráficos e dados numéricos.", "categoria": "Exatas"},
+                {"letra": "C", "texto": "Cuidadoso, priorizando o bem-estar físico e a segurança dos outros.", "categoria": "Saude"},
+                {"letra": "D", "texto": "Observador, analisando o funcionamento dos sistemas e ambientes naturais.", "categoria": "Natureza"}
+            ]
+        },
+        {
+            "id": 4,
+            "enunciado": "Se você estivesse em uma empresa, qual cargo chamaria mais sua atenção?",
+            "alternativas": [
+                {"letra": "A", "texto": "Gerente de Recursos Humanos ou Diretor de Comunicação.", "categoria": "Humanas"},
+                {"letra": "B", "texto": "Engenheiro de Software, Analista de Dados ou Diretor Financeiro.", "categoria": "Exatas"},
+                {"letra": "C", "texto": "Médico do Trabalho ou Coordenador de Segurança e Saúde.", "categoria": "Saude"},
+                {"letra": "D", "texto": "Gestor Ambiental ou Consultor de Sustentabilidade.", "categoria": "Natureza"}
+            ]
+        },
+        {
+            "id": 5,
+            "enunciado": "No seu tempo livre, qual destas atividades mais te relaxa?",
+            "alternativas": [
+                {"letra": "A", "texto": "Escrever, desenhar, tocar música ou conversar sobre diversos temas.", "categoria": "Humanas"},
+                {"letra": "B", "texto": "Jogar videogame de estratégia, xadrez ou programar.", "categoria": "Exatas"},
+                {"letra": "C", "texto": "Praticar atividades físicas, cozinhar receitas saudáveis ou ler sobre saúde.", "categoria": "Saude"},
+                {"letra": "D", "texto": "Cuidar de plantas, passear com animais de estimação ou caminhar ao ar livre.", "categoria": "Natureza"}
+            ]
+        }
+    ]
+}
+
+@login_required
+def iniciar_teste(request):
+    if request.method == 'POST':
+        materia = request.POST.get('materia', '')
+        hobby = request.POST.get('hobby', '')
+        habilidade = request.POST.get('habilidade', '')
+        objetivo = request.POST.get('objetivo', '')
+        
+        # Call Gemini if API Key is configured
+        api_key = getattr(settings, 'GEMINI_API_KEY', '')
+        questions_data = None
+        
+        if HAS_GEMINI and api_key:
+            try:
+                genai.configure(api_key=api_key)
+                model = genai.GenerativeModel("gemini-2.5-flash")
+                prompt = f"""
+                Gere um teste vocacional rápido com exatamente 5 perguntas personalizadas de múltipla escolha.
+                O perfil de preferências do usuário é:
+                - Matéria que mais gosta: {materia}
+                - Atividade de tempo livre: {hobby}
+                - Habilidade principal: {habilidade}
+                - Grande objetivo: {objetivo}
+
+                Crie 5 perguntas que ajudem a diferenciar este perfil específico entre as áreas de: Humanas, Exatas, Saude ou Natureza.
+                Cada pergunta deve conter exatamente 4 alternativas (A, B, C, D) com textos envolventes, curtos e dinâmicos.
+                Cada alternativa deve ter mapeada uma categoria correspondente entre: 'Humanas', 'Exatas', 'Saude' ou 'Natureza'.
+                Retorne a resposta estritamente no formato JSON estruturado abaixo, sem qualquer marcação markdown (como ```json ou ```):
+                {{
+                  "perguntas": [
+                    {{
+                      "id": 1,
+                      "enunciado": "Qual...",
+                      "alternativas": [
+                        {{"letra": "A", "texto": "...", "categoria": "Humanas"}},
+                        {{"letra": "B", "texto": "...", "categoria": "Exatas"}},
+                        {{"letra": "C", "texto": "...", "categoria": "Saude"}},
+                        {{"letra": "D", "texto": "...", "categoria": "Natureza"}}
+                      ]
+                    }}
+                  ]
+                }}
+                """
+                response = model.generate_content(prompt)
+                text = response.text.replace("```json", "").replace("```", "").strip()
+                questions_data = json.loads(text)
+            except Exception as e:
+                # Fallback to backup
+                questions_data = BACKUP_TEST
+        else:
+            questions_data = BACKUP_TEST
+            
+        request.session['vocational_test_questions'] = questions_data.get('perguntas', BACKUP_TEST['perguntas'])
+        return redirect('responder_teste')
+        
+    return render(request, 'teste_iniciar.html')
+
+@login_required
+def responder_teste(request):
+    questions = request.session.get('vocational_test_questions')
+    if not questions:
+        return redirect('iniciar_teste')
+    return render(request, 'teste_responder.html', {'questions': questions})
+
+@login_required
+def resultado_teste(request):
+    if request.method == 'POST':
+        # Collect categories of answers
+        category_counts = {}
+        for key, value in request.POST.items():
+            if key.startswith('pergunta_'):
+                category_counts[value] = category_counts.get(value, 0) + 1
+        
+        # Find winning category
+        if not category_counts:
+            winner = 'Exatas' # Default fallback
+        else:
+            winner = max(category_counts, key=category_counts.get)
+            
+        # Profiles mapping
+        profiles = {
+            'Exatas': {
+                'titulo': 'Explorador da Lógica e Exatas',
+                'descricao': 'Você é movido por dados, lógica, equações e tecnologia. Gosta de estruturar ideias e foca na resolução objetiva de problemas complexos.',
+                'carreiras': [
+                    {'nome': 'Engenharia de Software', 'salario': 'R$ 8.500', 'icone': 'code'},
+                    {'nome': 'Ciência de Dados', 'salario': 'R$ 9.000', 'icone': 'database'},
+                    {'nome': 'Engenharia de Produção', 'salario': 'R$ 7.200', 'icone': 'settings'},
+                    {'nome': 'Economia e Finanças', 'salario': 'R$ 6.800', 'icone': 'trending-up'}
+                ]
+            },
+            'Humanas': {
+                'titulo': 'Pensador e Comunicador de Humanas',
+                'descricao': 'Você valoriza a história, dinâmicas sociais, linguagem e conexões humanas. Empatia e comunicação são as suas maiores forças profissionais.',
+                'carreiras': [
+                    {'nome': 'Direito', 'salario': 'R$ 7.800', 'icone': 'briefcase'},
+                    {'nome': 'Psicologia', 'salario': 'R$ 4.500', 'icone': 'users'},
+                    {'nome': 'Marketing e Publicidade', 'salario': 'R$ 5.200', 'icone': 'megaphone'},
+                    {'nome': 'Relações Internacionais', 'salario': 'R$ 6.000', 'icone': 'globe'}
+                ]
+            },
+            'Saude': {
+                'titulo': 'Protetor do Cuidado e Saúde',
+                'descricao': 'Seu foco principal está na promoção do bem-estar físico e mental das pessoas. Você demonstra profundo zelo e sensibilidade para com o próximo.',
+                'carreiras': [
+                    {'nome': 'Medicina', 'salario': 'R$ 15.000', 'icone': 'heart'},
+                    {'nome': 'Enfermagem', 'salario': 'R$ 5.500', 'icone': 'activity'},
+                    {'nome': 'Fisioterapia', 'salario': 'R$ 4.200', 'icone': 'shield-alert'},
+                    {'nome': 'Nutrição', 'salario': 'R$ 4.000', 'icone': 'apple'}
+                ]
+            },
+            'Natureza': {
+                'titulo': 'Cientista e Protetor da Natureza',
+                'descricao': 'Você possui uma conexão natural com o meio ambiente, com a fauna, a flora e com o estudo das leis da biologia e ciências da terra.',
+                'carreiras': [
+                    {'nome': 'Biotecnologia / Biologia', 'salario': 'R$ 5.200', 'icone': 'flask'},
+                    {'nome': 'Engenharia Ambiental', 'salario': 'R$ 7.000', 'icone': 'leaf'},
+                    {'nome': 'Medicina Veterinária', 'salario': 'R$ 5.000', 'icone': 'dog'},
+                    {'nome': 'Agronomia', 'salario': 'R$ 6.800', 'icone': 'sprout'}
+                ]
+            }
+        }
+        
+        resultado = profiles.get(winner, profiles['Exatas'])
+        return render(request, 'teste_resultado.html', {'resultado': resultado, 'winner': winner})
+        
+    return redirect('iniciar_teste')
+

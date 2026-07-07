@@ -720,7 +720,7 @@
                 </a>
             </li>
             <li class="menu-item">
-                <a href="#">
+                <a href="{% url 'iniciar_teste' %}">
                     <i data-lucide="award" style="width: 20px; height: 20px;"></i>
                     <span>Teste Vocacional</span>
                 </a>
@@ -804,7 +804,7 @@
                 <p class="welcome-desc">
                     Responda ao teste vocacional e descubra carreiras que combinam com você. Cada passo te aproxima do seu futuro!
                 </p>
-                <a href="#" class="btn-start-test">
+                <a href="{% url 'iniciar_teste' %}" class="btn-start-test">
                     <span>Começar Teste</span>
                     <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
                 </a>
@@ -825,21 +825,21 @@
                 </svg>
 
                 <!-- Interactive level nodes -->
-                <div class="journey-node completed" style="bottom: 18px; left: 24px;" title="Introdução">
+                <a href="{% url 'iniciar_teste' %}" class="journey-node completed" style="bottom: 18px; left: 24px; text-decoration: none;" title="Introdução">
                     <i data-lucide="star" style="width: 20px; height: 20px;"></i>
-                </div>
-                <div class="journey-node completed" style="bottom: 40px; left: 120px;" title="Competências">
+                </a>
+                <a href="{% url 'iniciar_teste' %}" class="journey-node completed" style="bottom: 40px; left: 120px; text-decoration: none;" title="Competências">
                     <i data-lucide="briefcase" style="width: 20px; height: 20px;"></i>
-                </div>
-                <div class="journey-node active" style="top: 60px; left: 190px;" title="Áreas de Interesse">
+                </a>
+                <a href="{% url 'iniciar_teste' %}" class="journey-node active" style="top: 60px; left: 190px; text-decoration: none;" title="Áreas de Interesse">
                     <i data-lucide="brain" style="width: 20px; height: 20px;"></i>
-                </div>
-                <div class="journey-node locked" style="top: 15px; left: 270px;" title="Valores Pessoais">
+                </a>
+                <a href="{% url 'iniciar_teste' %}" class="journey-node locked" style="top: 15px; left: 270px; text-decoration: none;" title="Valores Pessoais">
                     <i data-lucide="heart" style="width: 20px; height: 20px;"></i>
-                </div>
-                <div class="journey-node locked" style="top: 45px; left: 340px;" title="Resultado Final">
+                </a>
+                <a href="{% url 'iniciar_teste' %}" class="journey-node locked" style="top: 45px; left: 340px; text-decoration: none;" title="Resultado Final">
                     <i data-lucide="rocket" style="width: 20px; height: 20px;"></i>
-                </div>
+                </a>
             </div>
         </section>
 
@@ -864,7 +864,7 @@
                         <div class="progress-track">
                             <div class="progress-fill"></div>
                         </div>
-                        <a href="#" class="btn-continue-test">Continuar Teste</a>
+                        <a href="{% url 'iniciar_teste' %}" class="btn-continue-test">Continuar Teste</a>
                     </div>
                 </div>
             </div>

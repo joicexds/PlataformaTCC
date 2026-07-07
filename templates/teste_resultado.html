@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil do Usuário - FutureWay</title>
+    <title>Resultado do Teste Vocacional - FutureWay</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,7 +44,7 @@
             overflow-x: hidden;
         }
 
-        /* Sidebar styling (identical) */
+        /* Sidebar styling */
         .sidebar {
             width: 280px;
             background-color: var(--bg-sidebar);
@@ -136,7 +136,7 @@
             align-items: center;
             justify-content: space-between;
             background-color: var(--bg-card-hover);
-            border: 1px solid var(--color-purple);
+            border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 12px;
             cursor: pointer;
@@ -188,219 +188,193 @@
             display: flex;
             flex-direction: column;
             gap: 30px;
-            max-width: 1200px;
+            max-width: 1000px;
         }
 
-        /* Top bar buttons */
-        .topbar-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn-back-home {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            background-color: var(--bg-card);
-            color: var(--text-white);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .btn-back-home:hover {
-            border-color: var(--color-cyan);
-            background-color: var(--bg-card-hover);
-            transform: translateX(-2px);
-        }
-
-        .topbar-stats {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .stat-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .stat-badge.gems i {
-            color: var(--color-cyan);
-        }
-
-        .stat-badge.streak i {
-            color: var(--color-cyan);
-        }
-
-        /* Profile Editor container */
-        .profile-container {
+        /* Result Header Banner */
+        .result-banner {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 24px;
             padding: 40px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
             text-align: left;
-            max-width: 800px;
-        }
-
-        .profile-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--color-cyan), var(--color-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 24px;
-        }
-
-        .profile-editor-grid {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            gap: 40px;
-        }
-
-        /* Avatar Editor */
-        .avatar-uploader-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .large-avatar-preview {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            background: var(--gradient-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 54px;
-            font-weight: 700;
-            color: var(--text-white);
-            border: 4px solid var(--border-color);
-            box-shadow: 0 0 25px rgba(168, 85, 247, 0.3);
+            position: relative;
             overflow: hidden;
-            position: relative;
         }
 
-        .large-avatar-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .custom-file-input {
-            position: relative;
-            display: inline-block;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .custom-file-input input[type="file"] {
+        .result-banner::after {
+            content: '';
             position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
+            top: -50%;
+            right: -20%;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
         }
 
-        .file-input-button {
-            display: block;
-            text-align: center;
-            padding: 10px;
+        .result-tag {
+            display: inline-block;
+            padding: 6px 12px;
             background-color: rgba(61, 214, 208, 0.1);
             border: 1px solid var(--color-cyan);
             color: var(--color-cyan);
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.2s;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
         }
 
-        .custom-file-input:hover .file-input-button {
-            background-color: var(--color-cyan);
-            color: var(--bg-main);
+        .result-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
         }
 
-        /* Info Form */
-        .profile-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        .result-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 800px;
         }
 
-        .form-row {
+        /* Career Grid */
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-white);
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .careers-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 24px;
         }
 
-        .form-group {
+        .career-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            align-items: center;
+            gap: 20px;
+            text-align: left;
+            transition: all 0.2s ease;
         }
 
-        .form-group label {
-            font-size: 14px;
+        .career-card:hover {
+            border-color: var(--color-purple);
+            transform: translateY(-2px);
+            background-color: var(--bg-card-hover);
+        }
+
+        .career-icon-wrapper {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background-color: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-purple);
+            flex-shrink: 0;
+        }
+
+        .career-card:nth-child(even) .career-icon-wrapper {
+            background-color: rgba(255, 95, 162, 0.1);
+            border-color: rgba(255, 95, 162, 0.2);
+            color: var(--color-pink);
+        }
+
+        .career-info {
+            flex: 1;
+        }
+
+        .career-name {
+            font-size: 16px;
             font-weight: 600;
             color: var(--text-white);
+            margin-bottom: 6px;
         }
 
-        .form-control {
-            height: 48px;
-            padding: 12px 16px;
-            background-color: rgba(26, 29, 58, 0.4);
+        .career-salary-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 8px;
+            background-color: rgba(26, 29, 58, 0.6);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            outline: none;
-            color: var(--text-white);
-            font-size: 15px;
-            transition: all 0.2s;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
         }
 
-        .form-control:focus {
-            border-color: var(--color-cyan);
-            box-shadow: 0 0 0 3px rgba(61, 214, 208, 0.15);
+        .career-salary-badge i {
+            color: var(--color-cyan);
         }
 
-        .btn-save-profile {
-            align-self: flex-start;
+        /* Action Buttons */
+        .actions-footer {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .btn-action-primary {
             padding: 14px 28px;
-            border: none;
-            border-radius: 12px;
             background: var(--gradient-primary);
+            border: none;
             color: var(--text-white);
             font-size: 15px;
             font-weight: 700;
+            border-radius: 12px;
+            text-decoration: none;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(255, 95, 162, 0.3);
-            margin-top: 10px;
             display: inline-flex;
             align-items: center;
             gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 95, 162, 0.3);
         }
 
-        .btn-save-profile:hover {
+        .btn-action-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(255, 95, 162, 0.5);
+        }
+
+        .btn-action-secondary {
+            padding: 14px 28px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+        .btn-action-secondary:hover {
+            border-color: var(--color-cyan);
+            color: var(--text-white);
         }
     </style>
 </head>
@@ -423,7 +397,7 @@
                     <span>Início</span>
                 </a>
             </li>
-            <li class="menu-item">
+            <li class="menu-item active">
                 <a href="{% url 'iniciar_teste' %}">
                     <i data-lucide="award" style="width: 20px; height: 20px;"></i>
                     <span>Teste Vocacional</span>
@@ -484,109 +458,49 @@
     <!-- Main Content Area -->
     <main class="main-content">
         
-        <!-- Top bar actions & stats -->
-        <div class="topbar-actions">
-            <a href="{% url 'home' %}" class="btn-back-home">
-                <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
-                <span>Voltar ao Início</span>
-            </a>
-            
-            <div class="topbar-stats">
-                <div class="stat-badge gems">
-                    <i data-lucide="gem" style="width: 18px; height: 18px;"></i>
-                    <span>1250</span>
-                </div>
-                <div class="stat-badge streak">
-                    <i data-lucide="flag" style="width: 18px; height: 18px; color: var(--color-cyan);"></i>
-                    <span>2/5 etapas</span>
-                </div>
-                <a href="{% url 'logout' %}" class="btn-logout" style="text-decoration: none; color: var(--color-pink); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 12px; font-weight: 600; font-size: 14px; background-color: rgba(255, 95, 162, 0.05); transition: 0.2s;">Sair</a>
-            </div>
-        </div>
-
-        <!-- Profile Editor Card -->
-        <section class="profile-container">
-            <h1 class="profile-title">Editar Perfil</h1>
-            
-            <form method="post" enctype="multipart/form-data" class="profile-form">
-                {% csrf_token %}
-                
-                <div class="profile-editor-grid">
-                    
-                    <!-- Avatar Column -->
-                    <div class="avatar-uploader-section">
-                        <div class="large-avatar-preview">
-                            {% if profile.profile_picture %}
-                                <img src="{{ profile.profile_picture.url }}" alt="Foto de Perfil" id="avatar-image-element">
-                            {% else %}
-                                <span id="avatar-initial-element">{% if user.first_name %}{{ user.first_name|slice:":1"|upper }}{% else %}{{ user.username|slice:":1"|upper }}{% endif %}</span>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="custom-file-input">
-                            {{ form.profile_picture }}
-                            <div class="file-input-button">
-                                <i data-lucide="camera" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;"></i>
-                                Alterar Foto
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Details Fields Column -->
-                    <div style="display: flex; flex-direction: column; gap: 20px;">
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="{{ form.first_name.id_for_label }}">Nome</label>
-                                {{ form.first_name }}
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="{{ form.last_name.id_for_label }}">Sobrenome</label>
-                                {{ form.last_name }}
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="{{ form.email.id_for_label }}">E-mail</label>
-                            {{ form.email }}
-                        </div>
-                        
-                        <button type="submit" class="btn-save-profile">
-                            <i data-lucide="save" style="width: 20px; height: 20px;"></i>
-                            <span>Salvar Alterações</span>
-                        </button>
-                        
-                    </div>
-                    
-                </div>
-            </form>
+        <!-- Result Banner -->
+        <section class="result-banner">
+            <div class="result-tag">Diagnóstico Concluído</div>
+            <h1 class="result-title">{{ resultado.titulo }}</h1>
+            <p class="result-description">{{ resultado.descricao }}</p>
         </section>
 
-    </main>
+        <!-- Recommended Careers -->
+        <section style="display: flex; flex-direction: column; gap: 16px;">
+            <h2 class="section-title">Carreiras Recomendadas</h2>
+            
+            <div class="careers-grid">
+                {% for c in resultado.carreiras %}
+                <div class="career-card">
+                    <div class="career-icon-wrapper">
+                        <i data-lucide="{{ c.icone }}" style="width: 26px; height: 26px;"></i>
+                    </div>
+                    <div class="career-info">
+                        <h3 class="career-name">{{ c.nome }}</h3>
+                        <div class="career-salary-badge">
+                            <i data-lucide="dollar-sign" style="width: 14px; height: 14px;"></i>
+                            <span>Salário Médio Inicial: {{ c.salario }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
 
-    <!-- Script to preview image before uploading -->
-    <script>
-        const fileInput = document.querySelector('input[type="file"]');
-        fileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    let img = document.getElementById('avatar-image-element');
-                    if (!img) {
-                        const preview = document.querySelector('.large-avatar-preview');
-                        preview.innerHTML = '';
-                        img = document.createElement('img');
-                        img.id = 'avatar-image-element';
-                        preview.appendChild(img);
-                    }
-                    img.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    </script>
+        <!-- Action Footer -->
+        <footer class="actions-footer">
+            <a href="{% url 'home' %}" class="btn-action-primary">
+                <i data-lucide="layout-dashboard" style="width: 18px; height: 18px;"></i>
+                <span>Voltar ao Painel</span>
+            </a>
+            
+            <a href="{% url 'iniciar_teste' %}" class="btn-action-secondary">
+                <i data-lucide="rotate-ccw" style="width: 18px; height: 18px;"></i>
+                <span>Refazer Teste</span>
+            </a>
+        </footer>
+
+    </main>
 
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
