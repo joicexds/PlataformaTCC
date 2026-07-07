@@ -64,6 +64,7 @@ try:
 except ImportError:
     HAS_GEMINI = False
 import json
+import random
 from django.conf import settings
 
 BACKUP_TEST = {
@@ -121,6 +122,61 @@ BACKUP_TEST = {
                 {"letra": "B", "texto": "Jogar videogame de estratégia, xadrez ou programar.", "categoria": "Exatas"},
                 {"letra": "C", "texto": "Praticar atividades físicas, cozinhar receitas saudáveis ou ler sobre saúde.", "categoria": "Saude"},
                 {"letra": "D", "texto": "Cuidar de plantas, passear com animais de estimação ou caminhar ao ar livre.", "categoria": "Natureza"}
+            ]
+        },
+        {
+            "id": 6,
+            "enunciado": "Quando assiste a um documentário, qual tema prende mais sua atenção?",
+            "image_prompt": "documentary themes nature tech history",
+            "alternativas": [
+                {"letra": "A", "texto": "História das civilizações, cultura pop ou movimentos artísticos.", "categoria": "Humanas"},
+                {"letra": "B", "texto": "Como as máquinas funcionam, viagens espaciais ou megaconstruções.", "categoria": "Exatas"},
+                {"letra": "C", "texto": "Corpo humano, mistérios da mente ou evolução da medicina.", "categoria": "Saude"},
+                {"letra": "D", "texto": "Vida selvagem, oceanos inexplorados ou sustentabilidade do planeta.", "categoria": "Natureza"}
+            ]
+        },
+        {
+            "id": 7,
+            "enunciado": "Se você criasse um aplicativo, para que ele serviria?",
+            "image_prompt": "smartphone glowing app interface",
+            "alternativas": [
+                {"letra": "A", "texto": "Uma rede social para conectar artistas, escritores e debater ideias.", "categoria": "Humanas"},
+                {"letra": "B", "texto": "Um sistema financeiro focado em investimentos e segurança de dados.", "categoria": "Exatas"},
+                {"letra": "C", "texto": "Um app de telemedicina para ajudar pessoas com rotinas de bem-estar.", "categoria": "Saude"},
+                {"letra": "D", "texto": "Um mapeamento interativo para preservação de espécies e doação para ONGs ecológicas.", "categoria": "Natureza"}
+            ]
+        },
+        {
+            "id": 8,
+            "enunciado": "Qual dessas feiras ou eventos você mais gostaria de visitar?",
+            "image_prompt": "event conference expo festival",
+            "alternativas": [
+                {"letra": "A", "texto": "Bienal do Livro ou Exposição de Arte Moderna.", "categoria": "Humanas"},
+                {"letra": "B", "texto": "Feira Internacional de Robótica ou Summit de Tecnologia.", "categoria": "Exatas"},
+                {"letra": "C", "texto": "Congresso de Biomedicina ou Feira de Inovação em Saúde.", "categoria": "Saude"},
+                {"letra": "D", "texto": "Simpósio Internacional de Ecologia e Proteção Ambiental.", "categoria": "Natureza"}
+            ]
+        },
+        {
+            "id": 9,
+            "enunciado": "No trabalho em equipe, qual é geralmente a sua função natural?",
+            "image_prompt": "teamwork collaboration modern office",
+            "alternativas": [
+                {"letra": "A", "texto": "O comunicador: responsável por mediar conflitos e apresentar as ideias do grupo.", "categoria": "Humanas"},
+                {"letra": "B", "texto": "O estrategista: organiza os dados, planilhas e pensa na execução lógica.", "categoria": "Exatas"},
+                {"letra": "C", "texto": "O cuidador: garante que o ambiente seja seguro, positivo e todos estejam bem.", "categoria": "Saude"},
+                {"letra": "D", "texto": "O observador: foca em como o projeto interage com o meio ambiente e as regras naturais.", "categoria": "Natureza"}
+            ]
+        },
+        {
+            "id": 10,
+            "enunciado": "Em um cenário de crise global, o que você tentaria fazer primeiro?",
+            "image_prompt": "global crisis planning future",
+            "alternativas": [
+                {"letra": "A", "texto": "Organizar as pessoas e criar campanhas de comunicação eficientes.", "categoria": "Humanas"},
+                {"letra": "B", "texto": "Construir uma infraestrutura tecnológica que garantisse a logística necessária.", "categoria": "Exatas"},
+                {"letra": "C", "texto": "Montar equipes de resgate, primeiros socorros e triagem médica.", "categoria": "Saude"},
+                {"letra": "D", "texto": "Mapear o impacto ambiental e proteger recursos hídricos e naturais críticos.", "categoria": "Natureza"}
             ]
         }
     ]
@@ -184,11 +240,16 @@ def iniciar_teste(request):
                 questions_data = json.loads(text)
             except Exception as e:
                 # Fallback to backup
-                questions_data = BACKUP_TEST
+                print("Gemini fallback due to:", e)
+                questions_list = random.sample(BACKUP_TEST['perguntas'], 5)
+                for i, q in enumerate(questions_list): q['id'] = i + 1
+                questions_data = {'perguntas': questions_list}
         else:
-            questions_data = BACKUP_TEST
+            questions_list = random.sample(BACKUP_TEST['perguntas'], 5)
+            for i, q in enumerate(questions_list): q['id'] = i + 1
+            questions_data = {'perguntas': questions_list}
             
-        request.session['vocational_test_questions'] = questions_data.get('perguntas', BACKUP_TEST['perguntas'])
+        request.session['vocational_test_questions'] = questions_data.get('perguntas')
         return redirect('responder_teste')
         
     return render(request, 'teste_iniciar.html')

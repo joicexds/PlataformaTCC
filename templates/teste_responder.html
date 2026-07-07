@@ -675,7 +675,7 @@
                     <div class="mascot-images-container">
                         {% for q in questions %}
                         <img id="img-step-{{ forloop.counter }}" 
-                             src="https://image.pollinations.ai/prompt/{{ q.image_prompt|urlencode }}?width=300&height=200&nologo=true" 
+                             src="https://image.pollinations.ai/prompt/{{ q.image_prompt }}?width=300&height=200&nologo=true" 
                              alt="Ilustração da pergunta" 
                              style="width: 100%; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); display: {% if forloop.first %}block{% else %}none{% endif %};">
                         {% endfor %}
