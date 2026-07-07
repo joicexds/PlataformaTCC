@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorar Profissões - FutureWay</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #060814;
+            --bg-sidebar: #090B19;
+            --bg-card: #0C0E22;
+            --bg-card-hover: #121532;
+            --border-color: #1A1D3A;
+            
+            --color-purple: #A855F7;
+            --color-pink: #FF5FA2;
+            --color-cyan: #3DD6D0;
+            --color-blue: #3B82F6;
+            --color-green: #10B981;
+            --color-yellow: #F59E0B;
+            
+            --text-white: #FFFFFF;
+            --text-muted: #8E94B2;
+            --text-secondary: #B4B9D4;
+            
+            --gradient-primary: linear-gradient(135deg, var(--color-purple), var(--color-pink));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar styling (identical to home.html) */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 10;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            margin-bottom: 40px;
+            padding-left: 10px;
+        }
+
+        .brand-logo i {
+            color: var(--color-pink);
+            font-size: 24px;
+        }
+
+        .brand-logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--text-white), var(--color-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-subtitle {
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .menu-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item a:hover {
+            background-color: var(--bg-card-hover);
+            color: var(--text-white);
+        }
+
+        .menu-item.active a {
+            background-color: rgba(168, 85, 247, 0.15);
+            color: var(--color-purple);
+            font-weight: 600;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .user-profile-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .user-profile-card:hover {
+            background-color: var(--bg-card-hover);
+            border-color: var(--color-purple);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-white);
+            font-size: 16px;
+        }
+
+        .user-meta {
+            flex: 1;
+            margin-left: 12px;
+            text-align: left;
+        }
+
+        .user-meta h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        .user-meta p {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 1200px;
+        }
+
+        /* Top Bar stats */
+        .topbar-stats {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .stat-badge.gems i {
+            color: var(--color-cyan);
+        }
+
+        .stat-badge.streak i {
+            color: #EF4444;
+        }
+
+        .btn-notification {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 20px;
+            transition: color 0.2s;
+        }
+
+        .btn-notification:hover {
+            color: var(--text-white);
+        }
+
+        /* Header Intro */
+        .page-header {
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--color-cyan), var(--color-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Area Grid */
+        .areas-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .area-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .area-card::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            transition: opacity 0.3s;
+            opacity: 0;
+        }
+
+        .area-card.humanas::after { background: var(--color-purple); }
+        .area-card.natureza::after { background: var(--color-green); }
+        .area-card.exatas::after { background: var(--color-cyan); }
+        .area-card.saude::after { background: var(--color-pink); }
+        .area-card.artes::after { background: var(--color-yellow); }
+        .area-card.negocios::after { background: var(--color-blue); }
+
+        .area-card:hover {
+            transform: translateY(-5px);
+            background-color: var(--bg-card-hover);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .area-card:hover::after {
+            opacity: 1;
+        }
+
+        .area-icon-box {
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .area-card.humanas .area-icon-box { background-color: rgba(168, 85, 247, 0.1); color: var(--color-purple); }
+        .area-card.natureza .area-icon-box { background-color: rgba(16, 185, 129, 0.1); color: var(--color-green); }
+        .area-card.exatas .area-icon-box { background-color: rgba(61, 214, 208, 0.1); color: var(--color-cyan); }
+        .area-card.saude .area-icon-box { background-color: rgba(255, 95, 162, 0.1); color: var(--color-pink); }
+        .area-card.artes .area-icon-box { background-color: rgba(245, 158, 11, 0.1); color: var(--color-yellow); }
+        .area-card.negocios .area-icon-box { background-color: rgba(59, 130, 246, 0.1); color: var(--color-blue); }
+
+        .area-info h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 8px;
+        }
+
+        .area-info p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Expanded Professions Area */
+        .professions-drawer {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 30px;
+            margin-top: 10px;
+            display: none;
+            animation: slideDown 0.3s ease-out forwards;
+            text-align: left;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+        }
+
+        .drawer-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-white);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-close-drawer {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .btn-close-drawer:hover {
+            color: var(--text-white);
+        }
+
+        .professions-list-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .profession-card {
+            background-color: rgba(26, 29, 58, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+
+        .profession-card:hover {
+            border-color: var(--color-purple);
+            transform: translateY(-2px);
+        }
+
+        .profession-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        .profession-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .profession-market {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--color-cyan);
+            font-weight: 600;
+        }
+
+        @media (max-width: 1024px) {
+            .areas-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .professions-list-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .areas-grid {
+                grid-template-columns: 1fr;
+            }
+            .professions-list-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Menu (Identical structure) -->
+    <aside class="sidebar">
+        <a href="{% url 'home' %}" class="brand-logo">
+            <i data-lucide="compass"></i>
+            <div>
+                <div class="brand-logo-text">FUTURO</div>
+                <div class="brand-subtitle">Descubra seu caminho</div>
+            </div>
+        </a>
+
+        <ul class="menu-list">
+            <li class="menu-item">
+                <a href="{% url 'home' %}">
+                    <i data-lucide="home" style="width: 20px; height: 20px;"></i>
+                    <span>Início</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="award" style="width: 20px; height: 20px;"></i>
+                    <span>Teste Vocacional</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="trending-up" style="width: 20px; height: 20px;"></i>
+                    <span>Meu Progresso</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="trophy" style="width: 20px; height: 20px;"></i>
+                    <span>Conquistas</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="bar-chart-2" style="width: 20px; height: 20px;"></i>
+                    <span>Ranking</span>
+                </a>
+            </li>
+            <li class="menu-item active">
+                <a href="{% url 'explorar_profissoes' %}">
+                    <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+                    <span>Explorar Profissões</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="book-open" style="width: 20px; height: 20px;"></i>
+                    <span>Guia de Carreiras</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="settings" style="width: 20px; height: 20px;"></i>
+                    <span>Configurações</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="user-profile-card">
+                <div class="user-avatar">
+                    {% if user.first_name %}{{ user.first_name|slice:":1"|upper }}{% else %}{{ user.username|slice:":1"|upper }}{% endif %}
+                </div>
+                <div class="user-meta">
+                    <h4>Olá, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!</h4>
+                    <p>Ver perfil</p>
+                </div>
+                <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        
+        <!-- Top bar metrics -->
+        <div class="topbar-stats">
+            <div class="stat-badge gems">
+                <i data-lucide="gem" style="width: 18px; height: 18px;"></i>
+                <span>1250</span>
+            </div>
+            <div class="stat-badge streak">
+                <i data-lucide="flame" style="width: 18px; height: 18px;"></i>
+                <span>7 dias</span>
+            </div>
+            <button class="btn-notification">
+                <i data-lucide="bell"></i>
+            </button>
+            <a href="{% url 'logout' %}" class="btn-logout" style="text-decoration: none; color: var(--color-pink); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 12px; font-weight: 600; font-size: 14px; background-color: rgba(255, 95, 162, 0.05); transition: 0.2s;">Sair</a>
+        </div>
+
+        <!-- Header Section -->
+        <section class="page-header">
+            <h1 class="page-title">Explorar Profissões</h1>
+            <p class="page-subtitle">Qual área você mais se identifica?</p>
+        </section>
+
+        <!-- Grid layout of areas -->
+        <section class="areas-grid">
+            
+            <!-- Humanas -->
+            <div class="area-card humanas" onclick="selectArea('humanas', 'Ciências Humanas e Sociais', 'var(--color-purple)')">
+                <div class="area-icon-box">
+                    <i data-lucide="book"></i>
+                </div>
+                <div class="area-info">
+                    <h3>Ciências Humanas</h3>
+                    <p>Compreenda a sociedade, cultura, comportamento, línguas, história e as relações humanas.</p>
+                </div>
+            </div>
+
+            <!-- Natureza -->
+            <div class="area-card natureza" onclick="selectArea('natureza', 'Ciências da Natureza e Biológicas', 'var(--color-green)')">
+                <div class="area-icon-box">
+                    <i data-lucide="leaf"></i>
+                </div>
+                <div class="area-info">
+                    <h3>Ciências da Natureza</h3>
+                    <p>Estude os seres vivos, meio ambiente, química, física, ecologia e sustentabilidade biológica.</p>
+                </div>
+            </div>
+
+            <!-- Exatas -->
+            <div class="area-card exatas" onclick="selectArea('exatas', 'Ciências Exatas e Tecnologia', 'var(--color-cyan)')">
+                <div class="area-icon-box">
+                    <i data-lucide="cpu"></i>
+                </div>
+                <div class="area-info">
+                    <h3>Ciências Exatas</h3>
+                    <p>Foque em lógica, matemática, cálculo, programação, dados e desenvolvimento tecnológico.</p>
+                </div>
+            </div>
+
+            <!-- Saude -->
+            <div class="area-card saude" onclick="selectArea('saude', 'Ciências da Saúde', 'var(--color-pink)')">
+                <div class="area-icon-box">
+                    <i data-lucide="heart-pulse"></i>
+                </div>
+                <div class="area-info">
+                    <h3>Ciências da Saúde</h3>
+                    <p>Dedique-se ao cuidado físico, mental, medicina, reabilitação, nutrição e bem-estar do corpo.</p>
+                </div>
+            </div>
+
+            <!-- Artes -->
+            <div class="area-card artes" onclick="selectArea('artes', 'Artes, Design e Comunicação', 'var(--color-yellow)')">
+                <div class="area-icon-box">
+                    <i data-lucide="palette"></i>
+                </div>
+                <div class="area-info">
+                    <h3>Artes e Design</h3>
+                    <p>Expresse sua criatividade através do design visual, arquitetura, música, cinema e belas artes.</p>
+                </div>
+            </div>
+
+            <!-- Negocios -->
+            <div class="area-card negocios" onclick="selectArea('negocios', 'Negócios, Economia e Gestão', 'var(--color-blue)')">
+                <div class="area-icon-box">
+                    <i data-lucide="landmark"></i>
+                </div>
+                <div class="area-info">
+                    <h3>Negócios e Gestão</h3>
+                    <p>Lidere projetos, administre empresas, estude finanças, marketing e estratégias de mercado.</p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Expanded professions display -->
+        <section id="professions-drawer" class="professions-drawer">
+            <div class="drawer-header">
+                <div class="drawer-title" id="drawer-title-element">
+                    <i data-lucide="compass"></i>
+                    <span>Nome da Área</span>
+                </div>
+                <button class="btn-close-drawer" onclick="closeDrawer()">
+                    <span>Fechar</span>
+                    <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                </button>
+            </div>
+            
+            <div class="professions-list-grid" id="professions-container-element">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Data of professions for simulation -->
+    <script>
+        const professionsData = {
+            humanas: [
+                { name: "Direito", desc: "Aplicação e estudo de leis, normas sociais e defesa jurídica.", market: "Alta Demanda" },
+                { name: "Psicologia", desc: "Estudo do comportamento, mente humana e tratamentos clínicos.", market: "Crescimento Rápido" },
+                { name: "Jornalismo", desc: "Investigação, redação e comunicação de notícias e eventos.", market: "Médio" },
+                { name: "História", desc: "Estudo crítico de fatos, culturas e eventos históricos passados.", market: "Estável" },
+                { name: "Sociologia", desc: "Análise das relações humanas, instituições e estruturas sociais.", market: "Estável" },
+                { name: "Pedagogia", desc: "Estudo e aplicação de métodos educacionais e docência.", market: "Alta Demanda" }
+            ],
+            natureza: [
+                { name: "Biologia", desc: "Estudo científico de todos os aspectos dos organismos vivos.", market: "Estável" },
+                { name: "Biotecnologia", desc: "Uso de sistemas biológicos para criar soluções tecnológicas.", market: "Alta Demanda" },
+                { name: "Agronomia", desc: "Planejamento e coordenação de safras, solos e cultivo agrícola.", market: "Alta Demanda" },
+                { name: "Gestão Ambiental", desc: "Estudo e plano de preservação, ecologia e sustentabilidade.", market: "Crescimento Rápido" },
+                { name: "Geologia", desc: "Estudo da estrutura interna, rochas e evolução do planeta Terra.", market: "Médio" },
+                { name: "Química Industrial", desc: "Estudo e desenvolvimento químico de larga escala na indústria.", market: "Estável" }
+            ],
+            exatas: [
+                { name: "Engenharia de Software", desc: "Desenho, codificação e arquitetura de sistemas e apps.", market: "Altíssima Demanda" },
+                { name: "Ciência de Dados", desc: "Análise avançada, modelagem preditiva e inteligência artificial.", market: "Altíssima Demanda" },
+                { name: "Engenharia Civil", desc: "Planejamento e construção de edifícios, pontes e estradas.", market: "Médio" },
+                { name: "Sistemas de Informação", desc: "Gerenciamento de redes, bancos de dados e TI corporativo.", market: "Alta Demanda" },
+                { name: "Física Médica", desc: "Estudo da física aplicada em diagnóstico por imagem e radiologia.", market: "Crescimento Rápido" },
+                { name: "Matemática Aplicada", desc: "Modelagem lógica para finanças, estatísticas e computação.", market: "Alta Demanda" }
+            ],
+            saude: [
+                { name: "Medicina", desc: "Diagnóstico, tratamento de enfermidades e cuidado de pacientes.", market: "Altíssima Demanda" },
+                { name: "Enfermagem", desc: "Cuidado direto ao paciente, tratamentos clínicos e triagem.", market: "Alta Demanda" },
+                { name: "Fisioterapia", desc: "Reabilitação de movimentos, lesões e saúde osteomuscular.", market: "Crescimento Rápido" },
+                { name: "Nutrição", desc: "Prescrição alimentar, planejamento nutricional e metabólico.", market: "Crescimento Rápido" },
+                { name: "Odontologia", desc: "Prevenção, diagnóstico e tratamento de distúrbios bucais.", market: "Alta Demanda" },
+                { name: "Farmácia", desc: "Desenvolvimento e dispersão de fármacos e análise laboratorial.", market: "Estável" }
+            ],
+            artes: [
+                { name: "Arquitetura e Urbanismo", desc: "Desenho estético e planejamento funcional de espaços urbanos.", market: "Médio" },
+                { name: "Design Gráfico", desc: "Comunicação visual, branding, interfaces e artes digitais.", market: "Alta Demanda" },
+                { name: "Cinema e Audiovisual", desc: "Produção de filmes, direção de arte, roteiro e edição.", market: "Médio" },
+                { name: "Artes Visuais", desc: "Desenho, pintura, escultura e curadoria de galerias.", market: "Estável" },
+                { name: "Design de Moda", desc: "Desenvolvimento criativo de roupas, acessórios e vestuário.", market: "Médio" },
+                { name: "Publicidade e Propaganda", desc: "Estratégias de anúncios, criação de campanhas de marketing.", market: "Alta Demanda" }
+            ],
+            negocios: [
+                { name: "Administração", desc: "Gerenciamento, planejamento financeiro e liderança corporativa.", market: "Alta Demanda" },
+                { name: "Economia", desc: "Estudo e análise de mercados, fluxos monetários e inflação.", market: "Alta Demanda" },
+                { name: "Marketing Digital", desc: "Estratégias online de vendas, redes sociais e captação.", market: "Altíssima Demanda" },
+                { name: "Ciências Contábeis", desc: "Análise contábil, auditoria fiscal e tributária de empresas.", market: "Alta Demanda" },
+                { name: "Relações Internacionais", desc: "Negociação global, tratados diplomáticos e comércio exterior.", market: "Médio" },
+                { name: "Logística", desc: "Gestão de fluxo de suprimentos, entregas e cadeias globais.", market: "Alta Demanda" }
+            ]
+        };
+
+        function selectArea(key, name, color) {
+            const drawer = document.getElementById('professions-drawer');
+            const titleEl = document.getElementById('drawer-title-element');
+            const containerEl = document.getElementById('professions-container-element');
+            
+            // Set title and active color border
+            titleEl.innerHTML = `<i data-lucide="compass" style="color: ${color}"></i><span>${name}</span>`;
+            drawer.style.borderColor = color;
+            
+            // Build list
+            let html = '';
+            professionsData[key].forEach(prof => {
+                html += `
+                    <div class="profession-card" style="border-left: 4px solid ${color}">
+                        <div class="profession-name">${prof.name}</div>
+                        <div class="profession-desc">${prof.desc}</div>
+                        <div class="profession-market">
+                            <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
+                            <span>Mercado: ${prof.market}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            containerEl.innerHTML = html;
+            
+            // Render icons and show drawer
+            lucide.createIcons();
+            drawer.style.display = 'block';
+            drawer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function closeDrawer() {
+            document.getElementById('professions-drawer').style.display = 'none';
+        }
+    </script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

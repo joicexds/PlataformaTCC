@@ -26,3 +26,7 @@ def register(request):
         form = RegisterForm()
     return render(request, 'register.html', {'form': form})
 
+@login_required
+def explorar_profissoes(request):
+    return render(request, 'explorar_profissoes.html')
+
