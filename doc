@@ -1,0 +1,143 @@
+### Proposta de Interface para uma Plataforma Web de Autoconhecimento e Teste Vocacional
+
+A interface da plataforma deverá seguir um conceito **minimalista, moderno e intuitivo**, priorizando a experiência do usuário (UX) e a facilidade de navegação. Considerando que o público-alvo é composto por adolescentes e jovens recém-formados, o design deverá transmitir **tranquilidade, acolhimento, confiança e profissionalismo**, despertando o interesse do usuário sem sobrecarregar a interface com elementos visuais excessivos.
+
+O layout deverá apresentar uma organização limpa, com boa distribuição dos espaços em branco, permitindo que o usuário concentre sua atenção no conteúdo principal. Os elementos gráficos deverão ser discretos e padronizados, seguindo uma identidade visual consistente em todas as páginas do sistema.
+
+### Paleta de Cores
+
+A escolha das cores deve favorecer uma experiência visual agradável, transmitindo sensação de calma, confiança e concentração durante a realização do teste vocacional.
+
+Sugere-se a seguinte paleta:
+
+| Elemento              | Cor              | Código HEX  |
+| --------------------- | ---------------- | ----------- |
+| Fundo principal       | Branco gelo      | **#F8FAFC** |
+| Fundo secundário      | Azul muito claro | **#EEF6FF** |
+| Cor principal         | Azul             | **#3B82F6** |
+| Cor complementar      | Verde água       | **#4FD1C5** |
+| Cor de destaque       | Amarelo suave    | **#FACC15** |
+| Texto principal       | Cinza escuro     | **#1F2937** |
+| Texto secundário      | Cinza médio      | **#6B7280** |
+| Botões de confirmação | Verde            | **#22C55E** |
+
+O branco será predominante na interface, proporcionando sensação de limpeza e organização. O azul será utilizado nos principais elementos de interação, como botões, menus e links, por transmitir segurança e confiabilidade. O verde água auxiliará na composição visual e em elementos relacionados ao bem-estar e progresso, enquanto o amarelo suave poderá ser empregado apenas para destacar informações importantes ou chamadas para ação, evitando excesso de estímulos visuais.
+
+---
+
+### Tipografia
+
+A tipografia deverá priorizar a legibilidade e a modernidade. Recomenda-se a utilização das fontes **Poppins** para títulos e **Inter** para textos correntes, ambas amplamente utilizadas em interfaces digitais.
+
+Sugestão de tamanhos:
+
+* Título principal (H1): 40 a 48 px
+* Títulos secundários (H2): 32 px
+* Subtítulos (H3): 24 px
+* Texto padrão: 16 a 18 px
+* Informações auxiliares: 14 px
+
+Os títulos deverão utilizar peso semibold ou bold, enquanto os textos informativos utilizarão peso regular.
+
+---
+
+### Botões
+
+Os botões deverão possuir formato arredondado, proporcionando um aspecto moderno e acolhedor.
+
+Especificações:
+
+* Altura entre 48 e 56 px;
+* Bordas com raio de aproximadamente 12 px;
+* Cor principal azul (#3B82F6);
+* Texto branco;
+* Efeito de mudança de tonalidade ao passar o cursor (hover);
+* Sombra discreta para destacar os elementos clicáveis.
+
+Os botões principais deverão possuir maior destaque em relação aos secundários, permitindo que o usuário identifique facilmente as ações mais importantes.
+
+---
+
+### Cartões (Cards)
+
+Os conteúdos poderão ser organizados em cartões para facilitar a leitura e a separação das informações.
+
+Características sugeridas:
+
+* Fundo branco;
+* Bordas arredondadas de aproximadamente 16 px;
+* Sombra suave;
+* Espaçamento interno entre 20 e 24 px;
+* Borda cinza clara de baixa intensidade.
+
+Esse padrão poderá ser utilizado para apresentar perfis vocacionais, resultados do teste, recomendações profissionais e informações adicionais.
+
+---
+
+### Ícones
+
+Os ícones deverão seguir um estilo **outline (traço fino)** ou **linear**, mantendo uma aparência discreta e profissional. Devem ser utilizados apenas para auxiliar a identificação visual das funcionalidades, evitando elementos ilustrativos ou infantis.
+
+Exemplos de ícones recomendados:
+
+* Usuário (Perfil)
+* Livro (Conhecimento)
+* Pasta ou Maleta (Profissões)
+* Gráfico (Resultados)
+* Engrenagem (Configurações)
+* Documento (Relatórios)
+* Calendário (Histórico)
+* Computador (Tecnologia)
+* Alvo (Objetivos)
+* Cérebro (Autoconhecimento)
+* Lâmpada (Habilidades)
+* Bússola (Orientação Profissional)
+
+Todos os ícones devem possuir o mesmo estilo gráfico, garantindo uniformidade visual.
+
+---
+
+### Organização da Interface
+
+A plataforma deverá apresentar uma navegação simples e objetiva.
+
+A página inicial poderá conter:
+
+* Barra superior com logotipo e menu de navegação;
+* Banner principal apresentando o objetivo da plataforma;
+* Botão de início do teste vocacional;
+* Seção explicativa sobre o funcionamento da plataforma;
+* Área apresentando os benefícios do autoconhecimento;
+* Depoimentos ou informações institucionais;
+* Rodapé contendo informações de contato e políticas da plataforma.
+
+Durante a realização do teste, recomenda-se apresentar apenas uma pergunta por tela, acompanhada de uma barra de progresso indicando o percentual já concluído. Essa estratégia reduz a sobrecarga cognitiva e aumenta o engajamento do usuário.
+
+---
+
+### Espaçamento
+
+A interface deverá utilizar espaçamentos amplos para proporcionar conforto visual.
+
+Recomenda-se:
+
+* Margens externas entre 24 e 32 px;
+* Espaçamento entre seções de 60 a 80 px;
+* Espaçamento entre componentes de 16 a 24 px;
+* Altura confortável entre linhas de texto para facilitar a leitura.
+
+---
+
+### Responsividade
+
+A plataforma deverá ser totalmente responsiva, adaptando automaticamente sua interface para computadores, tablets e dispositivos móveis. Todos os componentes devem manter boa legibilidade e facilidade de interação independentemente do tamanho da tela.
+
+---
+
+### Considerações de Usabilidade
+
+O projeto deverá seguir princípios de usabilidade e experiência do usuário (UX), garantindo uma navegação intuitiva, linguagem clara e feedback visual durante todas as etapas do teste. A interface deve minimizar distrações, permitindo que o usuário mantenha o foco nas perguntas e em seu processo de autoconhecimento.
+
+Além disso, recomenda-se utilizar animações discretas, como transições suaves entre páginas, efeitos leves nos botões e indicadores de progresso, evitando recursos visuais excessivos que possam comprometer a concentração.
+
+**Como referência visual, recomenda-se adotar um padrão semelhante ao utilizado por plataformas modernas como Google Material Design, Microsoft Fluent Design e Notion, priorizando simplicidade, consistência visual, acessibilidade e uma experiência agradável para o usuário.**

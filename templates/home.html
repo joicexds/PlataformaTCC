@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início - PlataformaTCC</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #EEF6FF;
+            --color-primary: #3B82F6;
+            --color-primary-hover: #2563EB;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --border-light: #E2E8F0;
+            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: #FFFFFF;
+            border-bottom: 1px solid var(--border-light);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--color-primary);
+            text-decoration: none;
+        }
+
+        .user-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            background-color: #EF4444;
+            color: #FFFFFF;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+
+        .btn-logout:hover {
+            background-color: #DC2626;
+        }
+
+        .container {
+            flex: 1;
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .welcome-card {
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .welcome-card h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            margin-bottom: 16px;
+            color: var(--color-primary);
+        }
+
+        .welcome-card p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="/" class="logo">
+            <i data-lucide="compass"></i>
+            <span>PlataformaTCC</span>
+        </a>
+        <div class="user-nav">
+            <span class="user-info">
+                <i data-lucide="user" style="width: 18px; height: 18px;"></i>
+                Olá, {{ user.username }}
+            </span>
+            <a href="{% url 'logout' %}" class="btn-logout">Sair</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h1>Você está conectado!</h1>
+            <p>
+                Sua autenticação foi realizada com sucesso através do sistema nativo do Django. A partir daqui, você pode iniciar o desenvolvimento da sua plataforma de orientação vocacional de forma limpa e organizada.
+            </p>
+        </div>
+    </div>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
