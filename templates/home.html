@@ -699,7 +699,7 @@
         <a href="{% url 'home' %}" class="brand-logo">
             <i data-lucide="compass"></i>
             <div>
-                <div class="brand-logo-text">FUTURO</div>
+                <div class="brand-logo-text">FutureWay</div>
                 <div class="brand-subtitle">Descubra seu caminho</div>
             </div>
         </a>
@@ -779,8 +779,8 @@
                 <span>1250</span>
             </div>
             <div class="stat-badge streak">
-                <i data-lucide="flame" style="width: 18px; height: 18px;"></i>
-                <span>7 dias</span>
+                <i data-lucide="flag" style="width: 18px; height: 18px; color: var(--color-cyan);"></i>
+                <span>2/5 etapas</span>
             </div>
             <button class="btn-notification">
                 <i data-lucide="bell"></i>
@@ -861,45 +861,37 @@
                 </div>
             </div>
 
-            <!-- Streak Card -->
+            <!-- Streak Card replaced by Completed Stages -->
             <div class="dash-card">
                 <div class="card-header">
-                    <i data-lucide="flame" style="color: #EF4444;"></i>
-                    <h3>Sequência Atual</h3>
+                    <i data-lucide="flag" style="color: var(--color-cyan);"></i>
+                    <h3>Etapas da Jornada</h3>
                 </div>
                 <div class="streak-info">
                     <div>
-                        <div class="streak-count">7 dias</div>
-                        <div class="streak-desc">Continue ativo e mantenha sua sequência!</div>
+                        <div class="streak-count">2 de 5 etapas</div>
+                        <div class="streak-desc">Você concluiu 2 de 5 etapas do seu teste vocacional!</div>
                     </div>
                     <div class="streak-days">
                         <div class="day-box">
-                            <span class="day-label">S</span>
-                            <div class="day-status completed">✓</div>
+                            <span class="day-label">Etapa 1</span>
+                            <div class="day-status completed" title="Introdução">✓</div>
                         </div>
                         <div class="day-box">
-                            <span class="day-label">T</span>
-                            <div class="day-status completed">✓</div>
+                            <span class="day-label">Etapa 2</span>
+                            <div class="day-status completed" title="Competências">✓</div>
                         </div>
                         <div class="day-box">
-                            <span class="day-label">Q</span>
-                            <div class="day-status completed">✓</div>
+                            <span class="day-label">Etapa 3</span>
+                            <div class="day-status active" title="Áreas de Interesse">3</div>
                         </div>
                         <div class="day-box">
-                            <span class="day-label">Q</span>
-                            <div class="day-status completed">✓</div>
+                            <span class="day-label">Etapa 4</span>
+                            <div class="day-status" style="border: 2px dashed var(--border-color); color: var(--text-muted);" title="Valores Pessoais">4</div>
                         </div>
                         <div class="day-box">
-                            <span class="day-label">S</span>
-                            <div class="day-status completed">✓</div>
-                        </div>
-                        <div class="day-box">
-                            <span class="day-label">S</span>
-                            <div class="day-status completed">✓</div>
-                        </div>
-                        <div class="day-box">
-                            <span class="day-label">D</span>
-                            <div class="day-status active">D</div>
+                            <span class="day-label">Etapa 5</span>
+                            <div class="day-status" style="border: 2px dashed var(--border-color); color: var(--text-muted);" title="Resultado Final">5</div>
                         </div>
                     </div>
                 </div>
