@@ -118,8 +118,18 @@ class UserProfileForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
+        self.user = user
         super().__init__(*args, **kwargs)
         if user:
             self.fields['first_name'].initial = user.first_name
             self.fields['last_name'].initial = user.last_name
             self.fields['email'].initial = user.email
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if self.user:
+            if User.objects.filter(email=email).exclude(pk=self.user.pk).exists():
+                raise ValidationError("Este e-mail já está em uso por outro usuário.")
+            if User.objects.filter(username=email).exclude(pk=self.user.pk).exists():
+                raise ValidationError("Este e-mail/usuário já está em uso.")
+        return email
