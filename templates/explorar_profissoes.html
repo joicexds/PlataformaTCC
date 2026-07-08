@@ -723,15 +723,18 @@
             // Build list
             let html = '';
             professionsData[key].forEach(prof => {
+                const profUrl = '/profissao/' + encodeURIComponent(prof.name) + '/';
                 html += `
-                    <div class="profession-card" style="border-left: 4px solid ${color}">
-                        <div class="profession-name">${prof.name}</div>
-                        <div class="profession-desc">${prof.desc}</div>
-                        <div class="profession-market">
-                            <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
-                            <span>Mercado: ${prof.market}</span>
+                    <a href="${profUrl}" style="text-decoration: none; color: inherit; display: block; outline: none;">
+                        <div class="profession-card" style="border-left: 4px solid ${color}">
+                            <div class="profession-name">${prof.name}</div>
+                            <div class="profession-desc">${prof.desc}</div>
+                            <div class="profession-market">
+                                <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
+                                <span>Ver detalhes completos</span>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 `;
             });
             containerEl.innerHTML = html;

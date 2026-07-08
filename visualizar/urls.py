@@ -12,4 +12,5 @@ urlpatterns = [
     path('teste/iniciar/', views.iniciar_teste, name='iniciar_teste'),
     path('teste/responder/', views.responder_teste, name='responder_teste'),
     path('teste/resultado/', views.resultado_teste, name='resultado_teste'),
+    path('profissao/<str:nome>/', views.detalhe_profissao, name='detalhe_profissao'),
 ]

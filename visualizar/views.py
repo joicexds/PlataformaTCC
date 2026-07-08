@@ -377,3 +377,58 @@ def resultado_teste(request):
         
     return redirect('iniciar_teste')
 
+
+@login_required
+def detalhe_profissao(request, nome):
+    # Base fallback structure
+    dados = {
+        'nome': nome.title(),
+        'descricao': f'A profissão de {nome.title()} é fundamental para o desenvolvimento e funcionamento da sociedade atual. Os profissionais dessa área lidam com desafios dinâmicos e possuem um amplo campo de oportunidades.',
+        'tempo_formacao': '4 a 5 anos',
+        'niveis_atuacao': ['Júnior', 'Pleno', 'Sênior', 'Especialista'],
+        'salario_medio': 'R$ 3.500 a R$ 12.000',
+        'custo_curso': 'R$ 800 a R$ 2.500 / mês',
+        'image_prompt': f'professional {nome} working modern futuristic cinematic',
+        'areas': [
+            {'nome': 'Setor Privado', 'desc': 'Atuação em empresas nacionais e multinacionais em diversos cargos estratégicos.'},
+            {'nome': 'Setor Público', 'desc': 'Concursos públicos e órgãos governamentais com estabilidade.'},
+            {'nome': 'Autônomo / Empreendedor', 'desc': 'Trabalho independente, prestando consultorias ou abrindo a própria empresa.'}
+        ]
+    }
+
+    api_key = getattr(settings, 'GEMINI_API_KEY', '')
+    if HAS_GEMINI and api_key:
+        try:
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel("gemini-2.5-flash", generation_config={"temperature": 0.5})
+            prompt = f"""
+            Você é um especialista em carreiras. O usuário quer saber os detalhes sobre a profissão: "{nome}".
+            Por favor, pesquise as informações dessa profissão no mercado brasileiro atual e gere um retorno ESTRITAMENTE em formato JSON, sem marcações markdown:
+            {{
+                "nome": "Nome oficial da profissão formatado (ex: Engenharia de Software)",
+                "descricao": "Uma descrição engajadora sobre o que o profissional faz no dia a dia, sua importância e rotina (máximo 4 linhas).",
+                "tempo_formacao": "Tempo médio para se formar ou especializar (ex: 4 a 5 anos)",
+                "niveis_atuacao": ["Júnior", "Pleno", "Sênior", "Especialista/Gestão"],
+                "salario_medio": "Faixa salarial do mercado brasileiro (ex: R$ 3.500 a R$ 15.000)",
+                "custo_curso": "Estimativa média da mensalidade da graduação (ex: R$ 800 a R$ 3.000 / mês) ou se é comum em federais",
+                "image_prompt": "A short english prompt to generate an image related to this profession (max 6 words, ex: 'modern lawyer office futuristic')",
+                "areas": [
+                    {{"nome": "Nome da Área de atuação 1", "desc": "Breve descrição sobre o dia a dia nessa área."}},
+                    {{"nome": "Nome da Área de atuação 2", "desc": "..."}},
+                    {{"nome": "Nome da Área de atuação 3", "desc": "..."}}
+                ]
+            }}
+            """
+            response = model.generate_content(prompt)
+            text = response.text.replace("```json", "").replace("```", "").strip()
+            dados_gerados = json.loads(text)
+            
+            # Garantir que todos os campos existem
+            for key in dados.keys():
+                if key in dados_gerados:
+                    dados[key] = dados_gerados[key]
+                    
+        except Exception as e:
+            print("Gemini fallback detalhe_profissao due to:", e)
+            
+    return render(request, 'profissao_detalhe.html', {'dados': dados, 'profissao_original': nome})
