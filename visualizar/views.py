@@ -388,7 +388,6 @@ def detalhe_profissao(request, nome):
         'niveis_atuacao': ['Júnior', 'Pleno', 'Sênior', 'Especialista'],
         'salario_medio': 'R$ 3.500 a R$ 12.000',
         'custo_curso': 'R$ 800 a R$ 2.500 / mês',
-        'image_prompt': f'professional {nome} working modern futuristic cinematic',
         'areas': [
             {'nome': 'Setor Privado', 'desc': 'Atuação em empresas nacionais e multinacionais em diversos cargos estratégicos.'},
             {'nome': 'Setor Público', 'desc': 'Concursos públicos e órgãos governamentais com estabilidade.'},
@@ -402,18 +401,18 @@ def detalhe_profissao(request, nome):
             genai.configure(api_key=api_key)
             model = genai.GenerativeModel("gemini-2.5-flash", generation_config={"temperature": 0.5})
             prompt = f"""
-            Você é um especialista em carreiras. O usuário quer saber os detalhes sobre a profissão: "{nome}".
-            Por favor, pesquise as informações dessa profissão no mercado brasileiro atual e gere um retorno ESTRITAMENTE em formato JSON, sem marcações markdown:
+            Você é um especialista em carreiras e mercado de trabalho no Brasil. O usuário quer saber detalhes reais e extremamente precisos sobre a profissão: "{nome}".
+            Por favor, pesquise os DADOS REAIS E ATUAIS (2025/2026) dessa profissão no Brasil. O foco é fornecer valores exatos de mensalidade de faculdades e tempo exato de duração dos cursos.
+            Gere um retorno ESTRITAMENTE em formato JSON, sem marcações markdown:
             {{
                 "nome": "Nome oficial da profissão formatado (ex: Engenharia de Software)",
-                "descricao": "Uma descrição engajadora sobre o que o profissional faz no dia a dia, sua importância e rotina (máximo 4 linhas).",
-                "tempo_formacao": "Tempo médio para se formar ou especializar (ex: 4 a 5 anos)",
+                "descricao": "Uma descrição profissional e clara sobre a rotina dessa profissão (máx 4 linhas).",
+                "tempo_formacao": "Duração exata do curso no Brasil em anos e semestres (ex: '4 anos (8 semestres)' ou '5 anos (10 semestres)'). Seja direto.",
                 "niveis_atuacao": ["Júnior", "Pleno", "Sênior", "Especialista/Gestão"],
-                "salario_medio": "Faixa salarial do mercado brasileiro (ex: R$ 3.500 a R$ 15.000)",
-                "custo_curso": "Estimativa média da mensalidade da graduação (ex: R$ 800 a R$ 3.000 / mês) ou se é comum em federais",
-                "image_prompt": "A short english prompt to generate an image related to this profession (max 6 words, ex: 'modern lawyer office futuristic')",
+                "salario_medio": "Faixa salarial REAL do mercado brasileiro atual (ex: R$ 3.500 a R$ 15.000)",
+                "custo_curso": "Estimativa EXATA da mensalidade em faculdades privadas no Brasil (ex: R$ 800 a R$ 1.500 / mês) e se é comum em federais.",
                 "areas": [
-                    {{"nome": "Nome da Área de atuação 1", "desc": "Breve descrição sobre o dia a dia nessa área."}},
+                    {{"nome": "Nome da Área de atuação 1", "desc": "Breve descrição profissional e objetiva."}},
                     {{"nome": "Nome da Área de atuação 2", "desc": "..."}},
                     {{"nome": "Nome da Área de atuação 3", "desc": "..."}}
                 ]
