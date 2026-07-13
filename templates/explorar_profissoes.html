@@ -675,52 +675,52 @@
     <script>
         const professionsData = {
             humanas: [
-                { name: "Direito", desc: "Aplicação e estudo de leis, normas sociais e defesa jurídica.", market: "Alta Demanda", icon: "scale" },
-                { name: "Psicologia", desc: "Estudo do comportamento, mente humana e tratamentos clínicos.", market: "Crescimento Rápido", icon: "brain" },
-                { name: "Jornalismo", desc: "Investigação, redação e comunicação de notícias e eventos.", market: "Médio", icon: "mic" },
-                { name: "História", desc: "Estudo crítico de fatos, culturas e eventos históricos passados.", market: "Estável", icon: "book-open" },
-                { name: "Sociologia", desc: "Análise das relações humanas, instituições e estruturas sociais.", market: "Estável", icon: "users" },
-                { name: "Pedagogia", desc: "Estudo e aplicação de métodos educacionais e docência.", market: "Alta Demanda", icon: "graduation-cap" }
+                { name: "Direito", desc: "Defesa jurídica, análise de contratos, tribunais e consultoria corporativa e pública.", market: "Alta concorrência, boas chances em tech law.", salary: "R$ 4.500 a R$ 15.000+", icon: "scale" },
+                { name: "Psicologia", desc: "Clínica, RH, psicologia organizacional e apoio à saúde mental em um mundo acelerado.", market: "Em alta, foco em teleterapia e bem-estar.", salary: "R$ 3.000 a R$ 8.000", icon: "brain" },
+                { name: "Jornalismo", desc: "Investigação, produção de conteúdo digital, podcasts, assessoria e fact-checking.", market: "Transição para digital e mídias independentes.", salary: "R$ 2.500 a R$ 7.000", icon: "mic" },
+                { name: "História", desc: "Docência, pesquisa acadêmica, curadoria de museus e consultoria cultural.", market: "Forte na docência e mercado editorial.", salary: "R$ 2.800 a R$ 6.500", icon: "book-open" },
+                { name: "Sociologia", desc: "Pesquisa de mercado, docência, análise de políticas públicas e terceiro setor.", market: "Demandado em ONGs e pesquisa de dados sociais.", salary: "R$ 3.200 a R$ 7.500", icon: "users" },
+                { name: "Pedagogia", desc: "Gestão escolar, docência infantil, educação especial e design instrucional (EAD).", market: "Alta demanda em EdTechs e escolas bilíngues.", salary: "R$ 2.500 a R$ 6.000", icon: "graduation-cap" }
             ],
             natureza: [
-                { name: "Biologia", desc: "Estudo científico de todos os aspectos dos organismos vivos.", market: "Estável", icon: "microscope" },
-                { name: "Biotecnologia", desc: "Uso de sistemas biológicos para criar soluções tecnológicas.", market: "Alta Demanda", icon: "flask-conical" },
-                { name: "Agronomia", desc: "Planejamento e coordenação de safras, solos e cultivo agrícola.", market: "Alta Demanda", icon: "tractor" },
-                { name: "Gestão Ambiental", desc: "Estudo e plano de preservação, ecologia e sustentabilidade.", market: "Crescimento Rápido", icon: "leaf" },
-                { name: "Geologia", desc: "Estudo da estrutura interna, rochas e evolução do planeta Terra.", market: "Médio", icon: "mountain" },
-                { name: "Química Industrial", desc: "Estudo e desenvolvimento químico de larga escala na indústria.", market: "Estável", icon: "beaker" }
+                { name: "Biologia", desc: "Pesquisa genética, conservação ambiental, biologia marinha e laboratórios clínicos.", market: "Estável, foco em sustentabilidade e genética.", salary: "R$ 3.500 a R$ 8.000", icon: "microscope" },
+                { name: "Biotecnologia", desc: "Engenharia genética, produção de vacinas, agroindústria e inovação de materiais.", market: "Explosão de demanda global em inovação verde.", salary: "R$ 4.500 a R$ 12.000", icon: "flask-conical" },
+                { name: "Agronomia", desc: "Gestão do agronegócio, agricultura de precisão (AgTech) e sustentabilidade do solo.", market: "Setor fortíssimo no Brasil com alta tecnologia.", salary: "R$ 5.000 a R$ 15.000", icon: "tractor" },
+                { name: "Gestão Ambiental", desc: "Adequação a normas ESG, controle de poluição e transição para energia limpa.", market: "Ascensão impulsionada por metas ESG corporativas.", salary: "R$ 4.000 a R$ 9.000", icon: "leaf" },
+                { name: "Geologia", desc: "Exploração de minérios, petróleo, estudos sismológicos e águas subterrâneas.", market: "Específico, forte em mineração e energia.", salary: "R$ 7.000 a R$ 14.000", icon: "mountain" },
+                { name: "Química Industrial", desc: "Desenvolvimento de cosméticos, plásticos biodegradáveis e processos fabris.", market: "Foco crescente na transição para a química verde.", salary: "R$ 4.500 a R$ 10.000", icon: "beaker" }
             ],
             exatas: [
-                { name: "Engenharia de Software", desc: "Desenho, codificação e arquitetura de sistemas e apps.", market: "Altíssima Demanda", icon: "code" },
-                { name: "Ciência de Dados", desc: "Análise avançada, modelagem preditiva e inteligência artificial.", market: "Altíssima Demanda", icon: "database" },
-                { name: "Engenharia Civil", desc: "Planejamento e construção de edifícios, pontes e estradas.", market: "Médio", icon: "hard-hat" },
-                { name: "Sistemas de Informação", desc: "Gerenciamento de redes, bancos de dados e TI corporativo.", market: "Alta Demanda", icon: "server" },
-                { name: "Física Médica", desc: "Estudo da física aplicada em diagnóstico por imagem e radiologia.", market: "Crescimento Rápido", icon: "activity" },
-                { name: "Matemática Aplicada", desc: "Modelagem lógica para finanças, estatísticas e computação.", market: "Alta Demanda", icon: "calculator" }
+                { name: "Engenharia de Software", desc: "Arquitetura de sistemas, desenvolvimento web/mobile e segurança da informação.", market: "Altíssima demanda por devs Pleno/Sênior.", salary: "R$ 5.000 a R$ 20.000+", icon: "code" },
+                { name: "Ciência de Dados", desc: "Machine learning, análise de big data, previsões de IA e inteligência de negócios.", market: "Profissão do futuro, hiper valorizada globalmente.", salary: "R$ 6.000 a R$ 25.000+", icon: "database" },
+                { name: "Engenharia Civil", desc: "Gestão de obras, cálculo estrutural, infraestrutura urbana e novos materiais.", market: "Retomada com foco em construções inteligentes.", salary: "R$ 6.000 a R$ 15.000", icon: "hard-hat" },
+                { name: "Sistemas de Informação", desc: "Gestão de redes, infraestrutura em nuvem, ERPs e integração de tecnologias.", market: "Essencial para a transformação digital das empresas.", salary: "R$ 4.500 a R$ 16.000", icon: "server" },
+                { name: "Física Médica", desc: "Calibração de equipamentos de radioterapia, dosimetria e medicina nuclear.", market: "Demanda especializada em hospitais oncológicos.", salary: "R$ 5.500 a R$ 12.000", icon: "activity" },
+                { name: "Matemática Aplicada", desc: "Modelagem financeira, estatística para seguros e otimização de logística.", market: "Alta absorção por bancos e mercado financeiro.", salary: "R$ 6.000 a R$ 18.000", icon: "calculator" }
             ],
             saude: [
-                { name: "Medicina", desc: "Diagnóstico, tratamento de enfermidades e cuidado de pacientes.", market: "Altíssima Demanda", icon: "stethoscope" },
-                { name: "Enfermagem", desc: "Cuidado direto ao paciente, tratamentos clínicos e triagem.", market: "Alta Demanda", icon: "heart-pulse" },
-                { name: "Fisioterapia", desc: "Reabilitação de movimentos, lesões e saúde osteomuscular.", market: "Crescimento Rápido", icon: "activity" },
-                { name: "Nutrição", desc: "Prescrição alimentar, planejamento nutricional e metabólico.", market: "Crescimento Rápido", icon: "apple" },
-                { name: "Odontologia", desc: "Prevenção, diagnóstico e tratamento de distúrbios bucais.", market: "Alta Demanda", icon: "smile" },
-                { name: "Farmácia", desc: "Desenvolvimento e dispersão de fármacos e análise laboratorial.", market: "Estável", icon: "pill" }
+                { name: "Medicina", desc: "Diagnóstico, cirurgias, clínica geral e uso de tecnologias (telemedicina/robótica).", market: "Demanda crônica, migração para HealthTechs.", salary: "R$ 10.000 a R$ 30.000+", icon: "stethoscope" },
+                { name: "Enfermagem", desc: "Assistência intensiva, gestão hospitalar, vacinação e cuidado geriátrico.", market: "Falta global de profissionais qualificados no setor.", salary: "R$ 3.500 a R$ 7.500", icon: "heart-pulse" },
+                { name: "Fisioterapia", desc: "Reabilitação esportiva, respiratória, traumato-ortopédica e pilates clínico.", market: "Crescimento devido ao envelhecimento populacional.", salary: "R$ 3.000 a R$ 8.000", icon: "activity" },
+                { name: "Nutrição", desc: "Nutrição clínica, esportiva, funcional e formulação de alimentos saudáveis.", market: "Alta procura por saúde preventiva e longevidade.", salary: "R$ 3.000 a R$ 7.000", icon: "apple" },
+                { name: "Odontologia", desc: "Ortodontia invisível, harmonização facial, implantes e saúde bucal preventiva.", market: "Forte avanço na área de estética e harmonização.", salary: "R$ 4.000 a R$ 15.000", icon: "smile" },
+                { name: "Farmácia", desc: "Desenvolvimento de fármacos, análises clínicas, oncologia e estética.", market: "Expansão rápida da indústria farmacêutica nacional.", salary: "R$ 3.500 a R$ 9.000", icon: "pill" }
             ],
             artes: [
-                { name: "Arquitetura e Urbanismo", desc: "Desenho estético e planejamento funcional de espaços urbanos.", market: "Médio", icon: "building" },
-                { name: "Design Gráfico", desc: "Comunicação visual, branding, interfaces e artes digitais.", market: "Alta Demanda", icon: "pen-tool" },
-                { name: "Cinema e Audiovisual", desc: "Produção de filmes, direção de arte, roteiro e edição.", market: "Médio", icon: "video" },
-                { name: "Artes Visuais", desc: "Desenho, pintura, escultura e curadoria de galerias.", market: "Estável", icon: "palette" },
-                { name: "Design de Moda", desc: "Desenvolvimento criativo de roupas, acessórios e vestuário.", market: "Médio", icon: "scissors" },
-                { name: "Publicidade e Propaganda", desc: "Estratégias de anúncios, criação de campanhas de marketing.", market: "Alta Demanda", icon: "megaphone" }
+                { name: "Arquitetura e Urbanismo", desc: "Projetos de interiores, urbanismo sustentável, smart cities e modelagem BIM.", market: "Boa demanda para reformas e projetos sustentáveis.", salary: "R$ 4.000 a R$ 12.000", icon: "building" },
+                { name: "Design Gráfico", desc: "Identidade visual, UI/UX (interfaces de apps), motion graphics e editoração.", market: "Migração massiva para UI/UX e mídias digitais.", salary: "R$ 3.000 a R$ 9.000", icon: "pen-tool" },
+                { name: "Cinema e Audiovisual", desc: "Produção, roteiro, edição VFX, direção de arte e conteúdo para streaming.", market: "Forte alta impulsionada por plataformas de streaming.", salary: "R$ 3.500 a R$ 10.000", icon: "video" },
+                { name: "Artes Visuais", desc: "Ilustração digital, modelagem 3D para games, galerias e NFTs artísticos.", market: "Setor de games e concept art em franca expansão.", salary: "R$ 2.500 a R$ 8.000", icon: "palette" },
+                { name: "Design de Moda", desc: "Criação de coleções, coolhunting, modelagem digital e moda sustentável.", market: "Adaptação agressiva para slow fashion e e-commerce.", salary: "R$ 3.000 a R$ 8.500", icon: "scissors" },
+                { name: "Publicidade e Propaganda", desc: "Tráfego pago, redação publicitária (copywriting), branding e growth hacking.", market: "Foco absoluto em marketing digital de performance.", salary: "R$ 3.000 a R$ 10.000", icon: "megaphone" }
             ],
             negocios: [
-                { name: "Administração", desc: "Gerenciamento, planejamento financeiro e liderança corporativa.", market: "Alta Demanda", icon: "briefcase" },
-                { name: "Economia", desc: "Estudo e análise de mercados, fluxos monetários e inflação.", market: "Alta Demanda", icon: "trending-up" },
-                { name: "Marketing Digital", desc: "Estratégias online de vendas, redes sociais e captação.", market: "Altíssima Demanda", icon: "mouse-pointer-click" },
-                { name: "Ciências Contábeis", desc: "Análise contábil, auditoria fiscal e tributária de empresas.", market: "Alta Demanda", icon: "calculator" },
-                { name: "Relações Internacionais", desc: "Negociação global, tratados diplomáticos e comércio exterior.", market: "Médio", icon: "globe" },
-                { name: "Logística", desc: "Gestão de fluxo de suprimentos, entregas e cadeias globais.", market: "Alta Demanda", icon: "truck" }
+                { name: "Administração", desc: "Gestão ágil de processos, finanças, recursos humanos e liderança estratégica.", market: "Vagas abundantes em startups e multinacionais.", salary: "R$ 3.500 a R$ 15.000+", icon: "briefcase" },
+                { name: "Economia", desc: "Análise de investimentos, macroeconomia, criptoativos e finanças corporativas.", market: "Alta valorização em bancos de investimento e fundos.", salary: "R$ 5.000 a R$ 20.000+", icon: "trending-up" },
+                { name: "Marketing Digital", desc: "E-commerce, SEO, gestão de tráfego, análise de métricas e mídias sociais.", market: "Transformou-se no pilar vital de qualquer empresa.", salary: "R$ 3.000 a R$ 12.000", icon: "mouse-pointer-click" },
+                { name: "Ciências Contábeis", desc: "Auditoria contábil, compliance, planejamento tributário e controladoria.", market: "Evolução do setor para consultoria contábil inteligente.", salary: "R$ 4.000 a R$ 14.000", icon: "calculator" },
+                { name: "Relações Internacionais", desc: "Diplomacia corporativa, expansão global de marcas, importação e exportação.", market: "Em alta nas gigantes corporativas de tecnologia.", salary: "R$ 4.000 a R$ 11.000", icon: "globe" },
+                { name: "Logística", desc: "Gestão de supply chain, logística e-commerce, frotas e automação de CDs.", market: "Boom absurdo graças ao crescimento do e-commerce.", salary: "R$ 3.500 a R$ 10.000", icon: "truck" }
             ]
         };
 
@@ -743,9 +743,15 @@
                             <i data-lucide="${prof.icon}" class="prof-card-icon" style="color: ${color}"></i>
                             <div class="profession-name">${prof.name}</div>
                             <div class="profession-desc">${prof.desc}</div>
-                            <div class="profession-market" style="margin-top: 4px;">
-                                <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
-                                <span>Ver detalhes completos</span>
+                            <div style="display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap;">
+                                <div class="profession-market" style="font-size: 11px;">
+                                    <i data-lucide="trending-up" style="width: 12px; height: 12px;"></i>
+                                    <span>${prof.market}</span>
+                                </div>
+                                <div class="profession-market" style="font-size: 11px; color: var(--color-cyan);">
+                                    <i data-lucide="dollar-sign" style="width: 12px; height: 12px;"></i>
+                                    <span>${prof.salary}</span>
+                                </div>
                             </div>
                         </div>
                     </a>
