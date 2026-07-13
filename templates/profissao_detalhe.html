@@ -377,6 +377,12 @@
             </div>
         </div>
 
+        <!-- Video Simulation Section -->
+        <h2 class="section-title" style="margin-top: 30px;"><i data-lucide="play-circle" style="color: var(--color-pink);"></i> Simulador: Na Prática</h2>
+        <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 20px; border: 1px solid var(--border-color); margin-top: 15px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed?listType=search&list=como+e+o+dia+a+dia+trabalho+de+um+profissional+de+{{ dados.nome|urlencode }}&autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
         <h2 class="section-title"><i data-lucide="briefcase" style="color: var(--color-purple);"></i> Áreas de Atuação</h2>
         <div class="areas-list">
             {% for area in dados.areas %}

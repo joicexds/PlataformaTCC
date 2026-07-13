@@ -207,29 +207,29 @@ def iniciar_teste(request):
                 genai.configure(api_key=api_key)
                 model = genai.GenerativeModel("gemini-2.5-flash", generation_config={"temperature": 0.9})
                 prompt = f"""
-                ATENÇÃO: Gere perguntas INÉDITAS, CRIATIVAS e diferentes a cada execução. Não repita formatos padrões.
-                Gere um teste vocacional rápido com exatamente 5 perguntas personalizadas de múltipla escolha.
-                O perfil de preferências do usuário é:
+                ATENÇÃO: VOCÊ É UM MESTRE DE RPG (GAME MASTER). O usuário quer uma experiência de jogo interativo e não um teste convencional.
+                Gere exatamente 5 perguntas em formato de CENÁRIOS DE MISSÃO (ex: "Você caiu numa ilha deserta...", "Uma invasão alienígena começou...", "Você é um detetive num caso impossível...").
+                Mude os temas (Espaço, Fantasia, Mistério, Sobrevivência, Cyberpunk, Apocalipse Zumbi) ALEATORIAMENTE a cada execução para que a aventura NUNCA se repita.
+                O perfil do jogador é:
                 - Matéria que mais gosta: {materia}
                 - Atividade de tempo livre: {hobby}
                 - Habilidade principal: {habilidade}
                 - Grande objetivo: {objetivo}
 
-                Crie 5 perguntas que ajudem a diferenciar este perfil específico entre as áreas de: Humanas, Exatas, Saude ou Natureza.
-                Cada pergunta deve conter exatamente 4 alternativas (A, B, C, D) com textos envolventes, curtos e dinâmicos.
-                Cada alternativa deve ter mapeada uma categoria correspondente entre: 'Humanas', 'Exatas', 'Saude' ou 'Natureza'.
-                Retorne a resposta estritamente no formato JSON estruturado abaixo, sem qualquer marcação markdown (como ```json ou ```):
+                Crie 5 cenários desafiadores. As 4 alternativas (A, B, C, D) de cada cenário devem ser AÇÕES DIRETAS que o jogador pode tomar para resolver o problema.
+                Cada ação deve refletir uma vocação diferente: 'Humanas', 'Exatas', 'Saude' ou 'Natureza'.
+                Retorne a resposta estritamente no formato JSON estruturado abaixo, sem marcação markdown (nem ```json):
                 {{
                   "perguntas": [
                     {{
                       "id": 1,
-                      "enunciado": "Qual...",
-                      "image_prompt": "A short english prompt to generate a picture related to the question (max 6 words, ex: futuristic tech laboratory)",
+                      "enunciado": "Cenário 1: Você está preso em uma nave espacial com problemas nos motores em rota de colisão. O que você faz primeiro?",
+                      "image_prompt": "futuristic spaceship interior crisis alarm",
                       "alternativas": [
-                        {{"letra": "A", "texto": "...", "categoria": "Humanas"}},
-                        {{"letra": "B", "texto": "...", "categoria": "Exatas"}},
-                        {{"letra": "C", "texto": "...", "categoria": "Saude"}},
-                        {{"letra": "D", "texto": "...", "categoria": "Natureza"}}
+                        {{"letra": "A", "texto": "Pego o rádio para acalmar a tripulação e organizar uma evacuação segura.", "categoria": "Humanas"}},
+                        {{"letra": "B", "texto": "Acesso o terminal central e uso código para tentar hackear e reiniciar os propulsores.", "categoria": "Exatas"}},
+                        {{"letra": "C", "texto": "Corro para a enfermaria para separar kits de primeiros socorros e checar sinais vitais.", "categoria": "Saude"}},
+                        {{"letra": "D", "texto": "Analiso a física da gravidade do planeta abaixo para planejar um pouso forçado usando a atmosfera.", "categoria": "Natureza"}}
                       ]
                     }}
                   ]
