@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Progresso - FutureWay</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #060814;
+            --bg-sidebar: #090B19;
+            --bg-card: #0C0E22;
+            --bg-card-hover: #121532;
+            --border-color: #1A1D3A;
+            
+            --color-purple: #A855F7;
+            --color-pink: #FF5FA2;
+            --color-cyan: #3DD6D0;
+            --color-blue: #3B82F6;
+            --color-gold: #FACC15;
+            
+            --text-white: #FFFFFF;
+            --text-muted: #8E94B2;
+            --text-secondary: #B4B9D4;
+            
+            --gradient-primary: linear-gradient(135deg, var(--color-purple), var(--color-pink));
+            --gradient-blue-purple: linear-gradient(135deg, var(--color-cyan), var(--color-purple));
+            --gradient-gold: linear-gradient(135deg, #FACC15, #F59E0B);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 10;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            margin-bottom: 40px;
+            padding-left: 10px;
+        }
+
+        .brand-logo i {
+            color: var(--color-pink);
+            font-size: 24px;
+        }
+
+        .brand-logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--text-white), var(--color-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-subtitle {
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .menu-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item a:hover {
+            background-color: var(--bg-card-hover);
+            color: var(--text-white);
+        }
+
+        .menu-item.active a {
+            background-color: rgba(168, 85, 247, 0.15);
+            color: var(--color-purple);
+            font-weight: 600;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .user-profile-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .user-profile-card:hover {
+            background-color: var(--bg-card-hover);
+            border-color: var(--color-purple);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-white);
+            font-size: 16px;
+            overflow: hidden;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .user-meta {
+            flex: 1;
+            margin-left: 12px;
+            text-align: left;
+        }
+
+        .user-meta h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        .user-meta p {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .user-profile-card i {
+            color: var(--text-muted);
+        }
+
+        /* Main Content area */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 1200px;
+        }
+
+        /* Top Bar stats */
+        .topbar-stats {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .stat-badge.gems i {
+            color: var(--color-cyan);
+        }
+
+        .stat-badge.streak i {
+            color: #EF4444; /* orange-red */
+        }
+
+        .btn-notification {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 20px;
+            transition: color 0.2s;
+        }
+
+        .btn-notification:hover {
+            color: var(--text-white);
+        }
+
+        /* Progress Hero Section */
+        .progress-hero {
+            background-color: var(--bg-card);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(0,0,0,0) 70%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            z-index: 2;
+        }
+
+        .level-badge-large {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            background: var(--bg-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border: 4px solid var(--color-purple);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.4), inset 0 0 20px rgba(168, 85, 247, 0.2);
+        }
+
+        .level-number {
+            font-size: 48px;
+            font-weight: 800;
+            font-family: 'Poppins', sans-serif;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        .level-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        .hero-details {
+            flex: 1;
+        }
+
+        .hero-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-white);
+            margin-bottom: 8px;
+        }
+        
+        .hero-subtitle {
+            font-size: 16px;
+            color: var(--color-cyan);
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        .xp-bar-container {
+            width: 100%;
+            background-color: var(--bg-main);
+            height: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .xp-bar-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            width: 69%; /* (3450/5000)*100 */
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .xp-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .xp-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .xp-stats strong {
+            color: var(--text-white);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--color-cyan);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+        
+        .stat-icon.xp {
+            background: rgba(168, 85, 247, 0.1);
+            color: var(--color-purple);
+        }
+        
+        .stat-icon.gems {
+            background: rgba(61, 214, 208, 0.1);
+            color: var(--color-cyan);
+        }
+        
+        .stat-icon.streak {
+            background: rgba(239, 68, 68, 0.1);
+            color: #EF4444;
+        }
+
+        .stat-info h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-white);
+            margin-bottom: 4px;
+        }
+
+        .stat-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Two columns layout for Missions and Achievements */
+        .dashboard-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .dash-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .card-header i {
+            font-size: 20px;
+            color: var(--color-purple);
+        }
+
+        .card-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        /* Missions List */
+        .mission-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .mission-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border-radius: 16px;
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        
+        .mission-item:hover {
+            border-color: var(--color-purple);
+            background-color: rgba(168, 85, 247, 0.05);
+        }
+
+        .mission-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .mission-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .mission-icon.completed {
+            background: rgba(61, 214, 208, 0.1);
+            color: var(--color-cyan);
+        }
+        
+        .mission-icon.active {
+            background: rgba(168, 85, 247, 0.1);
+            color: var(--color-purple);
+        }
+
+        .mission-details h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 4px;
+        }
+
+        .mission-details p {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mission-reward {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--color-gold);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Achievements List */
+        .achievement-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .badge-hexagon {
+            position: relative;
+            width: 70px;
+            height: 80px;
+            background: var(--gradient-gold);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(250, 204, 21, 0.3);
+            flex-shrink: 0;
+        }
+
+        .badge-hexagon-inner {
+            position: absolute;
+            width: 62px;
+            height: 72px;
+            background-color: var(--bg-card);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .badge-hexagon-inner i {
+            font-size: 28px;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .achievement-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 4px;
+        }
+
+        .achievement-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 6px;
+        }
+        
+        .achievement-xp {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--color-purple);
+            background: rgba(168, 85, 247, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Menu -->
+    <aside class="sidebar">
+        <a href="{% url 'home' %}" class="brand-logo">
+            <i data-lucide="compass"></i>
+            <div>
+                <div class="brand-logo-text">FutureWay</div>
+                <div class="brand-subtitle">Descubra seu caminho</div>
+            </div>
+        </a>
+
+        <ul class="menu-list">
+            <li class="menu-item">
+                <a href="{% url 'home' %}">
+                    <i data-lucide="home" style="width: 20px; height: 20px;"></i>
+                    <span>Início</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'iniciar_teste' %}">
+                    <i data-lucide="award" style="width: 20px; height: 20px;"></i>
+                    <span>Teste Vocacional</span>
+                </a>
+            </li>
+            <li class="menu-item active">
+                <a href="{% url 'meu_progresso' %}">
+                    <i data-lucide="trending-up" style="width: 20px; height: 20px;"></i>
+                    <span>Meu Progresso</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#">
+                    <i data-lucide="trophy" style="width: 20px; height: 20px;"></i>
+                    <span>Conquistas</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'explorar_profissoes' %}">
+                    <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+                    <span>Explorar Profissões</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="https://www.google.com/search?q=guia+completo+de+profissoes+em+alta+no+mercado+de+trabalho+salarios" target="_blank">
+                    <i data-lucide="book-open" style="width: 20px; height: 20px;"></i>
+                    <span>Guia de Carreiras</span>
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="sidebar-footer">
+            <a href="{% url 'profile' %}" style="text-decoration: none;">
+                <div class="user-profile-card">
+                    <div class="user-avatar">
+                        {% if user.profile.profile_picture %}
+                            <img src="{{ user.profile.profile_picture.url }}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        {% else %}
+                            {% if user.first_name %}{{ user.first_name|slice:":1"|upper }}{% else %}{{ user.username|slice:":1"|upper }}{% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="user-meta">
+                        <h4>Olá, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!</h4>
+                        <p>Ver perfil</p>
+                    </div>
+                    <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                </div>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        
+        <!-- Top bar metrics -->
+        <div class="topbar-stats">
+            <div class="stat-badge gems">
+                <i data-lucide="gem" style="width: 18px; height: 18px;"></i>
+                <span>{{ gems }}</span>
+            </div>
+            <div class="stat-badge streak">
+                <i data-lucide="flame" style="width: 18px; height: 18px; color: #EF4444;"></i>
+                <span>{{ streak_days }} dias</span>
+            </div>
+            <button class="btn-notification">
+                <i data-lucide="bell"></i>
+            </button>
+            <a href="{% url 'logout' %}" class="btn-logout" style="text-decoration: none; color: var(--color-pink); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 12px; font-weight: 600; font-size: 14px; background-color: rgba(255, 95, 162, 0.05); transition: 0.2s;">Sair</a>
+        </div>
+
+        <!-- Progress Hero Section -->
+        <section class="progress-hero">
+            <div class="hero-bg"></div>
+            <div class="hero-content">
+                <div class="level-badge-large">
+                    <span class="level-number">{{ level }}</span>
+                    <span class="level-label">Nível</span>
+                </div>
+                <div class="hero-details">
+                    <h1 class="hero-title">{{ level_title }}</h1>
+                    <p class="hero-subtitle">Você está avançando rápido na sua jornada vocacional!</p>
+                    
+                    <div class="xp-bar-container">
+                        <!-- Dynamic width based on percentage -->
+                        <div class="xp-bar-fill" style="width: {% widthratio total_xp next_level_xp 100 %}%;"></div>
+                    </div>
+                    <div class="xp-stats">
+                        <span><strong>{{ total_xp }}</strong> XP Total</span>
+                        <span>Faltam <strong>{{ next_level_xp|add:"-"|add:total_xp }}</strong> XP para o Nível {{ level|add:1 }}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Grid -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon xp">
+                    <i data-lucide="zap"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>{{ total_xp }}</h3>
+                    <p>Experiência (XP)</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon gems">
+                    <i data-lucide="gem"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>{{ gems }}</h3>
+                    <p>Gemas Acumuladas</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon streak">
+                    <i data-lucide="flame"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>{{ streak_days }}</h3>
+                    <p>Dias de Ofensiva</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Two Columns: Missions and Achievements -->
+        <div class="dashboard-row">
+            
+            <!-- Missions -->
+            <div class="dash-card">
+                <div class="card-header">
+                    <i data-lucide="target"></i>
+                    <h3>Missões Recentes</h3>
+                </div>
+                <div class="mission-list">
+                    {% for mission in recent_missions %}
+                    <div class="mission-item">
+                        <div class="mission-left">
+                            <div class="mission-icon {% if mission.status == 'completed' %}completed{% else %}active{% endif %}">
+                                <i data-lucide="{{ mission.icon }}"></i>
+                            </div>
+                            <div class="mission-details">
+                                <h4>{{ mission.title }}</h4>
+                                <p>
+                                    {% if mission.status == 'completed' %}
+                                        <i data-lucide="check-circle" style="width: 14px; height: 14px; color: var(--color-cyan);"></i> Concluída
+                                    {% else %}
+                                        <i data-lucide="clock" style="width: 14px; height: 14px; color: var(--color-purple);"></i> Em andamento
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mission-reward">
+                            +{{ mission.xp }} <i data-lucide="zap" style="width: 14px; height: 14px;"></i>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Achievements -->
+            <div class="dash-card">
+                <div class="card-header">
+                    <i data-lucide="medal"></i>
+                    <h3>Quadro de Conquistas</h3>
+                </div>
+                <div class="achievement-list">
+                    {% for badge in achievements %}
+                    <div class="achievement-item">
+                        <div class="badge-hexagon">
+                            <div class="badge-hexagon-inner">
+                                <i data-lucide="{{ badge.icon }}"></i>
+                            </div>
+                        </div>
+                        <div class="achievement-info">
+                            <h4>{{ badge.title }}</h4>
+                            <p>{{ badge.desc }}</p>
+                            <span class="achievement-xp">+{{ badge.xp_bonus }} XP</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+        </div>
+
+    </main>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

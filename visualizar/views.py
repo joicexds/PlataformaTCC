@@ -205,7 +205,7 @@ def iniciar_teste(request):
         if HAS_GEMINI and api_key:
             try:
                 genai.configure(api_key=api_key)
-                model = genai.GenerativeModel("gemini-2.5-flash", generation_config={"temperature": 0.9})
+                model = genai.GenerativeModel("gemini-1.5-flash", generation_config={"temperature": 0.9})
                 prompt = f"""
                 ATENÇÃO: VOCÊ É UM MESTRE DE RPG (GAME MASTER). O usuário quer uma experiência de jogo interativo e não um teste convencional.
                 Gere exatamente 5 perguntas em formato de CENÁRIOS DE MISSÃO (ex: "Você caiu numa ilha deserta...", "Uma invasão alienígena começou...", "Você é um detetive num caso impossível...").
@@ -301,7 +301,7 @@ def resultado_teste(request):
         if HAS_GEMINI and api_key and user_answers:
             try:
                 genai.configure(api_key=api_key)
-                model = genai.GenerativeModel("gemini-2.5-flash", generation_config={"temperature": 0.8})
+                model = genai.GenerativeModel("gemini-1.5-flash", generation_config={"temperature": 0.8})
                 prompt = f"""
                 Gere um resultado de teste vocacional altamente personalizado para um usuário que tem maior afinidade com a área de: {winner}.
                 As respostas dele no teste foram:
@@ -384,6 +384,7 @@ def detalhe_profissao(request, nome):
     dados = {
         'nome': nome.title(),
         'descricao': f'A profissão de {nome.title()} é fundamental para o desenvolvimento e funcionamento da sociedade atual. Os profissionais dessa área lidam com desafios dinâmicos e possuem um amplo campo de oportunidades.',
+        'resumo_pratico': 'No dia a dia, este profissional resolve problemas práticos, analisa dados e atua diretamente na sua área de especialidade garantindo resultados eficientes.',
         'tempo_formacao': '4 a 5 anos',
         'niveis_atuacao': ['Júnior', 'Pleno', 'Sênior', 'Especialista'],
         'salario_medio': 'R$ 3.500 a R$ 12.000',
@@ -399,7 +400,7 @@ def detalhe_profissao(request, nome):
     if HAS_GEMINI and api_key:
         try:
             genai.configure(api_key=api_key)
-            model = genai.GenerativeModel("gemini-2.5-flash", generation_config={"temperature": 0.5})
+            model = genai.GenerativeModel("gemini-1.5-flash", generation_config={"temperature": 0.5})
             prompt = f"""
             Você é um especialista em carreiras e mercado de trabalho no Brasil. O usuário quer saber detalhes reais e extremamente precisos sobre a profissão: "{nome}".
             Por favor, pesquise os DADOS REAIS E ATUAIS (2025/2026) dessa profissão no Brasil. O foco é fornecer valores exatos de mensalidade de faculdades e tempo exato de duração dos cursos.
@@ -407,6 +408,7 @@ def detalhe_profissao(request, nome):
             {{
                 "nome": "Nome oficial da profissão formatado (ex: Engenharia de Software)",
                 "descricao": "Uma descrição profissional e clara sobre a rotina dessa profissão (máx 4 linhas).",
+                "resumo_pratico": "Como se fosse um 'shorts' ou tiktok bem dinâmico e simples, explique em 2 ou 3 parágrafos curtos O QUE ESTA PROFISSÃO FAZ NA PRÁTICA todos os dias, de uma forma muito fácil de entender para um leigo.",
                 "tempo_formacao": "Duração exata do curso no Brasil em anos e semestres (ex: '4 anos (8 semestres)' ou '5 anos (10 semestres)'). Seja direto.",
                 "niveis_atuacao": ["Júnior", "Pleno", "Sênior", "Especialista/Gestão"],
                 "salario_medio": "Faixa salarial REAL do mercado brasileiro atual (ex: R$ 3.500 a R$ 15.000)",
@@ -431,3 +433,94 @@ def detalhe_profissao(request, nome):
             print("Gemini fallback detalhe_profissao due to:", e)
             
     return render(request, 'profissao_detalhe.html', {'dados': dados, 'profissao_original': nome})
+
+from django.http import JsonResponse
+
+def get_category_by_name(nome):
+    nome_lower = nome.lower()
+    health_keywords = ['medicina', 'enfermagem', 'fisioterapia', 'nutrição', 'nutricao', 'odonto', 'biomedicina', 'farmácia', 'farmacia']
+    human_keywords = ['direito', 'psicologia', 'marketing', 'publicidade', 'relações', 'relacoes', 'administração', 'administracao', 'letras', 'história', 'historia', 'design', 'arte']
+    nature_keywords = ['agronomia', 'ambiental', 'ecologia', 'zootecnia', 'biologia', 'geografia', 'veterinária', 'veterinaria']
+    
+    if any(k in nome_lower for k in health_keywords): return 'health'
+    if any(k in nome_lower for k in human_keywords): return 'human'
+    if any(k in nome_lower for k in nature_keywords): return 'nature'
+    return 'tech'
+
+@login_required
+def gerar_video_ia(request):
+    nome = request.GET.get('nome', '')
+    
+    cat_fallback = get_category_by_name(nome)
+    
+    # Base fallback
+    cenas = [
+        {'titulo': f'{nome} na Prática', 'texto': 'O profissional resolve problemas estratégicos no seu setor.'},
+        {'titulo': 'A Rotina', 'texto': 'Atua com ferramentas dinâmicas para organizar e projetar novas soluções.'},
+        {'titulo': 'O Impacto', 'texto': 'O resultado afeta diretamente o desenvolvimento da sociedade como um todo.'}
+    ]
+    
+    api_key = getattr(settings, 'GEMINI_API_KEY', '')
+    bg_url = f'/static/images/{cat_fallback}_bg.png'
+    print(f"DEBUG: HAS_GEMINI={HAS_GEMINI}, API_KEY_LENGTH={len(api_key)}")
+    
+    if HAS_GEMINI and api_key and nome:
+        try:
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel("gemini-1.5-flash", generation_config={"temperature": 0.8})
+            prompt = f'''
+            Gere um roteiro de "Vídeo Curto Animado" (estilo Reels/Shorts) de exatamente 3 cenas sobre a profissão de {nome}.
+            A linguagem deve ser empolgante, porém ALTAMENTE TÉCNICA E PRECISA. Baseie-se em dados reais do mercado de trabalho atual.
+            
+            Retorne ESTRITAMENTE em formato JSON, sem marcações markdown, assim:
+            {{
+                "categoria_imagem": "responda com apenas uma destas opções: tech, health, human, nature",
+                "cenas": [
+                    {{"titulo": "A Missão", "texto": "Objetivo técnico no mercado..."}},
+                    {{"titulo": "Na Prática", "texto": "Ferramentas reais e dia a dia prático..."}},
+                    {{"titulo": "O Impacto", "texto": "Relevância econômica e social..."}}
+                ]
+            }}
+            '''
+            response = model.generate_content(prompt)
+            text = response.text.replace("```json", "").replace("```", "").strip()
+            import json
+            dados = json.loads(text)
+            if 'cenas' in dados:
+                cenas = dados['cenas']
+            
+            cat = dados.get('categoria_imagem', 'tech')
+            if cat not in ['tech', 'health', 'human', 'nature']:
+                cat = 'tech'
+            bg_url = f'/static/images/{cat}_bg.png'
+            
+        except Exception as e:
+            print("Gemini API Error for Video Modal:", e)
+            bg_url = f'/static/images/{cat_fallback}_bg.png'
+            
+    return JsonResponse({"cenas": cenas, "bg_url": bg_url})
+
+@login_required
+def meu_progresso(request):
+    # Mock data for demonstration purposes as per gamification plan
+    context = {
+        'total_xp': 3450,
+        'gems': 1250,
+        'level': 5,
+        'level_title': 'Explorador Curioso',
+        'next_level_xp': 5000,
+        'streak_days': 4,
+        'recent_missions': [
+            {'title': 'Primeiros Passos', 'status': 'completed', 'xp': 500, 'icon': 'flag'},
+            {'title': 'Teste Vocacional I', 'status': 'completed', 'xp': 1000, 'icon': 'award'},
+            {'title': 'Explorador de Carreiras', 'status': 'completed', 'xp': 800, 'icon': 'search'},
+            {'title': 'Leitura Diária', 'status': 'completed', 'xp': 150, 'icon': 'book-open'},
+            {'title': 'Teste Vocacional II', 'status': 'active', 'xp': 1000, 'icon': 'award'}
+        ],
+        'achievements': [
+            {'title': 'Primeiro Login', 'desc': 'Você deu o primeiro passo!', 'icon': 'zap', 'xp_bonus': 100},
+            {'title': 'Semana Impecável', 'desc': '3 dias de ofensiva mantida.', 'icon': 'flame', 'xp_bonus': 500},
+            {'title': 'Sabe-tudo', 'desc': 'Explorou mais de 5 profissões diferentes.', 'icon': 'brain', 'xp_bonus': 300},
+        ]
+    }
+    return render(request, 'progresso.html', context)

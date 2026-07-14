@@ -376,6 +376,77 @@
             border-color: var(--color-cyan);
             color: var(--text-white);
         }
+
+        /* AI Modal */
+        .ai-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            z-index: 1000; display: none; align-items: center; justify-content: center;
+        }
+        .ai-modal-content {
+            width: 100%; max-width: 400px; height: 80vh; max-height: 700px;
+            background: var(--bg-card); border: 1px solid var(--color-purple);
+            border-radius: 24px; position: relative; overflow: hidden;
+            display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(168, 85, 247, 0.3);
+        }
+        .btn-close-modal {
+            position: absolute; top: 16px; right: 16px; z-index: 10;
+            background: rgba(0,0,0,0.5); border: none; color: white;
+            width: 32px; height: 32px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; cursor: pointer;
+        }
+        .ai-loading {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+        }
+        .spin-anim { animation: spin 2s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        .ai-player {
+            flex: 1; display: flex; flex-direction: column; position: relative;
+            background-color: #000;
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+        .ai-player::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.2));
+            z-index: 1;
+        }
+        .progress-bar-container {
+            display: flex; gap: 4px; padding: 16px; position: absolute; top: 0; left: 0; width: 100%; z-index: 5;
+        }
+        .progress-segment {
+            flex: 1; height: 4px; background: rgba(255,255,255,0.3); border-radius: 2px; overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%; width: 0%; background: white; transition: width 0.1s linear;
+        }
+        .ai-scene-content {
+            position: absolute; z-index: 5; bottom: 0; left: 0; width: 100%;
+            padding: 40px; text-align: center;
+        }
+        .scene-title {
+            font-size: 24px; color: var(--color-cyan); margin-bottom: 16px; font-family: 'Poppins', sans-serif;
+            animation: fadeIn 0.5s ease-out;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+        .scene-text {
+            font-size: 16px; color: white; line-height: 1.6;
+            animation: fadeIn 0.8s ease-out;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Ken Burns Effect */
+        .ai-player.ken-burns {
+            animation: kenBurns 15s linear infinite alternate;
+        }
+        @keyframes kenBurns {
+            0% { background-size: 100%; background-position: center; }
+            100% { background-size: 120%; background-position: top; }
+        }
+
     </style>
 </head>
 <body>
@@ -404,7 +475,7 @@
                 </a>
             </li>
             <li class="menu-item">
-                <a href="#">
+                <a href="{% url 'meu_progresso' %}">
                     <i data-lucide="trending-up" style="width: 20px; height: 20px;"></i>
                     <span>Meu Progresso</span>
                 </a>
@@ -466,7 +537,7 @@
             
             <div class="careers-grid">
                 {% for c in resultado.carreiras %}
-                <div class="career-card">
+                <div class="career-card" style="cursor: pointer;" onclick="openAiVideo('{{ c.nome }}')">
                     <div class="career-icon-wrapper">
                         <i data-lucide="{{ c.icone }}" style="width: 26px; height: 26px;"></i>
                     </div>
@@ -495,12 +566,124 @@
             </a>
         </footer>
 
+        <!-- AI Video Modal -->
+        <div id="ai-video-modal" class="ai-modal-overlay">
+            <div class="ai-modal-content">
+                <button class="btn-close-modal" onclick="closeAiVideo()">
+                    <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+                </button>
+                <div id="ai-loading" class="ai-loading">
+                    <i data-lucide="sparkles" class="spin-anim" style="color: var(--color-purple); width: 40px; height: 40px;"></i>
+                    <p style="font-weight: 600;">A IA está gerando o vídeo...</p>
+                </div>
+                <div id="ai-player" class="ai-player" style="display: none;">
+                    <div class="progress-bar-container">
+                        <div class="progress-segment"><div class="progress-fill" id="prog-0"></div></div>
+                        <div class="progress-segment"><div class="progress-fill" id="prog-1"></div></div>
+                        <div class="progress-segment"><div class="progress-fill" id="prog-2"></div></div>
+                    </div>
+                    <div class="ai-scene-content">
+                        <h3 id="scene-title" class="scene-title"></h3>
+                        <p id="scene-text" class="scene-text"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         lucide.createIcons();
+
+        let scenes = [];
+        let currentScene = 0;
+        let progressInterval;
+        let sceneDuration = 5000; // 5 seconds per scene
+
+        async function openAiVideo(profession) {
+            document.getElementById('ai-video-modal').style.display = 'flex';
+            document.getElementById('ai-loading').style.display = 'flex';
+            document.getElementById('ai-player').style.display = 'none';
+            
+            // Reset progress
+            clearInterval(progressInterval);
+            for(let i=0; i<3; i++) {
+                const el = document.getElementById('prog-'+i);
+                if(el) el.style.width = '0%';
+            }
+
+            try {
+                const response = await fetch(`/api/gerar-video-ia/?nome=${encodeURIComponent(profession)}`);
+                const data = await response.json();
+                scenes = data.cenas || [
+                    {titulo: "A Missão", texto: "Esta profissão lida com desafios diários envolvendo análise e solução de problemas."},
+                    {titulo: "Na Prática", texto: "O dia a dia envolve muita colaboração e uso de ferramentas especializadas."},
+                    {titulo: "O Impacto", texto: "Tudo isso para garantir a segurança e a eficiência em nossa sociedade."}
+                ];
+                
+                const playerEl = document.getElementById('ai-player');
+                playerEl.style.backgroundImage = `url('${data.bg_url || "/static/images/tech_bg.png"}')`;
+                playerEl.classList.add('ken-burns');
+
+                startVideo();
+            } catch (error) {
+                console.error("Erro", error);
+                // Fallback in case of error
+                scenes = [
+                    {titulo: "A Missão", texto: "Esta profissão é essencial para a nossa sociedade."},
+                    {titulo: "Na Prática", texto: "O trabalho é muito prático e focado na resolução de problemas reais."},
+                    {titulo: "O Impacto", texto: "Um impacto profundo e transformador no ambiente."}
+                ];
+                startVideo();
+            }
+        }
+
+        function startVideo() {
+            document.getElementById('ai-loading').style.display = 'none';
+            document.getElementById('ai-player').style.display = 'flex';
+            currentScene = 0;
+            playScene();
+        }
+
+        function playScene() {
+            if (currentScene >= scenes.length) {
+                closeAiVideo();
+                return;
+            }
+            
+            document.getElementById('scene-title').textContent = scenes[currentScene].titulo;
+            document.getElementById('scene-text').textContent = scenes[currentScene].texto;
+            
+            let startTime = Date.now();
+            
+            clearInterval(progressInterval);
+            progressInterval = setInterval(() => {
+                let elapsed = Date.now() - startTime;
+                let percent = (elapsed / sceneDuration) * 100;
+                
+                if (percent >= 100) {
+                    percent = 100;
+                    document.getElementById('prog-' + currentScene).style.width = percent + '%';
+                    clearInterval(progressInterval);
+                    currentScene++;
+                    playScene();
+                } else {
+                    document.getElementById('prog-' + currentScene).style.width = percent + '%';
+                }
+            }, 50);
+        }
+
+        function closeAiVideo() {
+            document.getElementById('ai-video-modal').style.display = 'none';
+            clearInterval(progressInterval);
+            for(let i=0; i<3; i++) {
+                const el = document.getElementById('prog-'+i);
+                if(el) el.style.width = '0%';
+            }
+            document.getElementById('ai-player').classList.remove('ken-burns');
+        }
     </script>
 </body>
 </html>
