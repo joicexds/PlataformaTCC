@@ -14,5 +14,6 @@ urlpatterns = [
     path('teste/resultado/', views.resultado_teste, name='resultado_teste'),
     path('profissao/<str:nome>/', views.detalhe_profissao, name='detalhe_profissao'),
     path('api/gerar-video-ia/', views.gerar_video_ia, name='gerar_video_ia'),
+    path('api/conquista/assistir_video/', views.registrar_bonus_video, name='registrar_bonus_video'),
     path('progresso/', views.meu_progresso, name='meu_progresso'),
 ]

@@ -779,11 +779,11 @@
         <div class="topbar-stats">
             <div class="stat-badge gems">
                 <i data-lucide="gem" style="width: 18px; height: 18px;"></i>
-                <span>1250</span>
+                <span>{{ profile.gems|default:"0" }}</span>
             </div>
             <div class="stat-badge streak">
                 <i data-lucide="flag" style="width: 18px; height: 18px; color: var(--color-cyan);"></i>
-                <span>2/5 etapas</span>
+                <span>{{ etapas_completas }}/5 etapas</span>
             </div>
             <button class="btn-notification">
                 <i data-lucide="bell"></i>
@@ -820,19 +820,19 @@
                 </svg>
 
                 <!-- Interactive level nodes -->
-                <a href="{% url 'iniciar_teste' %}" class="journey-node completed" style="bottom: 18px; left: 24px; text-decoration: none;" title="Introdução">
+                <a href="{% url 'profile' %}" class="journey-node {{ etapas.0.status }}" style="bottom: 18px; left: 24px; text-decoration: none;" title="{{ etapas.0.title }}">
                     <i data-lucide="star" style="width: 20px; height: 20px;"></i>
                 </a>
-                <a href="{% url 'iniciar_teste' %}" class="journey-node completed" style="bottom: 40px; left: 120px; text-decoration: none;" title="Competências">
+                <a href="{% url 'iniciar_teste' %}" class="journey-node {{ etapas.1.status }}" style="bottom: 40px; left: 120px; text-decoration: none;" title="{{ etapas.1.title }}">
                     <i data-lucide="briefcase" style="width: 20px; height: 20px;"></i>
                 </a>
-                <a href="{% url 'iniciar_teste' %}" class="journey-node active" style="top: 60px; left: 190px; text-decoration: none;" title="Áreas de Interesse">
+                <a href="{% url 'explorar_profissoes' %}" class="journey-node {{ etapas.2.status }}" style="top: 60px; left: 190px; text-decoration: none;" title="{{ etapas.2.title }}">
                     <i data-lucide="brain" style="width: 20px; height: 20px;"></i>
                 </a>
-                <a href="{% url 'iniciar_teste' %}" class="journey-node locked" style="top: 15px; left: 270px; text-decoration: none;" title="Valores Pessoais">
+                <a href="#" class="journey-node {{ etapas.3.status }}" style="top: 15px; left: 270px; text-decoration: none;" title="{{ etapas.3.title }}">
                     <i data-lucide="heart" style="width: 20px; height: 20px;"></i>
                 </a>
-                <a href="{% url 'iniciar_teste' %}" class="journey-node locked" style="top: 45px; left: 340px; text-decoration: none;" title="Resultado Final">
+                <a href="#" class="journey-node {{ etapas.4.status }}" style="top: 45px; left: 340px; text-decoration: none;" title="{{ etapas.4.title }}">
                     <i data-lucide="rocket" style="width: 20px; height: 20px;"></i>
                 </a>
             </div>
@@ -847,19 +847,19 @@
                     <h3>Seu Progresso</h3>
                 </div>
                 <div class="progress-content-box">
-                    <div class="circular-progress">
+                    <div class="circular-progress" style="background: conic-gradient(var(--color-purple) {{ xp_percent }}%, var(--border-color) 0);">
                         <div class="progress-value">
-                            60%
+                            {{ xp_percent }}%
                             <span>concluído</span>
                         </div>
                     </div>
                     <div class="progress-details">
                         <h4>Continue assim!</h4>
-                        <p>Você está no caminho certo para descobrir sua vocação.</p>
+                        <p>Você está no nível {{ profile.level }} ({{ profile.total_xp }} XP). Rumo ao próximo nível!</p>
                         <div class="progress-track">
-                            <div class="progress-fill"></div>
+                            <div class="progress-fill" style="width: {{ xp_percent }}%;"></div>
                         </div>
-                        <a href="{% url 'iniciar_teste' %}" class="btn-continue-test">Continuar Teste</a>
+                        <a href="{% url 'iniciar_teste' %}" class="btn-continue-test">Continuar Jornada</a>
                     </div>
                 </div>
             </div>
@@ -872,30 +872,18 @@
                 </div>
                 <div class="streak-info">
                     <div>
-                        <div class="streak-count">2 de 5 etapas</div>
-                        <div class="streak-desc">Você concluiu 2 de 5 etapas do seu teste vocacional!</div>
+                        <div class="streak-count">{{ etapas_completas }} de 5 etapas</div>
+                        <div class="streak-desc">Você concluiu {{ etapas_completas }} de 5 etapas da sua jornada vocacional!</div>
                     </div>
                     <div class="streak-days">
+                        {% for etapa in etapas %}
                         <div class="day-box">
-                            <span class="day-label">Etapa 1</span>
-                            <div class="day-status completed" title="Introdução">✓</div>
+                            <span class="day-label">Etapa {{ etapa.id }}</span>
+                            <div class="day-status {{ etapa.status }}" {% if etapa.status == 'locked' %}style="border: 2px dashed var(--border-color); color: var(--text-muted);"{% endif %} title="{{ etapa.title }}">
+                                {% if etapa.status == 'completed' %}✓{% else %}{{ etapa.id }}{% endif %}
+                            </div>
                         </div>
-                        <div class="day-box">
-                            <span class="day-label">Etapa 2</span>
-                            <div class="day-status completed" title="Competências">✓</div>
-                        </div>
-                        <div class="day-box">
-                            <span class="day-label">Etapa 3</span>
-                            <div class="day-status active" title="Áreas de Interesse">3</div>
-                        </div>
-                        <div class="day-box">
-                            <span class="day-label">Etapa 4</span>
-                            <div class="day-status" style="border: 2px dashed var(--border-color); color: var(--text-muted);" title="Valores Pessoais">4</div>
-                        </div>
-                        <div class="day-box">
-                            <span class="day-label">Etapa 5</span>
-                            <div class="day-status" style="border: 2px dashed var(--border-color); color: var(--text-muted);" title="Resultado Final">5</div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -910,44 +898,20 @@
                     <h3>Desafios Diários</h3>
                 </div>
                 <div class="quests-container">
-                    <div class="quest-subcard">
-                        <div class="quest-title">Responda 5 perguntas do teste</div>
+                    {% for missao in missoes_recentes %}
+                    <a href="{% url missao.url %}" style="text-decoration: none; display: block;" class="quest-subcard">
+                        <div class="quest-title">{{ missao.title }}</div>
                         <div class="quest-progress-box">
                             <div class="quest-bar-container">
-                                <div class="quest-fill" style="width: 80%;"></div>
+                                <div class="quest-fill" style="width: {{ missao.progress }}%;"></div>
                             </div>
                             <div class="quest-xp">
                                 <i data-lucide="sparkles"></i>
-                                <span>50</span>
+                                <span>{{ missao.xp }} XP</span>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="quest-subcard">
-                        <div class="quest-title">Explore 3 profissões</div>
-                        <div class="quest-progress-box">
-                            <div class="quest-bar-container">
-                                <div class="quest-fill" style="width: 33%;"></div>
-                            </div>
-                            <div class="quest-xp">
-                                <i data-lucide="star"></i>
-                                <span>40</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="quest-subcard">
-                        <div class="quest-title">Complete uma área de interesse</div>
-                        <div class="quest-progress-box">
-                            <div class="quest-bar-container">
-                                <div class="quest-fill" style="width: 0%;"></div>
-                            </div>
-                            <div class="quest-xp">
-                                <i data-lucide="star"></i>
-                                <span>60</span>
-                            </div>
-                        </div>
-                    </div>
+                    </a>
+                    {% endfor %}
                 </div>
             </div>
 
@@ -958,16 +922,29 @@
                     <h3>Conquista Recente</h3>
                 </div>
                 <div class="achievement-box">
+                    {% if conquista_recente %}
                     <div class="badge-hexagon">
                         <div class="badge-hexagon-inner">
-                            <i data-lucide="zap"></i>
+                            <i data-lucide="{{ conquista_recente.icon }}"></i>
                         </div>
                     </div>
                     <div class="achievement-details">
-                        <h4>Primeiros Passos</h4>
-                        <p>Completou suas primeiras perguntas do teste!</p>
-                        <div class="achievement-xp">+100 XP</div>
+                        <h4>{{ conquista_recente.title }}</h4>
+                        <p>{{ conquista_recente.desc }}</p>
+                        <div class="achievement-xp">+{{ conquista_recente.xp_bonus }} XP</div>
                     </div>
+                    {% else %}
+                    <div class="badge-hexagon" style="filter: grayscale(1); opacity: 0.5;">
+                        <div class="badge-hexagon-inner">
+                            <i data-lucide="lock"></i>
+                        </div>
+                    </div>
+                    <div class="achievement-details">
+                        <h4>Nenhuma Conquista</h4>
+                        <p>Continue explorando para desbloquear conquistas!</p>
+                        <div class="achievement-xp" style="color: var(--text-muted); -webkit-text-fill-color: var(--text-muted);">---</div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

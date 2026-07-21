@@ -6,7 +6,62 @@ from .forms import RegisterForm
 
 @login_required
 def home(request):
-    return render(request, 'home.html')
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    
+    # Generic streak update just in case they just open this page
+    complete_mission(request.user, None, 0)
+    
+    completed_missions = set(UserMission.objects.filter(user=request.user).values_list('mission_code', flat=True))
+    
+    next_level_xp = profile.level * 1000
+    xp_in_level = profile.total_xp % 1000
+    xp_percent = int((xp_in_level / 1000) * 100)
+    
+    # Etapas
+    etapas = [
+        {'id': 1, 'code': 'profile_completed', 'title': 'Introdução'},
+        {'id': 2, 'code': 'test_vocational', 'title': 'Competências'},
+        {'id': 3, 'code': 'watched_youtube_video', 'title': 'Áreas de Interesse'},
+        {'id': 4, 'code': 'future_mission_1', 'title': 'Valores Pessoais'},
+        {'id': 5, 'code': 'future_mission_2', 'title': 'Resultado Final'}
+    ]
+    
+    etapas_completas = 0
+    for etapa in etapas:
+        if etapa['code'] in completed_missions:
+            etapa['status'] = 'completed'
+            etapas_completas += 1
+        elif etapa['id'] == etapas_completas + 1:
+            etapa['status'] = 'active'
+        else:
+            etapa['status'] = 'locked'
+            
+    # Missões Recentes
+    missoes_recentes = [
+        {'title': 'O Despertar (Perfil)', 'status': 'completed' if 'profile_completed' in completed_missions else 'active', 'xp': 500, 'icon': 'user', 'url': 'profile', 'progress': 100 if 'profile_completed' in completed_missions else 0},
+        {'title': 'Teste Vocacional', 'status': 'completed' if 'test_vocational' in completed_missions else 'active', 'xp': 1000, 'icon': 'award', 'url': 'iniciar_teste', 'progress': 100 if 'test_vocational' in completed_missions else 0},
+        {'title': 'Visão do Futuro (IA)', 'status': 'completed' if 'watched_youtube_video' in completed_missions else 'active', 'xp': 200, 'icon': 'play-circle', 'url': 'explorar_profissoes', 'progress': 100 if 'watched_youtube_video' in completed_missions else 0},
+    ]
+    
+    # Conquista Recente
+    conquista_recente = None
+    if 'watched_youtube_video' in completed_missions:
+        conquista_recente = {'title': 'Cinéfilo das Carreiras', 'desc': 'Você assistiu ao seu primeiro vídeo de profissão!', 'icon': 'film', 'xp_bonus': 200}
+    elif profile.streak_days >= 3:
+        conquista_recente = {'title': 'Semana Impecável', 'desc': '3 dias de ofensiva mantida.', 'icon': 'flame', 'xp_bonus': 500}
+    elif 'profile_completed' in completed_missions:
+        conquista_recente = {'title': 'Primeiros Passos', 'desc': 'Completou seu perfil inicial!', 'icon': 'zap', 'xp_bonus': 100}
+
+    context = {
+        'profile': profile,
+        'xp_percent': xp_percent,
+        'etapas': etapas,
+        'etapas_completas': etapas_completas,
+        'missoes_recentes': missoes_recentes,
+        'conquista_recente': conquista_recente
+    }
+    
+    return render(request, 'home.html', context)
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'
@@ -31,8 +86,32 @@ def explorar_profissoes(request):
     return render(request, 'explorar_profissoes.html')
 
 
-from .models import UserProfile
+from .models import UserProfile, UserMission
 from .forms import UserProfileForm
+from django.utils import timezone
+
+def complete_mission(user, mission_code, xp_reward):
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+    
+    today = timezone.now().date()
+    if profile.last_activity_date != today:
+        if profile.last_activity_date == today - timezone.timedelta(days=1):
+            profile.streak_days += 1
+        elif profile.last_activity_date is None or profile.last_activity_date < today - timezone.timedelta(days=1):
+            profile.streak_days = 1
+        profile.last_activity_date = today
+        profile.save()
+        
+    if mission_code:
+        mission, created = UserMission.objects.get_or_create(user=user, mission_code=mission_code)
+        if created and xp_reward > 0:
+            profile.add_xp(xp_reward)
+            return True
+    
+    # Just update streak if it's a generic action or already completed
+    if xp_reward == 0:
+        profile.save()
+    return False
 
 @login_required
 def profile(request):
@@ -51,6 +130,7 @@ def profile(request):
             
             # Save Profile
             form.save()
+            complete_mission(request.user, 'profile_completed', 500)
             return redirect('profile')
     else:
         form = UserProfileForm(instance=profile_instance, user=request.user)
@@ -373,10 +453,44 @@ def resultado_teste(request):
             }
             resultado = profiles.get(winner, profiles['Exatas'])
             
+        complete_mission(request.user, 'test_vocational', 1000)
         return render(request, 'teste_resultado.html', {'resultado': resultado, 'winner': winner})
         
     return redirect('iniciar_teste')
+import urllib.request
+import urllib.parse
+import re
+import json
 
+def search_youtube_video(query):
+    query = urllib.parse.quote(query)
+    url = f"https://www.youtube.com/results?search_query={query}"
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'})
+        html = urllib.request.urlopen(req).read().decode('utf-8')
+        
+        # Buscar no ytInitialData para pegar exatamente o primeiro vídeo de conteúdo e ignorar sugestões/ads
+        match = re.search(r'var ytInitialData = (\{.*?\});</script>', html)
+        if match:
+            data = json.loads(match.group(1))
+            try:
+                contents = data['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents']
+                for section in contents:
+                    if 'itemSectionRenderer' in section:
+                        items = section['itemSectionRenderer']['contents']
+                        for item in items:
+                            if 'videoRenderer' in item:
+                                return item['videoRenderer']['videoId']
+            except KeyError:
+                pass
+        
+        # Fallback se a estrutura mudar
+        video_ids = re.findall(r"watch\?v=(\S{11})", html)
+        if video_ids:
+            return video_ids[0]
+    except Exception as e:
+        print("Erro YouTube:", e)
+    return None
 
 @login_required
 def detalhe_profissao(request, nome):
@@ -432,7 +546,10 @@ def detalhe_profissao(request, nome):
         except Exception as e:
             print("Gemini fallback detalhe_profissao due to:", e)
             
-    return render(request, 'profissao_detalhe.html', {'dados': dados, 'profissao_original': nome})
+    youtube_id = search_youtube_video(f"O que faz um {dados['nome']} mercado de trabalho")
+            
+    complete_mission(request.user, f'explored_{nome.lower()}', 150)
+    return render(request, 'profissao_detalhe.html', {'dados': dados, 'profissao_original': nome, 'youtube_id': youtube_id})
 
 from django.http import JsonResponse
 
@@ -498,29 +615,51 @@ def gerar_video_ia(request):
             print("Gemini API Error for Video Modal:", e)
             bg_url = f'/static/images/{cat_fallback}_bg.png'
             
+    complete_mission(request.user, 'watched_ai_video', 200)
     return JsonResponse({"cenas": cenas, "bg_url": bg_url})
 
 @login_required
+def registrar_bonus_video(request):
+    """View para registrar a conquista de assistir ao vídeo."""
+    if request.method == 'POST':
+        concluiu_agora = complete_mission(request.user, 'watched_youtube_video', 200)
+        return JsonResponse({'success': True, 'xp_ganho': 200, 'novo': concluiu_agora})
+    return JsonResponse({'success': False})
+
+@login_required
 def meu_progresso(request):
-    # Mock data for demonstration purposes as per gamification plan
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    
+    # Generic streak update just in case they just open this page
+    complete_mission(request.user, None, 0)
+    
+    completed_missions = set(UserMission.objects.filter(user=request.user).values_list('mission_code', flat=True))
+    
+    titles = ['Novato', 'Aprendiz', 'Explorador Curioso', 'Visionário', 'Mestre das Carreiras']
+    level_title = titles[profile.level - 1] if profile.level <= len(titles) else 'Lenda Viva'
+    next_level_xp = profile.level * 1000
+
+    recent_missions = [
+        {'title': 'O Despertar (Perfil)', 'status': 'completed' if 'profile_completed' in completed_missions else 'active', 'xp': 500, 'icon': 'user', 'url': 'profile'},
+        {'title': 'Teste Vocacional', 'status': 'completed' if 'test_vocational' in completed_missions else 'active', 'xp': 1000, 'icon': 'award', 'url': 'iniciar_teste'},
+        {'title': 'Visão do Futuro (IA)', 'status': 'completed' if 'watched_youtube_video' in completed_missions else 'active', 'xp': 200, 'icon': 'play-circle', 'url': 'explorar_profissoes'},
+    ]
+    
+    # Fazer as missões sumirem (estilo Duolingo daily quests) quando completadas
+    recent_missions = [m for m in recent_missions if m['status'] == 'active']
+    
     context = {
-        'total_xp': 3450,
-        'gems': 1250,
-        'level': 5,
-        'level_title': 'Explorador Curioso',
-        'next_level_xp': 5000,
-        'streak_days': 4,
-        'recent_missions': [
-            {'title': 'Primeiros Passos', 'status': 'completed', 'xp': 500, 'icon': 'flag'},
-            {'title': 'Teste Vocacional I', 'status': 'completed', 'xp': 1000, 'icon': 'award'},
-            {'title': 'Explorador de Carreiras', 'status': 'completed', 'xp': 800, 'icon': 'search'},
-            {'title': 'Leitura Diária', 'status': 'completed', 'xp': 150, 'icon': 'book-open'},
-            {'title': 'Teste Vocacional II', 'status': 'active', 'xp': 1000, 'icon': 'award'}
-        ],
+        'total_xp': profile.total_xp,
+        'gems': profile.gems,
+        'level': profile.level,
+        'level_title': level_title,
+        'next_level_xp': next_level_xp,
+        'streak_days': profile.streak_days,
+        'recent_missions': recent_missions,
         'achievements': [
-            {'title': 'Primeiro Login', 'desc': 'Você deu o primeiro passo!', 'icon': 'zap', 'xp_bonus': 100},
-            {'title': 'Semana Impecável', 'desc': '3 dias de ofensiva mantida.', 'icon': 'flame', 'xp_bonus': 500},
-            {'title': 'Sabe-tudo', 'desc': 'Explorou mais de 5 profissões diferentes.', 'icon': 'brain', 'xp_bonus': 300},
+            {'title': 'Primeiro Login', 'desc': 'Você deu o primeiro passo!', 'icon': 'zap', 'xp_bonus': 100, 'unlocked': True},
+            {'title': 'Semana Impecável', 'desc': '3 dias de ofensiva mantida.', 'icon': 'flame', 'xp_bonus': 500, 'unlocked': profile.streak_days >= 3},
+            {'title': 'Cinéfilo das Carreiras', 'desc': 'Você assistiu ao seu primeiro vídeo de profissão!', 'icon': 'film', 'xp_bonus': 200, 'unlocked': 'watched_youtube_video' in completed_missions},
         ]
     }
     return render(request, 'progresso.html', context)

@@ -766,28 +766,34 @@
                     <h3>Missões Recentes</h3>
                 </div>
                 <div class="mission-list">
-                    {% for mission in recent_missions %}
-                    <div class="mission-item">
-                        <div class="mission-left">
-                            <div class="mission-icon {% if mission.status == 'completed' %}completed{% else %}active{% endif %}">
-                                <i data-lucide="{{ mission.icon }}"></i>
-                            </div>
-                            <div class="mission-details">
-                                <h4>{{ mission.title }}</h4>
-                                <p>
-                                    {% if mission.status == 'completed' %}
-                                        <i data-lucide="check-circle" style="width: 14px; height: 14px; color: var(--color-cyan);"></i> Concluída
-                                    {% else %}
+                    {% if recent_missions %}
+                        {% for mission in recent_missions %}
+                        <a href="{% url mission.url %}" class="mission-item" style="text-decoration: none;">
+                            <div class="mission-left">
+                                <div class="mission-icon active">
+                                    <i data-lucide="{{ mission.icon }}"></i>
+                                </div>
+                                <div class="mission-details">
+                                    <h4>{{ mission.title }}</h4>
+                                    <p>
                                         <i data-lucide="clock" style="width: 14px; height: 14px; color: var(--color-purple);"></i> Em andamento
-                                    {% endif %}
-                                </p>
+                                    </p>
+                                </div>
                             </div>
+                            <div class="mission-reward">
+                                +{{ mission.xp }} <i data-lucide="zap" style="width: 14px; height: 14px;"></i>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    {% else %}
+                        <div style="text-align: center; padding: 30px; color: var(--text-muted);">
+                            <div style="width: 60px; height: 60px; background: rgba(61, 214, 208, 0.1); color: var(--color-cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                                <i data-lucide="check-circle" style="width: 32px; height: 32px;"></i>
+                            </div>
+                            <h4 style="color: var(--text-white); margin-bottom: 8px;">Tudo feito!</h4>
+                            <p style="font-size: 14px;">Você completou as missões pendentes. Continue explorando a plataforma!</p>
                         </div>
-                        <div class="mission-reward">
-                            +{{ mission.xp }} <i data-lucide="zap" style="width: 14px; height: 14px;"></i>
-                        </div>
-                    </div>
-                    {% endfor %}
+                    {% endif %}
                 </div>
             </div>
 
@@ -799,14 +805,21 @@
                 </div>
                 <div class="achievement-list">
                     {% for badge in achievements %}
-                    <div class="achievement-item">
+                    <div class="achievement-item" style="{% if not badge.unlocked %}opacity: 0.4; filter: grayscale(1);{% endif %}">
                         <div class="badge-hexagon">
                             <div class="badge-hexagon-inner">
                                 <i data-lucide="{{ badge.icon }}"></i>
                             </div>
                         </div>
                         <div class="achievement-info">
-                            <h4>{{ badge.title }}</h4>
+                            <h4 style="display: flex; align-items: center; gap: 6px;">
+                                {{ badge.title }}
+                                {% if badge.unlocked %}
+                                <i data-lucide="check-circle" style="width: 14px; height: 14px; color: var(--color-cyan);"></i>
+                                {% else %}
+                                <i data-lucide="lock" style="width: 14px; height: 14px; color: var(--text-muted);"></i>
+                                {% endif %}
+                            </h4>
                             <p>{{ badge.desc }}</p>
                             <span class="achievement-xp">+{{ badge.xp_bonus }} XP</span>
                         </div>
