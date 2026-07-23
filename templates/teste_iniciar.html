@@ -300,6 +300,12 @@
             box-shadow: 0 0 0 3px rgba(61, 214, 208, 0.15);
         }
 
+        .form-control option {
+            background-color: var(--bg-card);
+            color: var(--text-white);
+            font-size: 14px;
+        }
+
         .btn-generate {
             align-self: flex-start;
             padding: 16px 36px;
@@ -406,12 +412,7 @@
                     <span>Meu Progresso</span>
                 </a>
             </li>
-            <li class="menu-item">
-                <a href="#">
-                    <i data-lucide="trophy" style="width: 20px; height: 20px;"></i>
-                    <span>Conquistas</span>
-                </a>
-            </li>
+
             <li class="menu-item">
                 <a href="{% url 'explorar_profissoes' %}">
                     <i data-lucide="search" style="width: 20px; height: 20px;"></i>
@@ -470,50 +471,50 @@
                 {% csrf_token %}
                 
                 <div class="form-group">
-                    <label for="materia">Qual área ou matéria escolar você tem mais afinidade?</label>
-                    <select id="materia" name="materia" class="form-control" required>
-                        <option value="" disabled selected>Selecione uma opção...</option>
-                        <option value="Matemática e Física (Lógica, números e cálculos)">Matemática e Física</option>
-                        <option value="História, Geografia e Sociologia (Humanidade e sociedade)">História e Sociedade</option>
-                        <option value="Biologia e Ciências (Natureza, plantas e ecossistemas)">Biologia e Natureza</option>
-                        <option value="Artes, Design e Música (Criatividade e expressão)">Artes e Criatividade</option>
-                        <option value="Redação, Literatura e Idiomas (Escrita e leitura)">Línguas e Comunicação</option>
+                    <label for="materia">Existem áreas de estudo que naturalmente absorvemos com mais facilidade. Qual destas mais se aproxima da sua maior força cognitiva?</label>
+                    <select id="materia" name="materia" class="form-control" required style="font-size: 14px;">
+                        <option value="" disabled selected>Selecione uma área de estudo...</option>
+                        <option value="Ciências Exatas: Matemática, Física, algoritmos e cálculos complexos">Ciências Exatas: Física, Matemática e Raciocínio Lógico Estruturado</option>
+                        <option value="Ciências Biológicas: Biologia, anatomia, fisiologia animal e humana">Ciências Biológicas: Biologia Humana, Anatomia e Ciências da Vida</option>
+                        <option value="Ciências Humanas: História, Geografia, Filosofia e estrutura da sociedade">Ciências Humanas: História Geral, Filosofia e Dinâmicas de Sociedade</option>
+                        <option value="Artes e Linguagens: Redação, idiomas falados, literatura e design criativo">Linguagens e Expressão: Literatura, Idiomas, Escrita Estruturada e Design</option>
+                        <option value="Negócios: Administração analítica, finanças de escala e modelo de mercado">Negócios e Economia: Administração, Dinâmicas de Mercado e Finanças</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label for="hobby">O que você mais gosta de fazer no seu tempo livre?</label>
-                    <select id="hobby" name="hobby" class="form-control" required>
-                        <option value="" disabled selected>Selecione uma opção...</option>
-                        <option value="Jogar games de estratégia, programar ou resolver enigmas">Resolver problemas ou jogar</option>
-                        <option value="Ler livros, assistir documentários ou debater ideias">Ler e estudar novos assuntos</option>
-                        <option value="Fazer trilhas, praticar esportes e cuidar de animais">Atividades ao ar livre e esportes</option>
-                        <option value="Desenhar, pintar, editar vídeos ou criar conteúdo">Projetos criativos e artísticos</option>
-                        <option value="Conversar com amigos, aconselhar pessoas ou fazer trabalho voluntário">Ajudar pessoas e conversar</option>
+                    <label for="hobby">Profissionais precisam de descompressão. No seu tempo livre, para onde o seu foco costuma se direcionar passivamente?</label>
+                    <select id="hobby" name="hobby" class="form-control" required style="font-size: 14px;">
+                        <option value="" disabled selected>Selecione sua principal atividade de tempo livre...</option>
+                        <option value="Resolver desafios de raciocínio, codar sistemas, jogar jogos densos de estratégia lógica">Estratégia e Lógica: Resolver enigmas, jogos de tabuleiro/estratégia ou tecnologia</option>
+                        <option value="Absorver conteúdo complexo como livros extensos teóricos e documentários históricos ou reais">Estudo Contínuo: Leitura extensiva e consumo de documentários ou análises teóricas</option>
+                        <option value="Atividades físicas constantes, explorar reservas de natureza externa, lidar com esportes duros">Prática Física ou Natureza: Atividades esportivas intensas e exploração de ambientes externos</option>
+                        <option value="Projetos extremamente criativos visuais visando beleza, ilustração, animação de mídias ou som">Construção Criativa: Desenho, produção audiovisual, edição ou trabalhos manuais</option>
+                        <option value="Trabalhar com conversas significativas para com as pessoas, escutar e mediar dores interpessoais">Socialização Profunda: Conversas filosóficas/pessoais, aconselhamento e ações voluntárias</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label for="habilidade">Qual você considera sua maior habilidade?</label>
-                    <select id="habilidade" name="habilidade" class="form-control" required>
-                        <option value="" disabled selected>Selecione uma opção...</option>
-                        <option value="Raciocínio lógico estruturado e foco em soluções">Raciocínio lógico e foco</option>
-                        <option value="Empatia, escuta ativa e facilidade para aconselhar">Empatia e escuta ativa</option>
-                        <option value="Comunicação expressiva e oratória cativante">Falar bem e comunicar ideias</option>
-                        <option value="Trabalho manual, organização minuciosa ou pesquisa científica">Organização e atenção a detalhes</option>
-                        <option value="Facilidade para liderar grupos e gerenciar projetos">Liderança e trabalho em equipe</option>
+                    <label for="habilidade">Toda carreira exige aptidões base. Qual das habilidades primárias abaixo você executa com naturalidade elevada?</label>
+                    <select id="habilidade" name="habilidade" class="form-control" required style="font-size: 14px;">
+                        <option value="" disabled selected>Selecione sua habilidade preponderante...</option>
+                        <option value="Estruturação hiper-lógica da solução e quebra de complexidades de forma mecânica algorítmica">Racionalidade Analítica: Facilidade em quebrar cenários complexos para formular uma solução direta</option>
+                        <option value="Empatia e cuidado afetivo do outro sem julgar de imediato com compreensão interpessoal excelente">Análise Comportamental (Empatia): Condução de diálogos mediadores e compreensão profunda do outro</option>
+                        <option value="Comunicação persuasiva eloquente em oratória para liderar com argumentos invencíveis perante as massas">Oratória e Persuasão: Comunicação de ideias de forma muito clara, contundente e atraente</option>
+                        <option value="Foco hiper-detalhista sobre etapas micro para planejar logística em larga e pequena escala perfeitamente">Meticulosidade e Foco Prático: Perfeccionismo organizacional em tarefas de alta escala ou de precisão</option>
+                        <option value="Coordenação generalista da visão estratégica tomando frentes de riscos e gerindo recursos em crises">Liderança Estratégica: Facilidade em delegar, coordenar equipes e assumir grandes responsabilidades de crise</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label for="objetivo">Qual é o seu maior objetivo profissional?</label>
-                    <select id="objetivo" name="objetivo" class="form-control" required>
-                        <option value="" disabled selected>Selecione uma opção...</option>
-                        <option value="Desenvolver novas tecnologias e inovações revolucionárias">Desenvolver inovações tecnológicas</option>
-                        <option value="Ajudar no bem-estar físico e salvar vidas diretamente">Trabalhar com saúde e salvar vidas</option>
-                        <option value="Defender causas justas e fazer diferença social no mundo">Causas sociais e impacto humanitário</option>
-                        <option value="Criar marcas de sucesso, abrir empresas e liderar negócios">Empreender e liderar equipes</option>
-                        <option value="Preservar o planeta e promover o desenvolvimento sustentável">Preservação ambiental e sustentabilidade</option>
+                    <label for="objetivo">A vocação perfeita deve atender a um propósito vital. Qual legado ou impacto primordial você gostaria de entregar?</label>
+                    <select id="objetivo" name="objetivo" class="form-control" required style="font-size: 14px;">
+                        <option value="" disabled selected>Selecione seu objetivo profissional final...</option>
+                        <option value="Construir arquitetura tecnológica revolucionária, dominar AI e automatizar processos estagnados globais">Inovação e Sistemas: Desenvolver melhorias tecnológicas estruturais ou automatizar o mundo gradualmente</option>
+                        <option value="Trabalho medicinal ativo curando, resolvendo mistérios corporais/psicológicos focados no estande biológico">Saúde e Bem-estar Humano: Contribuição ativa para a redução da mortalidade e tratamentos de saúde orgânica</option>
+                        <option value="Equidade judiciaria irrestrita, criar impacto nas camadas socias pobres e defender minorias sistematicamente">Equidade Social e Justiça: Promover reformas nas dinâmicas jurídicas ou fortalecer leis em prol do meio social</option>
+                        <option value="Sustentabilidade executiva imensurável de mercado e empresas corporativas monumentais em valuation de riquezas">Crescimento Financeiro: Gerir sistemas de capitalização intensos, liderar corporações e comandar o mercado</option>
+                        <option value="Resgate botânico sistemático de espécimes rarificados, proteção de oceanos cruciais e biosfera terreal climática">Conservação Biológica: Estruturação defensiva dos recursos naturais e proteção imediata à biodiversidade viva</option>
                     </select>
                 </div>
                 

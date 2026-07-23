@@ -43,22 +43,12 @@ def home(request):
         {'title': 'Visão do Futuro (IA)', 'status': 'completed' if 'watched_youtube_video' in completed_missions else 'active', 'xp': 200, 'icon': 'play-circle', 'url': 'explorar_profissoes', 'progress': 100 if 'watched_youtube_video' in completed_missions else 0},
     ]
     
-    # Conquista Recente
-    conquista_recente = None
-    if 'watched_youtube_video' in completed_missions:
-        conquista_recente = {'title': 'Cinéfilo das Carreiras', 'desc': 'Você assistiu ao seu primeiro vídeo de profissão!', 'icon': 'film', 'xp_bonus': 200}
-    elif profile.streak_days >= 3:
-        conquista_recente = {'title': 'Semana Impecável', 'desc': '3 dias de ofensiva mantida.', 'icon': 'flame', 'xp_bonus': 500}
-    elif 'profile_completed' in completed_missions:
-        conquista_recente = {'title': 'Primeiros Passos', 'desc': 'Completou seu perfil inicial!', 'icon': 'zap', 'xp_bonus': 100}
-
     context = {
         'profile': profile,
         'xp_percent': xp_percent,
         'etapas': etapas,
         'etapas_completas': etapas_completas,
-        'missoes_recentes': missoes_recentes,
-        'conquista_recente': conquista_recente
+        'missoes_recentes': missoes_recentes
     }
     
     return render(request, 'home.html', context)
@@ -619,14 +609,6 @@ def gerar_video_ia(request):
     return JsonResponse({"cenas": cenas, "bg_url": bg_url})
 
 @login_required
-def registrar_bonus_video(request):
-    """View para registrar a conquista de assistir ao vídeo."""
-    if request.method == 'POST':
-        concluiu_agora = complete_mission(request.user, 'watched_youtube_video', 200)
-        return JsonResponse({'success': True, 'xp_ganho': 200, 'novo': concluiu_agora})
-    return JsonResponse({'success': False})
-
-@login_required
 def meu_progresso(request):
     profile, _ = UserProfile.objects.get_or_create(user=request.user)
     
@@ -655,11 +637,6 @@ def meu_progresso(request):
         'level_title': level_title,
         'next_level_xp': next_level_xp,
         'streak_days': profile.streak_days,
-        'recent_missions': recent_missions,
-        'achievements': [
-            {'title': 'Primeiro Login', 'desc': 'Você deu o primeiro passo!', 'icon': 'zap', 'xp_bonus': 100, 'unlocked': True},
-            {'title': 'Semana Impecável', 'desc': '3 dias de ofensiva mantida.', 'icon': 'flame', 'xp_bonus': 500, 'unlocked': profile.streak_days >= 3},
-            {'title': 'Cinéfilo das Carreiras', 'desc': 'Você assistiu ao seu primeiro vídeo de profissão!', 'icon': 'film', 'xp_bonus': 200, 'unlocked': 'watched_youtube_video' in completed_missions},
-        ]
+        'recent_missions': recent_missions
     }
     return render(request, 'progresso.html', context)

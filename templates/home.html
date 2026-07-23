@@ -731,12 +731,7 @@
                     <span>Meu Progresso</span>
                 </a>
             </li>
-            <li class="menu-item">
-                <a href="#">
-                    <i data-lucide="trophy" style="width: 20px; height: 20px;"></i>
-                    <span>Conquistas</span>
-                </a>
-            </li>
+
             <li class="menu-item">
                 <a href="{% url 'explorar_profissoes' %}">
                     <i data-lucide="search" style="width: 20px; height: 20px;"></i>
@@ -890,7 +885,7 @@
         </div>
 
         <!-- Cards Row 2 -->
-        <div class="dashboard-row uneven">
+        <div class="dashboard-row" style="grid-template-columns: 1fr;">
             <!-- Daily Quests Card -->
             <div class="dash-card">
                 <div class="card-header">
@@ -915,38 +910,6 @@
                 </div>
             </div>
 
-            <!-- Recent Achievement Card -->
-            <div class="dash-card">
-                <div class="card-header">
-                    <i data-lucide="trophy" style="color: #EAB308;"></i>
-                    <h3>Conquista Recente</h3>
-                </div>
-                <div class="achievement-box">
-                    {% if conquista_recente %}
-                    <div class="badge-hexagon">
-                        <div class="badge-hexagon-inner">
-                            <i data-lucide="{{ conquista_recente.icon }}"></i>
-                        </div>
-                    </div>
-                    <div class="achievement-details">
-                        <h4>{{ conquista_recente.title }}</h4>
-                        <p>{{ conquista_recente.desc }}</p>
-                        <div class="achievement-xp">+{{ conquista_recente.xp_bonus }} XP</div>
-                    </div>
-                    {% else %}
-                    <div class="badge-hexagon" style="filter: grayscale(1); opacity: 0.5;">
-                        <div class="badge-hexagon-inner">
-                            <i data-lucide="lock"></i>
-                        </div>
-                    </div>
-                    <div class="achievement-details">
-                        <h4>Nenhuma Conquista</h4>
-                        <p>Continue explorando para desbloquear conquistas!</p>
-                        <div class="achievement-xp" style="color: var(--text-muted); -webkit-text-fill-color: var(--text-muted);">---</div>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
         </div>
 
     </main>

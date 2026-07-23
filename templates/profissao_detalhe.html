@@ -480,20 +480,9 @@
             <div class="tag-badge">{{ nivel }}</div>
             {% endfor %}
         </div>
-
-        <!-- Toast Notification para Conquista -->
-        <div id="achievement-toast" style="position: fixed; bottom: 30px; right: 30px; background: var(--bg-card); border: 1px solid var(--color-purple); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3); display: flex; align-items: center; gap: 16px; transform: translateX(120%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000;">
-            <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; color: white;">
-                <i data-lucide="award" style="width: 24px; height: 24px;"></i>
-            </div>
-            <div>
-                <h4 style="font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 700; color: var(--color-pink); margin-bottom: 4px;">Conquista Desbloqueada!</h4>
-                <p style="font-size: 14px; color: var(--text-white); margin-bottom: 2px;">Cinéfilo das Carreiras</p>
-                <p style="font-size: 12px; color: var(--color-cyan); font-weight: 600;">+200 XP</p>
-            </div>
-        </div>
-
     </main>
+
+
 
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -527,30 +516,11 @@
             // Se o vídeo estiver tocando (PLAYING = 1) e o bônus ainda não foi dado
             if (event.data == YT.PlayerState.PLAYING && !bonusAwarded) {
                 bonusAwarded = true;
-                // Enviar requisição para ganhar XP e Conquista
-                fetch('/api/conquista/assistir_video/', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken'),
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if(data.success && data.novo) {
-                        showAchievementToast();
-                    }
-                });
+                // Anteriormente enviaria request de conquista, agora sem ação.
             }
         }
 
-        function showAchievementToast() {
-            const toast = document.getElementById('achievement-toast');
-            toast.style.transform = 'translateX(0)';
-            setTimeout(() => {
-                toast.style.transform = 'translateX(120%)';
-            }, 5000);
-        }
+
 
         // CSRF helper function
         function getCookie(name) {
