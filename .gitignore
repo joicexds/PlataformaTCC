@@ -17,3 +17,6 @@ staticfiles/
 # IDEs
 .vscode/
 .idea/
+
+# Binaries
+cloudflared.exe

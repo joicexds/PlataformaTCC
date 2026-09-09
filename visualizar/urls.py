@@ -15,4 +15,9 @@ urlpatterns = [
     path('profissao/<str:nome>/', views.detalhe_profissao, name='detalhe_profissao'),
     path('api/gerar-video-ia/', views.gerar_video_ia, name='gerar_video_ia'),
     path('progresso/', views.meu_progresso, name='meu_progresso'),
+    path('localiza-futuro/', views.localiza_futuro, name='localiza_futuro'),
+    path('guia-carreiras/', views.guia_carreiras, name='guia_carreiras'),
+    path('feedback/', views.feedback_view, name='feedback'),
+    path('admin-feedbacks/', views.admin_feedbacks_view, name='admin_feedbacks'),
 ]
+

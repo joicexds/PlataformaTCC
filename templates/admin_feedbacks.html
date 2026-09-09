@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Feedbacks dos Usuários - FutureWay</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --bg-main: #060814;
+            --bg-sidebar: #090B19;
+            --bg-card: #0C0E22;
+            --bg-card-hover: #121532;
+            --border-color: #1A1D3A;
+            
+            --color-purple: #A855F7;
+            --color-pink: #FF5FA2;
+            --color-cyan: #3DD6D0;
+            --color-blue: #3B82F6;
+            --color-gold: #FACC15;
+            --color-green: #22C55E;
+            
+            --text-white: #FFFFFF;
+            --text-muted: #8E94B2;
+            --text-secondary: #B4B9D4;
+            
+            --gradient-primary: linear-gradient(135deg, var(--color-purple), var(--color-pink));
+            --gradient-gold: linear-gradient(135deg, #FACC15, #F59E0B);
+            --gradient-blue: linear-gradient(135deg, #3B82F6, #2563EB);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            margin-bottom: 36px;
+            padding-left: 10px;
+        }
+
+        .brand-logo i { color: var(--color-pink); font-size: 24px; }
+
+        .brand-logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--text-white), var(--color-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-subtitle {
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .menu-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item a:hover {
+            background-color: var(--bg-card-hover);
+            color: var(--text-white);
+        }
+
+        .menu-item.active a {
+            background-color: rgba(168, 85, 247, 0.15);
+            color: var(--color-purple);
+            font-weight: 600;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .menu-item.admin-link a {
+            border: 1px dashed rgba(250, 204, 21, 0.4);
+            background: rgba(250, 204, 21, 0.05);
+            color: #FACC15;
+        }
+
+        .menu-item.admin-link.active a {
+            background: rgba(250, 204, 21, 0.18);
+            border: 1px solid #FACC15;
+            color: #FACC15;
+            box-shadow: 0 0 15px rgba(250, 204, 21, 0.2);
+        }
+
+        .badge-admin-nav {
+            margin-left: auto;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 2px 7px;
+            background: rgba(250, 204, 21, 0.2);
+            color: #FACC15;
+            border-radius: 6px;
+            border: 1px solid rgba(250, 204, 21, 0.4);
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .user-profile-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .user-profile-card:hover {
+            background-color: var(--bg-card-hover);
+            border-color: var(--color-purple);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-white);
+            font-size: 16px;
+            overflow: hidden;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .user-meta {
+            flex: 1;
+            margin-left: 12px;
+            text-align: left;
+        }
+
+        .user-meta h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        .user-meta p {
+            font-size: 11px;
+            color: #FACC15;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            max-width: 1300px;
+        }
+
+        /* Top Header */
+        .admin-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .admin-title-box h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-white);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-title-box p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .admin-action-btns {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-django-admin {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 12px;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            color: #60A5FA;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-django-admin:hover {
+            background: rgba(59, 130, 246, 0.25);
+            color: #93C5FD;
+            transform: translateY(-2px);
+        }
+
+        /* KPI Cards Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .kpi-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card.gold-border { border-color: rgba(250, 204, 21, 0.35); }
+        .kpi-card.purple-border { border-color: rgba(168, 85, 247, 0.35); }
+        .kpi-card.cyan-border { border-color: rgba(61, 214, 208, 0.35); }
+        .kpi-card.blue-border { border-color: rgba(59, 130, 246, 0.35); }
+
+        .kpi-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .kpi-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .kpi-icon-box.gold { background: rgba(250, 204, 21, 0.15); color: var(--color-gold); }
+        .kpi-icon-box.purple { background: rgba(168, 85, 247, 0.15); color: var(--color-purple); }
+        .kpi-icon-box.cyan { background: rgba(61, 214, 208, 0.15); color: var(--color-cyan); }
+        .kpi-icon-box.blue { background: rgba(59, 130, 246, 0.15); color: var(--color-blue); }
+
+        .kpi-value {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-white);
+            line-height: 1;
+        }
+
+        .kpi-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Criteria Breakdown Section */
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 1000px) {
+            .breakdown-grid { grid-template-columns: 1fr; }
+        }
+
+        .admin-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .card-header-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-white);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .criteria-row {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .criteria-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .criteria-item-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .criteria-item-score {
+            color: var(--color-gold);
+            font-weight: 700;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        .progress-bar-fill.gold { background: var(--gradient-gold); }
+        .progress-bar-fill.blue { background: var(--gradient-blue); }
+
+        /* Star Distribution List */
+        .stars-dist-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .stars-dist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .stars-dist-label {
+            min-width: 60px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--color-gold);
+            font-weight: 600;
+        }
+
+        .stars-dist-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .stars-dist-fill {
+            height: 100%;
+            background: var(--color-gold);
+            border-radius: 4px;
+        }
+
+        .stars-dist-num {
+            min-width: 45px;
+            text-align: right;
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Filter and Search Bar */
+        .filter-bar {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 240px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 18px;
+            height: 18px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px 14px 10px 42px;
+            color: var(--text-white);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--color-purple);
+        }
+
+        .filter-select {
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .btn-filter-submit {
+            background: var(--gradient-primary);
+            color: var(--text-white);
+            border: none;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-filter-submit:hover { opacity: 0.9; }
+
+        .btn-filter-clear {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-size: 13px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-filter-clear:hover {
+            color: var(--text-white);
+            border-color: var(--text-secondary);
+        }
+
+        /* Feedbacks List / Table Cards */
+        .feedbacks-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .feedback-user-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 28px;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .feedback-user-card:hover {
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .fuc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .fuc-user-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .fuc-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--text-white);
+            overflow: hidden;
+        }
+
+        .fuc-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .fuc-name-box h4 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        .fuc-name-box p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .fuc-rating-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(250, 204, 21, 0.12);
+            border: 1px solid rgba(250, 204, 21, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            color: var(--color-gold);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .fuc-date {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        /* Detail Scores Grid */
+        .fuc-scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            background: rgba(6, 8, 20, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 14px 18px;
+            margin-bottom: 18px;
+        }
+
+        .fuc-score-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .fuc-score-item span.stars {
+            color: var(--color-gold);
+            font-weight: 700;
+        }
+
+        .fuc-feature-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(61, 214, 208, 0.12);
+            border: 1px solid rgba(61, 214, 208, 0.3);
+            color: var(--color-cyan);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+        }
+
+        .fuc-comment-quote {
+            background: rgba(18, 21, 50, 0.6);
+            border-left: 3px solid var(--color-purple);
+            border-radius: 0 12px 12px 0;
+            padding: 14px 18px;
+            color: var(--text-white);
+            font-size: 14px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .fuc-comment-empty {
+            color: var(--text-muted);
+            font-size: 13px;
+            font-style: italic;
+        }
+
+        .empty-feed-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .empty-feed-card i {
+            font-size: 48px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar { width: 80px; padding: 20px 10px; }
+            .brand-logo-text, .brand-subtitle, .menu-item span, .badge-admin-nav, .user-meta { display: none; }
+            .main-content { margin-left: 80px; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <a href="{% url 'home' %}" class="brand-logo">
+            <i data-lucide="compass"></i>
+            <div>
+                <div class="brand-logo-text">FutureWay</div>
+                <div class="brand-subtitle">Descubra seu caminho</div>
+            </div>
+        </a>
+
+        <ul class="menu-list">
+            <li class="menu-item">
+                <a href="{% url 'home' %}">
+                    <i data-lucide="home" style="width: 20px; height: 20px;"></i>
+                    <span>Início</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'iniciar_teste' %}">
+                    <i data-lucide="award" style="width: 20px; height: 20px;"></i>
+                    <span>Teste Vocacional</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'meu_progresso' %}">
+                    <i data-lucide="trending-up" style="width: 20px; height: 20px;"></i>
+                    <span>Meu Progresso</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'localiza_futuro' %}">
+                    <i data-lucide="map-pin" style="width: 20px; height: 20px;"></i>
+                    <span>Localiza Futuro</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'explorar_profissoes' %}">
+                    <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+                    <span>Explorar Profissões</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'guia_carreiras' %}">
+                    <i data-lucide="book-open" style="width: 20px; height: 20px;"></i>
+                    <span>Guia de Carreiras</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'feedback' %}">
+                    <i data-lucide="message-square" style="width: 20px; height: 20px;"></i>
+                    <span>Feedback</span>
+                </a>
+            </li>
+            <!-- Admin Shortcut -->
+            <li class="menu-item admin-link active">
+                <a href="{% url 'admin_feedbacks' %}">
+                    <i data-lucide="shield-check" style="width: 20px; height: 20px; color: #FACC15;"></i>
+                    <span>Painel Admin</span>
+                    <span class="badge-admin-nav">ADMIN</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <a href="{% url 'profile' %}" style="text-decoration: none;">
+                <div class="user-profile-card">
+                    <div class="user-avatar">
+                        {% if user.profile.profile_picture %}
+                            <img src="{{ user.profile.profile_picture.url }}" alt="{{ user.first_name }}">
+                        {% else %}
+                            {{ user.first_name|default:user.username|slice:":1"|upper }}
+                        {% endif %}
+                    </div>
+                    <div class="user-meta">
+                        <h4>{{ user.first_name|default:user.username }}</h4>
+                        <p>Administradora ⭐</p>
+                    </div>
+                    <i data-lucide="chevron-right" style="width: 16px; height: 16px; color: #FACC15;"></i>
+                </div>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <div class="admin-header-row">
+            <div class="admin-title-box">
+                <h1>
+                    <i data-lucide="shield-check" style="color: var(--color-gold);"></i>
+                    Painel de Feedbacks & Avaliações
+                </h1>
+                <p>Gestão completa e métricas consolidadas dos feedbacks e opiniões enviadas pelos usuários da FutureWay.</p>
+            </div>
+            <div class="admin-action-btns">
+                <a href="/admin/visualizar/feedback/" target="_blank" class="btn-django-admin">
+                    <i data-lucide="database" style="width: 16px; height: 16px;"></i>
+                    Django Admin Oficial
+                </a>
+            </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <section class="kpi-grid">
+            <div class="kpi-card gold-border">
+                <div class="kpi-header">
+                    <span class="kpi-label">Média Geral de Satisfação</span>
+                    <div class="kpi-icon-box gold"><i data-lucide="star"></i></div>
+                </div>
+                <div class="kpi-value">{{ avg_overall }} <span style="font-size: 16px; color: var(--color-gold);">/ 5.0</span></div>
+            </div>
+
+            <div class="kpi-card purple-border">
+                <div class="kpi-header">
+                    <span class="kpi-label">Total de Feedbacks</span>
+                    <div class="kpi-icon-box purple"><i data-lucide="message-square"></i></div>
+                </div>
+                <div class="kpi-value">{{ total_feedbacks }}</div>
+            </div>
+
+            <div class="kpi-card cyan-border">
+                <div class="kpi-header">
+                    <span class="kpi-label">Usuários Cadastrados</span>
+                    <div class="kpi-icon-box cyan"><i data-lucide="users"></i></div>
+                </div>
+                <div class="kpi-value">{{ total_users }}</div>
+            </div>
+
+            <div class="kpi-card blue-border">
+                <div class="kpi-header">
+                    <span class="kpi-label">Média Usabilidade (UX)</span>
+                    <div class="kpi-icon-box blue"><i data-lucide="mouse-pointer"></i></div>
+                </div>
+                <div class="kpi-value">{{ avg_usability }} <span style="font-size: 16px; color: #60A5FA;">/ 5.0</span></div>
+            </div>
+        </section>
+
+        <!-- Search and Filter Bar -->
+        <form method="GET" action="{% url 'admin_feedbacks' %}" class="filter-bar">
+            <div class="search-box">
+                <i data-lucide="search"></i>
+                <input type="text" name="q" value="{{ query }}" placeholder="Buscar por usuário, email, comentários..." class="search-input">
+            </div>
+
+            <select name="rating" class="filter-select">
+                <option value="">Todas as notas</option>
+                <option value="5" {% if rating_filter == '5' %}selected{% endif %}>⭐⭐⭐⭐⭐ (5 estrelas)</option>
+                <option value="4" {% if rating_filter == '4' %}selected{% endif %}>⭐⭐⭐⭐ (4 estrelas)</option>
+                <option value="3" {% if rating_filter == '3' %}selected{% endif %}>⭐⭐⭐ (3 estrelas)</option>
+                <option value="2" {% if rating_filter == '2' %}selected{% endif %}>⭐⭐ (2 estrelas)</option>
+                <option value="1" {% if rating_filter == '1' %}selected{% endif %}>⭐ (1 estrela)</option>
+            </select>
+
+            <button type="submit" class="btn-filter-submit">Filtrar</button>
+
+            {% if query or rating_filter %}
+                <a href="{% url 'admin_feedbacks' %}" class="btn-filter-clear">Limpar Filtros</a>
+            {% endif %}
+        </form>
+
+        <!-- Feedbacks List Feed -->
+        <section class="feedbacks-feed">
+            {% for item in feedbacks %}
+                <div class="feedback-user-card">
+                    <div class="fuc-header">
+                        <div class="fuc-user-info">
+                            <div class="fuc-avatar">
+                                {% if item.user.profile.profile_picture %}
+                                    <img src="{{ item.user.profile.profile_picture.url }}" alt="{{ item.user.first_name }}">
+                                {% else %}
+                                    {{ item.user.first_name|default:item.user.username|slice:":1"|upper }}
+                                {% endif %}
+                            </div>
+                            <div class="fuc-name-box">
+                                <h4>{{ item.user.first_name|default:item.user.username }}</h4>
+                                <p>{{ item.user.email }}</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="fuc-rating-badge">
+                                <i data-lucide="star" style="width: 16px; height: 16px; fill: var(--color-gold);"></i>
+                                <span>{{ item.overall_rating }}.0 / 5.0</span>
+                            </div>
+                            <div class="fuc-date">{{ item.created_at|date:"d/m/Y H:i" }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Respondent Profile Meta (Age, Work, Experience) -->
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;">
+                        {% if item.age %}
+                            <span style="display: inline-flex; align-items: center; gap: 5px; background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); color: #C084FC; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 10px;">
+                                <i data-lucide="user" style="width: 13px; height: 13px;"></i>
+                                {{ item.age }} anos
+                            </span>
+                        {% endif %}
+                        {% if item.is_working %}
+                            <span style="display: inline-flex; align-items: center; gap: 5px; background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); color: #60A5FA; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 10px;">
+                                <i data-lucide="briefcase" style="width: 13px; height: 13px;"></i>
+                                {{ item.is_working }}
+                            </span>
+                        {% endif %}
+                        {% if item.work_experience_time %}
+                            <span style="display: inline-flex; align-items: center; gap: 5px; background: rgba(250, 204, 21, 0.12); border: 1px solid rgba(250, 204, 21, 0.3); color: var(--color-gold); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 10px;">
+                                <i data-lucide="clock" style="width: 13px; height: 13px;"></i>
+                                {{ item.work_experience_time }}
+                            </span>
+                        {% endif %}
+                        {% if item.favorite_feature %}
+                            <span class="fuc-feature-tag" style="margin-bottom: 0;">
+                                <i data-lucide="sparkles" style="width: 13px; height: 13px;"></i>
+                                Favorito: <strong>{{ item.favorite_feature }}</strong>
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Individual Criterion Scores Grid -->
+                    <div class="fuc-scores-grid">
+                        <div class="fuc-score-item">
+                            <span>Design & Conceito:</span>
+                            <span class="stars">{{ item.rating_design }}★</span>
+                        </div>
+                        <div class="fuc-score-item">
+                            <span>Paleta de Cores:</span>
+                            <span class="stars">{{ item.rating_colors }}★</span>
+                        </div>
+                        <div class="fuc-score-item">
+                            <span>Tipografia:</span>
+                            <span class="stars">{{ item.rating_typography }}★</span>
+                        </div>
+                        <div class="fuc-score-item">
+                            <span>Usabilidade / UX:</span>
+                            <span class="stars">{{ item.rating_usability }}★</span>
+                        </div>
+                        <div class="fuc-score-item">
+                            <span>Teste Vocacional:</span>
+                            <span class="stars">{{ item.rating_vocational_test }}★</span>
+                        </div>
+                        <div class="fuc-score-item">
+                            <span>Responsividade:</span>
+                            <span class="stars">{{ item.rating_responsiveness }}★</span>
+                        </div>
+                    </div>
+
+                    <!-- Comments / Suggestions -->
+                    <div>
+                        <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 6px;">
+                            Comentários & Sugestões:
+                        </div>
+                        {% if item.suggestions %}
+                            <div class="fuc-comment-quote">
+                                "{{ item.suggestions }}"
+                            </div>
+                        {% else %}
+                            <div class="fuc-comment-empty">
+                                O usuário não inseriu comentários adicionais em texto.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <div class="empty-feed-card">
+                    <i data-lucide="inbox"></i>
+                    <h3 style="font-family: 'Poppins', sans-serif; font-size: 18px; color: var(--text-white); margin-bottom: 6px;">
+                        Nenhum feedback encontrado
+                    </h3>
+                    <p style="font-size: 14px;">Nenhum feedback corresponde aos filtros selecionados ou ainda não há respostas cadastradas.</p>
+                </div>
+            {% endfor %}
+        </section>
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

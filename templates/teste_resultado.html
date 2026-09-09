@@ -377,6 +377,101 @@
             color: var(--text-white);
         }
 
+        /* Affinities Grid */
+        .affinities-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .affinities-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        @media (max-width: 992px) {
+            .affinities-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 576px) {
+            .affinities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .affinity-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+        .affinity-card.winner {
+            border-color: rgba(168, 85, 247, 0.6);
+            background: linear-gradient(180deg, rgba(168, 85, 247, 0.08) 0%, var(--bg-card) 100%);
+            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.15);
+        }
+        .affinity-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .affinity-icon-tag {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .affinity-pct {
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+        }
+        .affinity-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+        .affinity-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+        .affinity-bar-track {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        .affinity-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .affinity-badge-winner {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            background: rgba(168, 85, 247, 0.25);
+            color: #D8B4FE;
+            border: 1px solid rgba(168, 85, 247, 0.4);
+        }
+
         /* AI Modal */
         .ai-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -482,18 +577,38 @@
             </li>
 
             <li class="menu-item">
+                <a href="{% url 'localiza_futuro' %}">
+                    <i data-lucide="map-pin" style="width: 20px; height: 20px;"></i>
+                    <span>Localiza Futuro</span>
+                </a>
+            </li>
+            <li class="menu-item">
                 <a href="{% url 'explorar_profissoes' %}">
                     <i data-lucide="search" style="width: 20px; height: 20px;"></i>
                     <span>Explorar Profissões</span>
                 </a>
             </li>
             <li class="menu-item">
-                <a href="https://www.google.com/search?q=guia+completo+de+profissoes+em+alta+no+mercado+de+trabalho+salarios" target="_blank">
+                <a href="{% url 'guia_carreiras' %}">
                     <i data-lucide="book-open" style="width: 20px; height: 20px;"></i>
                     <span>Guia de Carreiras</span>
                 </a>
             </li>
-
+            <li class="menu-item">
+                <a href="{% url 'feedback' %}">
+                    <i data-lucide="message-square" style="width: 20px; height: 20px;"></i>
+                    <span>Feedback</span>
+                </a>
+            </li>
+            {% if user.is_staff or user.is_superuser %}
+            <li class="menu-item admin-link" style="margin-top: 6px;">
+                <a href="{% url 'admin_feedbacks' %}" style="border: 1px dashed rgba(250, 204, 21, 0.4); background: rgba(250, 204, 21, 0.06); color: #FACC15;">
+                    <i data-lucide="shield-check" style="width: 20px; height: 20px; color: #FACC15;"></i>
+                    <span>Painel Admin</span>
+                    <span style="margin-left: auto; font-size: 9px; font-weight: 800; padding: 2px 6px; background: rgba(250, 204, 21, 0.2); color: #FACC15; border-radius: 6px;">ADMIN</span>
+                </a>
+            </li>
+            {% endif %}
         </ul>
 
         <div class="sidebar-footer">
@@ -524,6 +639,104 @@
             <div class="result-tag">Diagnóstico Concluído</div>
             <h1 class="result-title">{{ resultado.titulo }}</h1>
             <p class="result-description">{{ resultado.descricao }}</p>
+        </section>
+
+        <!-- Affinities Breakdown Section -->
+        <section class="affinities-container">
+            <div>
+                <h2 class="section-title" style="margin-bottom: 4px;">Distribuição das suas Afinidades</h2>
+                <p style="font-size: 14px; color: var(--text-muted);">Calculado de acordo com suas características pessoais e escolhas práticas no teste.</p>
+            </div>
+            
+            <div class="affinities-grid">
+                <!-- Humanas -->
+                <div class="affinity-card {% if winner == 'Humanas' %}winner{% endif %}">
+                    {% if winner == 'Humanas' %}
+                    <span class="affinity-badge-winner">Perfil Principal</span>
+                    {% elif secondary_winner == 'Humanas' %}
+                    <span class="affinity-badge-winner" style="background: rgba(255, 255, 255, 0.08); color: #E2E8F0; border-color: rgba(255,255,255,0.15);">2ª Afinidade</span>
+                    {% endif %}
+                    <div class="affinity-card-header">
+                        <div class="affinity-icon-tag" style="background: rgba(168, 85, 247, 0.15); color: #A855F7;">
+                            <i data-lucide="users" style="width: 20px; height: 20px;"></i>
+                        </div>
+                        <span class="affinity-pct" style="color: #A855F7;">{{ percentages.Humanas|default:0 }}%</span>
+                    </div>
+                    <div>
+                        <div class="affinity-name">Ciências Humanas</div>
+                        <div class="affinity-desc">Comunicação, empatia, sociedade e artes</div>
+                    </div>
+                    <div class="affinity-bar-track">
+                        <div class="affinity-bar-fill" style="width: {{ percentages.Humanas|default:0 }}%; background: #A855F7;"></div>
+                    </div>
+                </div>
+
+                <!-- Exatas -->
+                <div class="affinity-card {% if winner == 'Exatas' %}winner{% endif %}">
+                    {% if winner == 'Exatas' %}
+                    <span class="affinity-badge-winner">Perfil Principal</span>
+                    {% elif secondary_winner == 'Exatas' %}
+                    <span class="affinity-badge-winner" style="background: rgba(255, 255, 255, 0.08); color: #E2E8F0; border-color: rgba(255,255,255,0.15);">2ª Afinidade</span>
+                    {% endif %}
+                    <div class="affinity-card-header">
+                        <div class="affinity-icon-tag" style="background: rgba(59, 130, 246, 0.15); color: #3B82F6;">
+                            <i data-lucide="cpu" style="width: 20px; height: 20px;"></i>
+                        </div>
+                        <span class="affinity-pct" style="color: #3B82F6;">{{ percentages.Exatas|default:0 }}%</span>
+                    </div>
+                    <div>
+                        <div class="affinity-name">Exatas e Tecnologia</div>
+                        <div class="affinity-desc">Lógica, dados, cálculo e sistemas</div>
+                    </div>
+                    <div class="affinity-bar-track">
+                        <div class="affinity-bar-fill" style="width: {{ percentages.Exatas|default:0 }}%; background: #3B82F6;"></div>
+                    </div>
+                </div>
+
+                <!-- Saude -->
+                <div class="affinity-card {% if winner == 'Saude' %}winner{% endif %}">
+                    {% if winner == 'Saude' %}
+                    <span class="affinity-badge-winner">Perfil Principal</span>
+                    {% elif secondary_winner == 'Saude' %}
+                    <span class="affinity-badge-winner" style="background: rgba(255, 255, 255, 0.08); color: #E2E8F0; border-color: rgba(255,255,255,0.15);">2ª Afinidade</span>
+                    {% endif %}
+                    <div class="affinity-card-header">
+                        <div class="affinity-icon-tag" style="background: rgba(255, 95, 162, 0.15); color: #FF5FA2;">
+                            <i data-lucide="heart-pulse" style="width: 20px; height: 20px;"></i>
+                        </div>
+                        <span class="affinity-pct" style="color: #FF5FA2;">{{ percentages.Saude|default:0 }}%</span>
+                    </div>
+                    <div>
+                        <div class="affinity-name">Saúde e Bem-Estar</div>
+                        <div class="affinity-desc">Cuidado físico/mental e fisiologia</div>
+                    </div>
+                    <div class="affinity-bar-track">
+                        <div class="affinity-bar-fill" style="width: {{ percentages.Saude|default:0 }}%; background: #FF5FA2;"></div>
+                    </div>
+                </div>
+
+                <!-- Natureza -->
+                <div class="affinity-card {% if winner == 'Natureza' %}winner{% endif %}">
+                    {% if winner == 'Natureza' %}
+                    <span class="affinity-badge-winner">Perfil Principal</span>
+                    {% elif secondary_winner == 'Natureza' %}
+                    <span class="affinity-badge-winner" style="background: rgba(255, 255, 255, 0.08); color: #E2E8F0; border-color: rgba(255,255,255,0.15);">2ª Afinidade</span>
+                    {% endif %}
+                    <div class="affinity-card-header">
+                        <div class="affinity-icon-tag" style="background: rgba(16, 185, 129, 0.15); color: #10B981;">
+                            <i data-lucide="leaf" style="width: 20px; height: 20px;"></i>
+                        </div>
+                        <span class="affinity-pct" style="color: #10B981;">{{ percentages.Natureza|default:0 }}%</span>
+                    </div>
+                    <div>
+                        <div class="affinity-name">Natureza e Ecologia</div>
+                        <div class="affinity-desc">Sustentabilidade, fauna e flora</div>
+                    </div>
+                    <div class="affinity-bar-track">
+                        <div class="affinity-bar-fill" style="width: {{ percentages.Natureza|default:0 }}%; background: #10B981;"></div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Recommended Careers -->

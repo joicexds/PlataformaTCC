@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Localiza Futuro - FutureWay</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #060814;
+            --bg-sidebar: #090B19;
+            --bg-card: #0C0E22;
+            --bg-card-hover: #121532;
+            --border-color: #1A1D3A;
+            
+            --color-purple: #A855F7;
+            --color-pink: #FF5FA2;
+            --color-cyan: #3DD6D0;
+            
+            --text-white: #FFFFFF;
+            --text-muted: #8E94B2;
+            --text-secondary: #B4B9D4;
+            
+            --gradient-primary: linear-gradient(135deg, var(--color-purple), var(--color-pink));
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 10;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            margin-bottom: 40px;
+            padding-left: 10px;
+        }
+
+        .brand-logo i { color: var(--color-pink); font-size: 24px; }
+
+        .brand-logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--text-white), var(--color-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-subtitle {
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .menu-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item a:hover {
+            background-color: var(--bg-card-hover);
+            color: var(--text-white);
+        }
+
+        .menu-item.active a {
+            background-color: rgba(168, 85, 247, 0.15);
+            color: var(--color-purple);
+            font-weight: 600;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .user-profile-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-white);
+            font-size: 16px;
+            overflow: hidden;
+        }
+
+        .user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+        .user-meta { flex: 1; margin-left: 12px; text-align: left; }
+        .user-meta h4 { font-size: 14px; font-weight: 600; color: var(--text-white); }
+        .user-meta p { font-size: 11px; color: var(--text-muted); }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 1000px;
+        }
+
+        .page-header {
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--text-white), var(--color-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 16px;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .content-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--color-purple);
+        }
+
+        .map-wrapper {
+            width: 100%;
+            height: 400px;
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+            background-color: #12142B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .map-loading {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .map-loading i {
+            color: var(--color-cyan);
+            animation: pulse 1.5s infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        iframe#mapFrame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+        }
+
+        .search-section {
+            margin-top: 40px;
+        }
+
+        .search-section h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--text-white);
+        }
+
+        .search-section p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 20px;
+            color: var(--text-white);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--color-cyan);
+            box-shadow: 0 0 0 3px rgba(61, 214, 208, 0.15);
+        }
+
+        .btn-search {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0 30px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(168, 85, 247, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Menu (Será atualizado globalmente) -->
+    <aside class="sidebar">
+        <a href="{% url 'home' %}" class="brand-logo">
+            <i data-lucide="compass"></i>
+            <div>
+                <div class="brand-logo-text">FutureWay</div>
+                <div class="brand-subtitle">Descubra seu caminho</div>
+            </div>
+        </a>
+
+        <ul class="menu-list">
+            <li class="menu-item">
+                <a href="{% url 'home' %}">
+                    <i data-lucide="home" style="width: 20px; height: 20px;"></i>
+                    <span>Início</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'iniciar_teste' %}">
+                    <i data-lucide="award" style="width: 20px; height: 20px;"></i>
+                    <span>Teste Vocacional</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'meu_progresso' %}">
+                    <i data-lucide="trending-up" style="width: 20px; height: 20px;"></i>
+                    <span>Meu Progresso</span>
+                </a>
+            </li>
+            <li class="menu-item active">
+                <a href="{% url 'localiza_futuro' %}">
+                    <i data-lucide="map-pin" style="width: 20px; height: 20px;"></i>
+                    <span>Localiza Futuro</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'explorar_profissoes' %}">
+                    <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+                    <span>Explorar Profissões</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'guia_carreiras' %}">
+                    <i data-lucide="book-open" style="width: 20px; height: 20px;"></i>
+                    <span>Guia de Carreiras</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'feedback' %}">
+                    <i data-lucide="message-square" style="width: 20px; height: 20px;"></i>
+                    <span>Feedback</span>
+                </a>
+            </li>
+            {% if user.is_staff or user.is_superuser %}
+            <li class="menu-item admin-link" style="margin-top: 6px;">
+                <a href="{% url 'admin_feedbacks' %}" style="border: 1px dashed rgba(250, 204, 21, 0.4); background: rgba(250, 204, 21, 0.06); color: #FACC15;">
+                    <i data-lucide="shield-check" style="width: 20px; height: 20px; color: #FACC15;"></i>
+                    <span>Painel Admin</span>
+                    <span style="margin-left: auto; font-size: 9px; font-weight: 800; padding: 2px 6px; background: rgba(250, 204, 21, 0.2); color: #FACC15; border-radius: 6px;">ADMIN</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+
+        <div class="sidebar-footer">
+            <a href="{% url 'profile' %}" style="text-decoration: none;">
+                <div class="user-profile-card">
+                    <div class="user-avatar">
+                        {% if user.profile.profile_picture %}
+                            <img src="{{ user.profile.profile_picture.url }}" alt="Avatar">
+                        {% else %}
+                            {% if user.first_name %}{{ user.first_name|slice:":1"|upper }}{% else %}{{ user.username|slice:":1"|upper }}{% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="user-meta">
+                        <h4>Olá, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!</h4>
+                        <p>Ver perfil</p>
+                    </div>
+                    <i data-lucide="chevron-right" style="width: 16px; height: 16px; color: var(--color-purple);"></i>
+                </div>
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1><i data-lucide="map" style="width: 32px; height: 32px; color: var(--color-cyan);"></i> Localiza Futuro</h1>
+            <p>Descubra as melhores instituições de ensino ao seu redor ou pesquise opções qualificadas pelo MEC na cidade dos seus sonhos.</p>
+        </div>
+
+        <div class="content-card">
+            <h2 class="card-title"><i data-lucide="crosshair"></i> Universidades Próximas a Você</h2>
+            
+            <div class="map-wrapper" id="mapWrapper">
+                <div class="map-loading" id="mapLoading">
+                    <i data-lucide="map-pin" style="width: 30px; height: 30px;"></i>
+                    <p>Solicitando acesso à sua localização para mostrar instituições próximas...</p>
+                    <small>Por favor, permita o acesso à localização no seu navegador.</small>
+                </div>
+                <iframe id="mapFrame" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+
+            <div class="search-section">
+                <h3>Buscar em outra cidade</h3>
+                <p>Mire alto! Qual cidade você deseja estudar? A inteligência da plataforma buscará apenas instituições oficalmente reconhecidas e bem avaliadas.</p>
+                
+                <div class="search-box">
+                    <input type="text" id="cityInput" class="search-input" placeholder="Ex: São Paulo, Rio de Janeiro, Florianópolis..." autocomplete="off">
+                    <button class="btn-search" onclick="searchUniversities()">
+                        <i data-lucide="search" style="width: 20px; height: 20px;"></i> Buscar Universidades
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+
+        // Localização automática para carregar Mapa (Google Maps Embed Genérico Search)
+        document.addEventListener("DOMContentLoaded", () => {
+            const mapLoading = document.getElementById('mapLoading');
+            const mapFrame = document.getElementById('mapFrame');
+
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        // Google Maps genérico não exige API Key para chamadas padrão embed
+                        const mapUrl = `https://maps.google.com/maps?q=Universidades&ll=${lat},${lon}&z=13&output=embed`;
+                        
+                        mapFrame.src = mapUrl;
+                        mapLoading.style.display = 'none';
+                        mapFrame.style.display = 'block';
+                    },
+                    (error) => {
+                        mapLoading.innerHTML = `<i data-lucide="alert-triangle" style="color: #ef4444;"></i><p>Não foi possível obter sua localização. Permissão negada ou erro.</p>`;
+                        lucide.createIcons();
+                    }
+                );
+            } else {
+                mapLoading.innerHTML = `<p>Geolocalização não suportada no seu navegador.</p>`;
+            }
+        });
+
+        // Função de busca inteligente com IA/Google (Redirecionamento Advanced)
+        function searchUniversities() {
+            const city = document.getElementById('cityInput').value.trim();
+            if (city === "") {
+                alert("Por favor, digite o nome de uma cidade válida.");
+                return;
+            }
+
+            // Monta query focando apenas em universidades reconhecidas/aprovadas pelo MEC
+            const query = `melhores universidades credenciadas reconhecidas pelo MEC em ${city}`;
+            const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+            
+            // Abre o buscador guiado pela plataforma em nova aba
+            window.open(searchUrl, '_blank');
+        }
+
+        // Permite apertar Enter para buscar
+        document.getElementById('cityInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                searchUniversities();
+            }
+        });
+    </script>
+</body>
+</html>

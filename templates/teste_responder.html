@@ -563,18 +563,38 @@
             </li>
 
             <li class="menu-item">
+                <a href="{% url 'localiza_futuro' %}">
+                    <i data-lucide="map-pin" style="width: 20px; height: 20px;"></i>
+                    <span>Localiza Futuro</span>
+                </a>
+            </li>
+            <li class="menu-item">
                 <a href="{% url 'explorar_profissoes' %}">
                     <i data-lucide="search" style="width: 20px; height: 20px;"></i>
                     <span>Explorar Profissões</span>
                 </a>
             </li>
             <li class="menu-item">
-                <a href="https://www.google.com/search?q=guia+completo+de+profissoes+em+alta+no+mercado+de+trabalho+salarios" target="_blank">
+                <a href="{% url 'guia_carreiras' %}">
                     <i data-lucide="book-open" style="width: 20px; height: 20px;"></i>
                     <span>Guia de Carreiras</span>
                 </a>
             </li>
-
+            <li class="menu-item">
+                <a href="{% url 'feedback' %}">
+                    <i data-lucide="message-square" style="width: 20px; height: 20px;"></i>
+                    <span>Feedback</span>
+                </a>
+            </li>
+            {% if user.is_staff or user.is_superuser %}
+            <li class="menu-item admin-link" style="margin-top: 6px;">
+                <a href="{% url 'admin_feedbacks' %}" style="border: 1px dashed rgba(250, 204, 21, 0.4); background: rgba(250, 204, 21, 0.06); color: #FACC15;">
+                    <i data-lucide="shield-check" style="width: 20px; height: 20px; color: #FACC15;"></i>
+                    <span>Painel Admin</span>
+                    <span style="margin-left: auto; font-size: 9px; font-weight: 800; padding: 2px 6px; background: rgba(250, 204, 21, 0.2); color: #FACC15; border-radius: 6px;">ADMIN</span>
+                </a>
+            </li>
+            {% endif %}
         </ul>
 
         <div class="sidebar-footer">

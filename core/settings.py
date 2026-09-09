@@ -25,7 +25,15 @@ SECRET_KEY = 'django-insecure-*mi34iqs^zljfnu^%@!tyfnlw%b+6%+b+m#%2o8(&3xzw*s5%(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.trycloudflare.com',
+    'https://*.ngrok-free.app',
+    'https://*.loca.lt',
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+]
 
 
 # Application definition
@@ -136,10 +144,16 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'
 
+AUTHENTICATION_BACKENDS = [
+    'visualizar.backends.EmailOrUsernameModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 # Session configuration to always ask for login on new browser sessions
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 import os
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
+
 
 

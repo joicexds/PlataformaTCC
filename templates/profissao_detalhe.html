@@ -402,7 +402,14 @@
         <ul class="menu-list">
             <li class="menu-item"><a href="{% url 'home' %}"><i data-lucide="home"></i><span>Início</span></a></li>
             <li class="menu-item"><a href="{% url 'iniciar_teste' %}"><i data-lucide="award"></i><span>Teste Vocacional</span></a></li>
+            <li class="menu-item"><a href="{% url 'meu_progresso' %}"><i data-lucide="trending-up"></i><span>Meu Progresso</span></a></li>
+            <li class="menu-item"><a href="{% url 'localiza_futuro' %}"><i data-lucide="map-pin"></i><span>Localiza Futuro</span></a></li>
             <li class="menu-item active"><a href="{% url 'explorar_profissoes' %}"><i data-lucide="search"></i><span>Explorar Profissões</span></a></li>
+            <li class="menu-item"><a href="{% url 'guia_carreiras' %}"><i data-lucide="book-open"></i><span>Guia de Carreiras</span></a></li>
+            <li class="menu-item"><a href="{% url 'feedback' %}"><i data-lucide="message-square"></i><span>Feedback</span></a></li>
+            {% if user.is_staff or user.is_superuser %}
+            <li class="menu-item admin-link" style="margin-top: 6px;"><a href="{% url 'admin_feedbacks' %}" style="border: 1px dashed rgba(250, 204, 21, 0.4); background: rgba(250, 204, 21, 0.06); color: #FACC15;"><i data-lucide="shield-check" style="color: #FACC15;"></i><span>Painel Admin</span></a></li>
+            {% endif %}
         </ul>
     </aside>
 
