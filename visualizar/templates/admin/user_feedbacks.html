@@ -1,0 +1,27 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% block title %}Feedbacks do Usuário{% endblock %}
+
+{% block content %}
+<h1 style="font-family: 'Inter', sans-serif; color: #fff; margin-bottom: 20px;">Feedbacks de {{ user.username }}</h1>
+<table class="admin-table" style="width:100%; margin-top:10px;">
+  <thead style="background:rgba(0,0,0,0.4); color:#fff;">
+    <tr>
+      <th>ID</th><th>Data</th><th>Rating Geral</th><th>Sugestões</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for fb in feedbacks %}
+    <tr style="background:rgba(255,255,255,0.02);">
+      <td>{{ fb.id }}</td>
+      <td>{{ fb.created_at|date:'d/m/Y H:i' }}</td>
+      <td>{{ fb.overall_rating }}</td>
+      <td>{{ fb.suggestions|default:"—" }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4" style="color:#ff6b6b;">Nenhum feedback encontrado.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p style="margin-top:20px;"><a href="{% url 'admin-dashboard' %}" class="button" style="color:#0ff;">← Voltar ao Dashboard</a></p>
+{% endblock %}

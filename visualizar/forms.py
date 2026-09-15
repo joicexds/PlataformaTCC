@@ -2,16 +2,10 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 import re
+from django.utils.text import slugify as _slugify
 
 class RegisterForm(forms.Form):
-    email = forms.EmailField(
-        label="E-mail",
-        widget=forms.EmailInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Digite seu e-mail',
-            'required': True
-        })
-    )
+
     full_name = forms.CharField(
         label="Nome Completo",
         max_length=150,
@@ -38,24 +32,14 @@ class RegisterForm(forms.Form):
         })
     )
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if User.objects.filter(email=email).exists():
-            raise ValidationError("Este e-mail já está cadastrado.")
-        if User.objects.filter(username=email).exists():
-            raise ValidationError("Este usuário/e-mail já está cadastrado.")
-        return email
+
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
-        if len(password) < 8:
-            raise ValidationError("A senha deve ter pelo menos 8 caracteres.")
-        if not re.search(r'[A-Z]', password):
-            raise ValidationError("A senha deve conter pelo menos uma letra maiúscula.")
-        if not re.search(r'[a-z]', password):
-            raise ValidationError("A senha deve conter pelo menos uma letra minúscula.")
-        if not re.search(r'[0-9]', password):
-            raise ValidationError("A senha deve conter pelo menos um número.")
+        if password:
+            # Exigência de senha simples: exatamente 8 dígitos numéricos
+            if not password.isdigit() or len(password) != 8:
+                raise ValidationError('A senha deve conter exatamente 8 dígitos numéricos.')
         return password
 
     def clean(self):
@@ -68,22 +52,28 @@ class RegisterForm(forms.Form):
         return cleaned_data
 
     def save(self):
-        email = self.cleaned_data.get('email')
         full_name = self.cleaned_data.get('full_name')
         password = self.cleaned_data.get('password')
 
         # Split full_name into first_name and last_name
-        name_parts = full_name.strip().split(' ', 1)
-        first_name = name_parts[0]
-        last_name = name_parts[1] if len(name_parts) > 1 else ''
+        parts = full_name.strip().split(' ', 1)
+        first_name = _slugify(parts[0])
+        last_name = _slugify(parts[1]) if len(parts) > 1 else ''
 
-        # Create user
+        # Build username
+        username = f"{first_name}_{last_name}" if last_name else first_name
+        base_username = username
+        counter = 1
+        while User.objects.filter(username=username).exists():
+            username = f"{base_username}{counter}"
+            counter += 1
+
         user = User.objects.create_user(
-            username=email,
-            email=email,
+            username=username,
+            email='',
             password=password,
             first_name=first_name,
-            last_name=last_name
+            last_name=last_name,
         )
         return user
 

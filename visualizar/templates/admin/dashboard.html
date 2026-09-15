@@ -1,0 +1,67 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% block title %}Dashboard - Admin{% endblock %}
+
+{% block content %}
+<h1 style="font-family: 'Inter', sans-serif; color: #fff; margin-bottom: 20px;">📊 Dashboard de Feedbacks</h1>
+<div style="display: flex; flex-wrap: wrap; gap: 2rem;">
+  <div style="flex: 1 1 300px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; backdrop-filter: blur(8px);">
+    <h2 style="color:#fff;">📈 Total de Feedbacks</h2>
+    <p style="font-size: 2rem; color:#0ff;">{{ total_feedback }}</p>
+  </div>
+  <div style="flex: 1 1 300px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; backdrop-filter: blur(8px);">
+    <h2 style="color:#fff;">⭐ Rating Médio</h2>
+    <p style="font-size: 2rem; color:#ff0;">{{ avg_rating }}</p>
+  </div>
+</div>
+
+<h2 style="margin-top: 30px; color:#fff;">📅 Feedbacks nos últimos 30 dias</h2>
+<canvas id="feedbackChart" width="400" height="200" style="background: rgba(255,255,255,0.05); border-radius:12px; padding:10px;"></canvas>
+
+<h2 style="margin-top: 30px; color:#fff;">👥 Usuários cadastrados</h2>
+<table class="admin-table" style="width:100%; margin-top:10px;">
+  <thead style="background:rgba(0,0,0,0.4); color:#fff;">
+    <tr>
+      <th>Usuário</th><th>Nome completo</th><th>E‑mail</th><th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in users %}
+    <tr style="background:rgba(255,255,255,0.02);">
+      <td>{{ u.username }}</td>
+      <td>{{ u.first_name }} {{ u.last_name }}</td>
+      <td>{{ u.email }}</td>
+      <td><a href="{% url 'admin-user-feedbacks' user_id=u.id %}" class="button" style="color:#0ff;">Ver feedbacks</a></td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4" style="color:#ff6b6b;">Nenhum usuário encontrado.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('feedbackChart').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: {{ chart_labels|safe }},
+      datasets: [{
+        label: 'Feedbacks por dia',
+        data: {{ chart_counts|safe }},
+        borderColor: '#0ff',
+        backgroundColor: 'rgba(0,255,255,0.2)',
+        tension: 0.3,
+        fill: true,
+      }]
+    },
+    options: {
+      plugins: { legend: { labels: { color: '#fff' } } },
+      scales: {
+        x: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+        y: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+      }
+    }
+  });
+</script>
+{% endblock %}

@@ -18,9 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+# Import custom admin site
+from visualizar.admin import visualizar_admin_site
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', visualizar_admin_site.urls),
     path('', include('visualizar.urls')),
 ]
 

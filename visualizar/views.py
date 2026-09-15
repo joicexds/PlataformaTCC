@@ -1,8 +1,16 @@
 from django.shortcuts import render, redirect
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
 from .forms import RegisterForm
+
+@staff_member_required
+def list_users(request):
+    """Admin view that lists all usernames for debugging."""
+    users = User.objects.all().values('username', 'first_name', 'last_name')
+    return render(request, 'list_users.html', {'users': users})
 
 @login_required
 def home(request):
@@ -62,12 +70,25 @@ class CustomLoginView(LoginView):
             logout(request)
         return super().dispatch(request, *args, **kwargs)
 
+    def form_valid(self, form):
+        """Log the user in using the explicit ModelBackend.
+        This avoids the "multiple authentication backends" ValueError.
+        """
+        from django.contrib.auth import login as auth_login
+        user = form.get_user()
+        auth_login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+        return redirect(self.get_success_url())
+
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('login')
+            user = form.save()
+            # Log the user in immediately after registration
+            from django.contrib.auth import login as auth_login
+            # Specify backend explicitly because multiple auth backends are configured
+            auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            return redirect('home')
     else:
         form = RegisterForm()
     return render(request, 'register.html', {'form': form})
@@ -124,6 +145,9 @@ def profile(request):
             complete_mission(request.user, 'profile_completed', 500)
             return redirect('profile')
     else:
+        # Render registration form if GET
+        form = RegisterForm()
+        return render(request, 'register.html', {'form': form})
         form = UserProfileForm(instance=profile_instance, user=request.user)
         
     return render(request, 'profile.html', {'form': form, 'profile': profile_instance})
@@ -142,7 +166,7 @@ BACKUP_TEST = {
     "perguntas": [
         {
             "id": 1,
-            "enunciado": "Você tem um sábado completamente livre pela frente. Qual destas atividades você escolheria espontaneamente para aproveitar o seu dia?",
+            "enunciado": "O que você mais curte fazer no seu tempo livre?",
             "image_prompt": "young friends having pleasant conversation coffee books culture",
             "alternativas": [
                 {"letra": "A", "texto": "Ir a um café ou centro cultural com amigos para conversar, debater ideias, ler um livro ou assistir a uma peça/filme.", "categoria": "Humanas"},
@@ -1034,4 +1058,22 @@ def admin_feedbacks_view(request):
 
     return render(request, 'admin_feedbacks.html', context)
 
+@login_required
+def my_feedbacks_view(request):
+    """Mostra os feedbacks do usuário logado de forma simples."""
+    feedbacks = Feedback.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'my_feedbacks.html', {'feedbacks': feedbacks})
 
+
+@login_required
+def user_feedbacks_view(request, username):
+    """Display feedbacks for a specific user (admin can view any)."""
+    # Admin can view any user's feedbacks; regular users only their own
+    if request.user.is_staff or request.user.is_superuser:
+        target_user = User.objects.filter(username=username).first()
+    else:
+        target_user = request.user
+    if not target_user:
+        return redirect('list_users')
+    feedbacks = Feedback.objects.filter(user=target_user).order_by('-created_at')
+    return render(request, 'user_feedbacks.html', {'feedbacks': feedbacks, 'target_user': target_user})

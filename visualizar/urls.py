@@ -19,5 +19,7 @@ urlpatterns = [
     path('guia-carreiras/', views.guia_carreiras, name='guia_carreiras'),
     path('feedback/', views.feedback_view, name='feedback'),
     path('admin-feedbacks/', views.admin_feedbacks_view, name='admin_feedbacks'),
+    path('meus-feedbacks/', views.my_feedbacks_view, name='my_feedbacks'),
+
 ]
 

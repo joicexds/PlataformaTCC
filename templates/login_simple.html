@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Simples - FutureWay</title>
+    <style>
+        :root {
+            --bg-main: #0E1020;
+            --bg-card: #15182D;
+            --color-primary-start: #A855F7;
+            --color-primary-end: #FF5FA2;
+            --color-cyan: #3DD6D0;
+            --text-white: #FFFFFF;
+            --text-secondary: #8E94B2;
+            --border-color: #2A2D3E;
+        }
+        body {font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-white); display:flex; align-items:center; justify-content:center; height:100vh; margin:0;}
+        .login-box {background: var(--bg-card); padding:40px; border-radius:12px; box-shadow:0 4px 6px rgba(0,0,0,0.4); width:340px;}
+        .login-box h2 {margin:0 0 20px; font-size:24px; text-align:center;}
+        .form-group {margin-bottom:20px;}
+        .form-group label {display:block; margin-bottom:6px;}
+        .form-control {width:100%; padding:10px; border:1px solid var(--border-color); border-radius:8px; background: var(--bg-main); color: var(--text-white);}
+        .btn-submit {width:100%; padding:12px; border:none; border-radius:8px; background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end)); color: var(--text-white); font-weight:600; cursor:pointer;}
+        .btn-submit:hover {box-shadow:0 0 12px rgba(255,95,162,0.4);}
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>Entrar</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_username">Usuário</label>
+                <input type="text" name="username" autofocus autocomplete="username" maxlength="150" required id="id_username" class="form-control" placeholder="Digite seu usuário">
+            </div>
+            <div class="form-group">
+                <label for="id_password">Senha</label>
+                <input type="password" name="password" autocomplete="current-password" required id="id_password" class="form-control" placeholder="Digite sua senha">
+            </div>
+            <button type="submit" class="btn-submit">Acessar</button>
+        </form>
+        <p style="margin-top:15px; text-align:center; font-size:14px; color:var(--text-secondary);">
+            Não tem conta? <a href="{% url 'register' %}" style="color:var(--color-cyan); text-decoration:none;">Cadastre‑se</a>
+        </p>
+    </div>
+</body>
+</html>

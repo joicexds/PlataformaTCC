@@ -334,7 +334,7 @@
             justify-content: center;
             color: var(--text-white);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease, transform 0.3s ease;
             border: 3px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
         }
@@ -345,6 +345,7 @@
 
         .journey-node.completed {
             background: var(--gradient-blue-purple);
+            transform: translateY(-10px);
         }
 
         .journey-node.active {
@@ -389,6 +390,7 @@
             padding: 30px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
             text-align: left;
+            transition: transform 0.3s ease;
         }
 
         .card-header {
@@ -856,7 +858,7 @@
         <!-- Cards Row 1 -->
         <div class="dashboard-row">
             <!-- Progress Card -->
-            <div class="dash-card">
+            <div class="dash-card" style="transform: translateY(calc(-{{ etapas_completas }} * 12px));">
                 <div class="card-header">
                     <i data-lucide="trending-up"></i>
                     <h3>Seu Progresso</h3>
